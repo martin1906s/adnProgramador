@@ -117,7 +117,7 @@ const persona11 = {
   pelo: (caracteristicas.pelo.largo = true),
 };
 
-export const personas = [
+const personas = [
   persona1,
   persona2,
   persona3,
@@ -130,4 +130,3 @@ export const personas = [
   persona10,
   persona11,
 ];
-export { caracteristicas };

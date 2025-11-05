@@ -1,8 +1,4 @@
-// Importar personas desde person.js
-import { personas } from './person.js';
-
-// Importar caracteristicas para las comparaciones
-import { caracteristicas } from './person.js';
+// Las personas y características están disponibles globalmente desde person.js
 
 // Sistema de instrucciones con operadores lógicos
 let instruccionActual = null;
@@ -774,5 +770,5 @@ if (document.readyState === 'loading') {
   inicializar();
 }
 
-// Exportar funciones útiles
-export { cambiarInstruccion, generarInstruccionAleatoria };
+// Funciones disponibles globalmente
+// cambiarInstruccion y generarInstruccionAleatoria están disponibles globalmente
