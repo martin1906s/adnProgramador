@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SYSTEM_QUERY.exe - Clasificación de Personas</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="cyber-grid"></div>
+    <div class="scan-line"></div>
+    
+    <div class="container">
+      <header class="header">
+        <div class="logo-terminal">
+          <span class="terminal-prompt">&gt;</span>
+          <h1 class="cyber-title">
+            <span class="code-symbol">{"</span>SYSTEM_QUERY<span class="code-symbol">"}</span>
+          </h1>
+        </div>
+        <p class="subtitle">
+          <span class="code-comment">// Lógica de Programación: Operadores Condicionales</span>
+          <br>
+          <span class="code-operator">if (condición) { Y | O | NO }</span>
+        </p>
+      </header>
+      
+      <div class="instructions panel-glow">
+        <div class="panel-header">
+          <span class="status-indicator"></span>
+          <span class="panel-title">INSTRUCCIONES DEL SISTEMA</span>
+        </div>
+        <div class="panel-content">
+          <p class="instruction-text">Cargando instrucciones...</p>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="data-pool panel-glow">
+          <div class="panel-header">
+            <span class="status-indicator"></span>
+            <span class="panel-title">POOL DE DATOS</span>
+            <span class="data-count" id="dataCount">0 entidades</span>
+          </div>
+          <div class="person-container" id="personContainer">
+            <!-- Las personas se generarán dinámicamente -->
+          </div>
+        </div>
+
+        <div class="drag-container panel-glow" id="dragArea">
+          <div class="panel-header">
+            <span class="status-indicator"></span>
+            <span class="panel-title">ZONA DE CLASIFICACIÓN</span>
+          </div>
+          <div class="drop-zone">
+            <div class="drop-placeholder">
+              <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <p class="drop-text">Arrastra las entidades aquí según las instrucciones del sistema</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="progress panel-glow">
+        <div class="progress-header">
+          <span class="status-indicator"></span>
+          <span class="panel-title">PROGRESO DEL SISTEMA</span>
+        </div>
+        <div class="progress-content">
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+          <p class="progress-text" id="progressText">
+            <span class="code-value">0</span> / <span class="code-value">0</span> entidades clasificadas correctamente
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./scripts/script.js"></script>
+  </body>
+</html>
