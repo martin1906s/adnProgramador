@@ -1,90 +1,247 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
+    <!-- Meta Tags Básicos -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SYSTEM_QUERY.exe - Clasificación de Personas</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- SEO Meta Tags -->
+    <title>
+      Clasificación de Personas | Ejercicio de Lógica de Programación
+    </title>
+    <meta
+      name="description"
+      content="Sistema interactivo de clasificación de personas usando operadores condicionales lógicos (Y, O, NO). Aprende lógica de programación arrastrando y soltando entidades según condiciones específicas. Ejercicio educativo interactivo."
+    />
+    <meta
+      name="keywords"
+      content="lógica de programación, operadores condicionales, clasificación de personas, ejercicios interactivos, programación educativa, drag and drop, Y, O, NO, operadores lógicos, aprendizaje interactivo"
+    />
+    <meta name="author" content="ADN Programador" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="language" content="Spanish" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="theme-color" content="#00ffff" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="SYSTEM_QUERY.exe - Clasificación de Personas | Ejercicio de Lógica de Programación"
+    />
+    <meta
+      property="og:description"
+      content="Sistema interactivo de clasificación de personas usando operadores condicionales lógicos (Y, O, NO). Aprende lógica de programación arrastrando y soltando entidades según condiciones específicas."
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="SYSTEM_QUERY.exe - Sistema de Clasificación de Personas"
+    />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="ADN Programador" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="SYSTEM_QUERY.exe - Clasificación de Personas"
+    />
+    <meta
+      name="twitter:description"
+      content="Sistema interactivo de clasificación usando operadores condicionales lógicos. Ejercicio educativo de lógica de programación."
+    />
+    <meta
+      name="twitter:image:alt"
+      content="SYSTEM_QUERY.exe - Sistema de Clasificación"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./assets/favicon.png" />
+    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+
+    <!-- Preconnect para Rendimiento -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+
+    <!-- Estilos -->
     <link rel="stylesheet" href="./styles/style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Fuentes -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Schema.org JSON-LD para Rich Snippets -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "SYSTEM_QUERY.exe",
+        "description": "Sistema interactivo de clasificación de personas usando operadores condicionales lógicos (Y, O, NO). Ejercicio educativo de lógica de programación.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5",
+          "ratingCount": "1"
+        },
+        "educationalUse": "interactive learning",
+        "learningResourceType": "interactive tutorial",
+        "teaches": "lógica de programación, operadores condicionales, clasificación de datos",
+        "inLanguage": "es"
+      }
+    </script>
   </head>
   <body>
     <div class="cyber-grid"></div>
     <div class="scan-line"></div>
-    
+
     <div class="container">
-      <header class="header">
+      <header class="header" role="banner">
         <div class="logo-terminal">
-          <span class="terminal-prompt">&gt;</span>
+          <span class="terminal-prompt" aria-hidden="true">&gt;</span>
           <h1 class="cyber-title">
-            <span class="code-symbol">{"</span>SYSTEM_QUERY<span class="code-symbol">"}</span>
+            <span class="code-symbol" aria-hidden="true">{"</span
+            >SYSTEM_QUERY<span class="code-symbol" aria-hidden="true">"}</span>
           </h1>
         </div>
         <p class="subtitle">
-          <span class="code-comment">// Lógica de Programación: Operadores Condicionales</span>
-          <br>
+          <span class="code-comment"
+            >// Lógica de Programación: Operadores Condicionales</span
+          >
+          <br />
           <span class="code-operator">if (condición) { Y | O | NO }</span>
         </p>
       </header>
-      
-      <div class="instructions panel-glow">
-        <div class="panel-header">
-          <span class="status-indicator"></span>
-          <span class="panel-title">INSTRUCCIONES DEL SISTEMA</span>
-        </div>
-        <div class="panel-content">
-          <p class="instruction-text">Cargando instrucciones...</p>
-        </div>
-      </div>
 
-      <div class="main-content">
-        <div class="data-pool panel-glow">
+      <main role="main">
+        <section
+          class="instructions panel-glow"
+          aria-labelledby="instructions-title"
+        >
           <div class="panel-header">
-            <span class="status-indicator"></span>
-            <span class="panel-title">POOL DE DATOS</span>
-            <span class="data-count" id="dataCount">0 entidades</span>
+            <span class="status-indicator" aria-hidden="true"></span>
+            <h2 class="panel-title" id="instructions-title">
+              INSTRUCCIONES DEL SISTEMA
+            </h2>
           </div>
-          <div class="person-container" id="personContainer">
-            <!-- Las personas se generarán dinámicamente -->
+          <div class="panel-content">
+            <p class="instruction-text">Cargando instrucciones...</p>
           </div>
+        </section>
+
+        <div class="main-content">
+          <section
+            class="data-pool panel-glow"
+            aria-labelledby="data-pool-title"
+          >
+            <div class="panel-header">
+              <span class="status-indicator" aria-hidden="true"></span>
+              <h2 class="panel-title" id="data-pool-title">POOL DE DATOS</h2>
+              <span class="data-count" id="dataCount" aria-live="polite"
+                >0 entidades</span
+              >
+            </div>
+            <div
+              class="person-container"
+              id="personContainer"
+              role="list"
+              aria-label="Lista de personas disponibles para clasificar"
+            >
+              <!-- Las personas se generarán dinámicamente -->
+            </div>
+          </section>
+
+          <section
+            class="drag-container panel-glow"
+            id="dragArea"
+            aria-labelledby="classification-title"
+            role="region"
+            aria-label="Zona de clasificación"
+          >
+            <div class="panel-header">
+              <span class="status-indicator" aria-hidden="true"></span>
+              <h2 class="panel-title" id="classification-title">
+                ZONA DE CLASIFICACIÓN
+              </h2>
+            </div>
+            <div
+              class="drop-zone"
+              role="application"
+              aria-label="Área de destino para arrastrar personas"
+            >
+              <div class="drop-placeholder">
+                <svg
+                  class="drop-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  role="img"
+                >
+                  <title>Ícono de arrastrar y soltar</title>
+                  <path
+                    d="M12 5v14M5 12h14"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <p class="drop-text">
+                  Arrastra las entidades aquí según las instrucciones del
+                  sistema
+                </p>
+              </div>
+            </div>
+          </section>
         </div>
 
-        <div class="drag-container panel-glow" id="dragArea">
-          <div class="panel-header">
-            <span class="status-indicator"></span>
-            <span class="panel-title">ZONA DE CLASIFICACIÓN</span>
+        <section class="progress panel-glow" aria-labelledby="progress-title">
+          <div class="progress-header">
+            <span class="status-indicator" aria-hidden="true"></span>
+            <h2 class="panel-title" id="progress-title">
+              PROGRESO DEL SISTEMA
+            </h2>
           </div>
-          <div class="drop-zone">
-            <div class="drop-placeholder">
-              <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <p class="drop-text">Arrastra las entidades aquí según las instrucciones del sistema</p>
+          <div class="progress-content">
+            <div class="progress-bar-container">
+              <div
+                class="progress-bar"
+                id="progressBar"
+                role="progressbar"
+                aria-valuenow="0"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-label="Progreso de clasificación"
+              >
+                <div class="progress-fill"></div>
+              </div>
             </div>
+            <p class="progress-text" id="progressText" aria-live="polite">
+              <span class="code-value">0</span> /
+              <span class="code-value">0</span> entidades clasificadas
+              correctamente
+            </p>
           </div>
-        </div>
-      </div>
-      
-      <div class="progress panel-glow">
-        <div class="progress-header">
-          <span class="status-indicator"></span>
-          <span class="panel-title">PROGRESO DEL SISTEMA</span>
-        </div>
-        <div class="progress-content">
-          <div class="progress-bar-container">
-            <div class="progress-bar" id="progressBar">
-              <div class="progress-fill"></div>
-            </div>
-          </div>
-          <p class="progress-text" id="progressText">
-            <span class="code-value">0</span> / <span class="code-value">0</span> entidades clasificadas correctamente
-          </p>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
 
-    <script src="./scripts/person.js"></script>
-    <script src="./scripts/script.js"></script>
+    <!-- Scripts con defer para mejor rendimiento y SEO -->
+    <script src="./scripts/person.js" defer></script>
+    <script src="./scripts/script.js" defer></script>
   </body>
 </html>

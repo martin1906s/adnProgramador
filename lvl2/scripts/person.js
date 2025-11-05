@@ -117,6 +117,26 @@ const persona11 = {
   pelo: (caracteristicas.pelo.largo = true),
 };
 
+const persona12 = {
+  img: "12.png",
+  gorra: (caracteristicas.gorra = false),
+  lentes: (caracteristicas.lentes = false),
+  edad: (caracteristicas.edad.adulto = true),
+  sexo: (caracteristicas.sexo.mujer = true),
+  ropa: (caracteristicas.ropa.color = "Amarillo"),
+  pelo: (caracteristicas.pelo.largo = true),
+};
+
+const persona13 = {
+  img: "13.png",
+  gorra: false,
+  lentes: false,
+  edad: (caracteristicas.edad.adulto = true),
+  sexo: (caracteristicas.sexo.mujer = true),
+  ropa: (caracteristicas.ropa.color = "Negro"),
+  pelo: (caracteristicas.pelo.corto = true),
+};
+
 const personas = [
   persona1,
   persona2,
@@ -129,4 +149,6 @@ const personas = [
   persona9,
   persona10,
   persona11,
+  persona12,
+  persona13,
 ];

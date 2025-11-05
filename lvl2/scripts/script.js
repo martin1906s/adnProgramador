@@ -87,6 +87,10 @@ function inicializarMapaCaracteristicas() {
       edad = 'adulto'; sexo = 'hombre'; pelo = 'largo';
     } else if (persona.img === '11.png') {
       edad = 'adulto'; sexo = 'hombre'; pelo = 'largo';
+    } else if (persona.img === '12.png') {
+      edad = 'adulto'; sexo = 'mujer'; pelo = 'largo';
+    } else if (persona.img === '13.png') {
+      edad = 'adulto'; sexo = 'mujer'; pelo = 'corto';
     } else {
       // Para nuevas personas, usar valores por defecto o inferir de otras propiedades
       // Por ahora, usar el índice como fallback (no ideal pero funcional)
@@ -449,7 +453,11 @@ function generarPersonajes() {
     // Crear imagen si está disponible
     const img = document.createElement('img');
     img.src = `./assets/${persona.img}`;
-    img.alt = `Persona ${index + 1}`;
+    // Alt text descriptivo para SEO y accesibilidad
+    const altText = `Persona ${edad}, ${sexo}, pelo ${pelo}, ${persona.gorra ? 'con gorra' : 'sin gorra'}, ${persona.lentes ? 'con lentes' : 'sin lentes'}, ropa ${persona.ropa}`;
+    img.alt = altText;
+    img.loading = 'lazy'; // Lazy loading para mejor rendimiento y SEO
+    img.decoding = 'async'; // Decodificación asíncrona para mejor rendimiento
     img.style.width = '100%';
     img.style.height = '100%';
     img.style.objectFit = 'cover';
@@ -716,6 +724,12 @@ function actualizarProgreso(actuales, totales) {
     } else {
       progressText.innerHTML = `<span class="code-value">${actuales}</span> / <span class="code-value">${totales}</span> entidades clasificadas correctamente`;
     }
+  }
+  
+  if (progressBar && totales > 0) {
+    const porcentaje = Math.round((actuales / totales) * 100);
+    progressBar.setAttribute('aria-valuenow', porcentaje);
+    progressBar.setAttribute('aria-valuetext', `${porcentaje}% completado`);
   }
   
   if (progressFill && totales > 0) {
