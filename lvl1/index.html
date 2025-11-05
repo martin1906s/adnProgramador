@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBERPUNK - Ordenar Cards</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="grid-background"></div>
+  <div class="scanlines"></div>
+  <button class="level-button" onclick="showLevelModal()">
+    <span class="button-text">[LEVEL] PASAR DE NIVEL</span>
+  </button>
+  <div class="game-container">
+
+    <h2 class="cyber-title">[SYSTEM] ORDENAR CARDS POR EDAD</h2>
+    
+    <div class="problems-container">
+      <div class="neon-text" id="problem-text">Cargando problema...</div>
+    </div>
+
+    <h3 class="cyber-subtitle">[DRAG & DROP] Arrastra las Cards en el orden correcto (de menor a mayor edad):</h3>
+    <div class="order-container" id="order-container">
+      <div class="drop-zone" id="drop-zone-1" data-position="0"></div>
+      <div class="drop-zone" id="drop-zone-2" data-position="1"></div>
+      <div class="drop-zone" id="drop-zone-3" data-position="2"></div>
+      <div class="drop-zone" id="drop-zone-4" data-position="3"></div>
+    </div>
+
+    <div class="cards-container" id="cards-container">
+    </div>
+
+
+    <div class="buttons-container">
+      <button class="cyber-button" onclick="checkOrder()">
+        <span class="button-text">[VERIFY] COMPROBAR ORDEN</span>
+        <span class="button-glow"></span>
+    </div>
+    <p id="result" class="result-text"></p>
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content cyber-modal">
+      <div class="modal-header">
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <h2 class="modal-title">[ACCESS GRANTED]</h2>
+        <p class="modal-message">El orden es el adecuado.</p>
+        <div class="code-container">
+          <span class="code-label">[CODE]</span>
+          <p class="code neon-code">0816</p>
+        </div>
+        <div class="success-indicator">
+          <div class="success-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="level-modal" class="modal">
+    <div class="level-modal-content">
+      <span class="close" onclick="closeLevelModal()">&times;</span>
+      <div class="level-modal-background">
+        <img src="images/fondo-code.png" alt="Fondo" class="level-background-img">
+        <div class="level-modal-content-inner">
+          <img src="images/codigo.png" alt="Código" class="level-code-img">
+          <button class="invisible-btn number-btn" style="left: 240px; top: 220px;" onclick="pressNumber(1)"></button>
+          <button class="invisible-btn number-btn" style="left: 340px; top: 220px;" onclick="pressNumber(2)"></button>
+          <button class="invisible-btn number-btn" style="left: 440px; top: 220px;" onclick="pressNumber(3)"></button>
+          <button class="invisible-btn number-btn" style="left: 240px; top: 320px;" onclick="pressNumber(4)"></button>
+          <button class="invisible-btn number-btn" style="left: 340px; top: 320px;" onclick="pressNumber(5)"></button>
+          <button class="invisible-btn number-btn" style="left: 440px; top: 320px;" onclick="pressNumber(6)"></button>
+          <button class="invisible-btn number-btn" style="left: 240px; top: 420px;" onclick="pressNumber(7)"></button>
+          <button class="invisible-btn number-btn" style="left: 340px; top: 420px;" onclick="pressNumber(8)"></button>
+          <button class="invisible-btn number-btn" style="left: 440px; top: 420px;" onclick="pressNumber(9)"></button>
+          <button class="invisible-btn number-btn" style="left: 340px; top: 520px;" onclick="pressNumber(0)"></button>
+          <button class="invisible-btn delete-btn" style="left: 240px; top: 520px;" onclick="pressDelete()"></button>
+          <button class="invisible-btn confirm-btn" style="left: 440px; top: 520px;" onclick="pressConfirm()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
