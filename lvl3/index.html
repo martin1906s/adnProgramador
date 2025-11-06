@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nivel 3 - Coordenadas Cartesianas</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    <div class="scan-line"></div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo-terminal">
+                <span class="terminal-prompt">></span>
+                <h1 class="cyber-title">NIVEL <span class="code-symbol">3</span> - COORDENADAS CARTESIANAS</h1>
+            </div>
+            <p class="subtitle">
+                Arrastra las imágenes a las coordenadas correctas para formar un <span class="code-operator">GATO</span>
+            </p>
+        </header>
+
+        <!-- Cuadrícula Cartesiana con Paneles Laterales -->
+        <div class="panel-glow">
+            <div class="panel-header">
+                <div class="status-indicator"></div>
+                <h2 class="panel-title">Cuadrícula Cartesiana</h2>
+            </div>
+            <div class="panel-content grid-layout-container">
+                <!-- Panel de Puntos (Izquierda) -->
+                <div class="side-panel side-panel-left">
+                    <div class="side-panel-header">
+                        <div class="status-indicator"></div>
+                        <h3 class="side-panel-title">Puntos Disponibles</h3>
+                        <span class="data-count" id="images-count">10</span>
+                    </div>
+                    <div class="side-panel-content">
+                        <div class="points-container" id="points-container">
+                            <!-- Los puntos se cargarán aquí con JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cuadrícula (Centro) -->
+                <div class="grid-center-panel">
+                    <div id="grid-container" class="grid-container">
+                        <!-- La cuadrícula se generará con JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Panel de Coordenadas (Derecha) -->
+                <div class="side-panel side-panel-right">
+                    <div class="side-panel-header">
+                        <div class="status-indicator"></div>
+                        <h3 class="side-panel-title">Coordenadas Objetivo</h3>
+                        <span class="data-count" id="coords-count">10</span>
+                    </div>
+                    <div class="side-panel-content">
+                        <div id="coordinates-list" class="coordinates-list">
+                            <!-- Las coordenadas se mostrarán aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón Validar -->
+        <div class="validate-container">
+            <button id="validate-btn" class="validate-btn">VALIDAR</button>
+        </div>
+    </div>
+
+    <!-- Modal de Aprobado -->
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal-content validation-modal">
+            <div class="modal-header">
+                <h2 class="modal-title success-title">200 OK</h2>
+            </div>
+            <div class="modal-body">
+                <div class="success-icon">✓</div>
+                <p class="modal-message">¡Felicitaciones! Has colocado todas las coordenadas correctamente.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn" onclick="closeModal('success-modal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Error -->
+    <div id="error-modal" class="modal-overlay">
+        <div class="modal-content validation-modal">
+            <div class="modal-header">
+                <h2 class="modal-title error-title">ERROR 404</h2>
+            </div>
+            <div class="modal-body">
+                <div class="error-icon">✗</div>
+                <p class="modal-message">Mal las coordenadas. Por favor, revisa y corrige las posiciones.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn" onclick="closeModal('error-modal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/script.js"></script>
+</body>
+</html>
+
