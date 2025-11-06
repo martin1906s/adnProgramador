@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.remove('show');
+                modal.style.display = 'none';
             }
         });
     });
@@ -1167,12 +1168,28 @@ function validateCoordinates() {
 }
 
 // Cerrar modal (función global para usar en onclick)
-window.closeModal = function(modalId) {
+function closeModal(modalId) {
+    console.log('>>> closeModal llamado con ID:', modalId);
     const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('show');
+    
+    if (!modal) {
+        console.error('❌ ERROR: Modal no encontrado con ID:', modalId);
+        return;
     }
-};
+    
+    console.log('✓ Modal encontrado, cerrando...');
+    
+    // Remover clase show
+    modal.classList.remove('show');
+    
+    // También establecer display: none explícitamente
+    modal.style.display = 'none';
+    
+    console.log('✓ Modal cerrado');
+}
+
+// Hacer la función global
+window.closeModal = closeModal;
 
 // Mostrar mensaje temporal
 function showMessage(text, type = 'success') {
