@@ -2975,20 +2975,14 @@
           return;
         }
         
-        // Aquí puedes cambiar el código según lo que necesites
-        // Por ejemplo, podrías usar el código generado del modal
-        const codeModal = document.getElementById('codeModal');
-        if (codeModal && codeModal.classList.contains('show')) {
-          // Si hay un código generado, validarlo
-          alert(`Código ingresado: ${keyboardInput}. Verifica que coincida con el código generado.`);
+        if (keyboardInput === '0816') {
+          // Código correcto, redirigir al nivel 3
+          window.location.href = '../lvl3/index.html';
         } else {
-          // Por defecto, mostrar mensaje
-          alert(`Código ingresado: ${keyboardInput}. Sistema completado.`);
+          alert(`Código incorrecto: ${keyboardInput}. Intenta nuevamente.`);
+          keyboardInput = '';
+          updateKeyboardDisplay();
         }
-        
-        keyboardInput = '';
-        updateKeyboardDisplay();
-        closeLevelModal();
       }
 
       function updateKeyboardDisplay() {
