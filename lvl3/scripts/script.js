@@ -449,8 +449,15 @@ function updateCounts() {
         isCoordinatePlaced(coord.x, coord.y, coord.colorId)
     ).length;
     
-    document.getElementById('coords-count').textContent = `${correctCount}/10`;
-    document.getElementById('points-count').textContent = `${POINT_COLORS.length - placedCount}`;
+    const coordsCount = document.getElementById('coords-count');
+    if (coordsCount) {
+        coordsCount.textContent = `${correctCount}/10`;
+    }
+    
+    const imagesCount = document.getElementById('images-count');
+    if (imagesCount) {
+        imagesCount.textContent = `${POINT_COLORS.length - placedCount}`;
+    }
 }
 
 // Calcular posición de la esquina según coordenada
@@ -1094,25 +1101,40 @@ function handlePlacedPointDrop(e) {
 
 // Abrir modal (declarar antes de validateCoordinates)
 function openModal(modalId) {
-    console.log('openModal llamado con:', modalId);
+    console.log('>>> openModal llamado con ID:', modalId);
     const modal = document.getElementById(modalId);
-    console.log('Modal encontrado:', modal);
-    if (modal) {
-        // Remover cualquier otra clase que pueda interferir
-        modal.classList.remove('hide');
-        // Agregar clase show
-        modal.classList.add('show');
-        console.log('Clase show agregada. Modal visible:', modal.classList.contains('show'));
-        // Asegurarnos de que el display se establezca explícitamente
-        modal.style.display = 'flex';
-    } else {
-        console.error('Modal no encontrado con ID:', modalId);
+    
+    if (!modal) {
+        console.error('❌ ERROR: Modal no encontrado con ID:', modalId);
+        console.log('Buscando modales disponibles...');
+        const allModals = document.querySelectorAll('.modal-overlay');
+        console.log('Modales encontrados:', allModals.length);
+        allModals.forEach(m => console.log('  - ID:', m.id));
+        return;
     }
+    
+    console.log('✓ Modal encontrado:', modal);
+    console.log('  - Clases actuales:', modal.className);
+    
+    // Remover cualquier otra clase que pueda interferir
+    modal.classList.remove('hide');
+    
+    // Agregar clase show
+    modal.classList.add('show');
+    console.log('  - Clase "show" agregada');
+    
+    // Asegurarnos de que el display se establezca explícitamente
+    modal.style.display = 'flex';
+    modal.style.zIndex = '3000';
+    
+    console.log('  - Display:', modal.style.display);
+    console.log('  - Clases finales:', modal.className);
+    console.log('✓ Modal debería estar visible ahora');
 }
 
 // Validar coordenadas
 function validateCoordinates() {
-    console.log('Validando coordenadas...');
+    console.log('=== INICIANDO VALIDACIÓN ===');
     console.log('placedPoints:', placedPoints);
     
     let allCorrect = true;
@@ -1121,7 +1143,7 @@ function validateCoordinates() {
     // Verificar que todas las coordenadas estén correctas
     for (const coord of CAT_COORDINATES) {
         const isPlaced = isCoordinatePlaced(coord.x, coord.y, coord.colorId);
-        console.log(`Coordenada (${coord.x}, ${coord.y}) con colorId ${coord.colorId}: ${isPlaced ? 'CORRECTA' : 'INCORRECTA'}`);
+        console.log(`Coordenada (${coord.x}, ${coord.y}) con colorId ${coord.colorId}: ${isPlaced ? '✓ CORRECTA' : '✗ INCORRECTA'}`);
         if (isPlaced) {
             correctCount++;
         } else {
@@ -1129,17 +1151,19 @@ function validateCoordinates() {
         }
     }
     
-    console.log(`Correctas: ${correctCount}/${CAT_COORDINATES.length}`);
+    console.log(`Total correctas: ${correctCount}/${CAT_COORDINATES.length}`);
     console.log(`Todas correctas: ${allCorrect}`);
     
     // Mostrar modal correspondiente
     if (allCorrect) {
-        console.log('Abriendo modal de éxito');
+        console.log('>>> Abriendo modal de ÉXITO (200 OK)');
         openModal('success-modal');
     } else {
-        console.log('Abriendo modal de error');
+        console.log('>>> Abriendo modal de ERROR (404)');
         openModal('error-modal');
     }
+    
+    console.log('=== FIN VALIDACIÓN ===');
 }
 
 // Cerrar modal (función global para usar en onclick)
