@@ -31,7 +31,7 @@ const problems = [
     name: "Problema 3",
     text: "Luis es menor que Elena, Elena es menor que Roberto, Roberto es menor que Carmen, Carmen es la mayor",
     people: [
-      { id: "card-luis", name: "Luis", age: 19 },
+      { id: "card-luis", name: "Luis", age: 20 },
       { id: "card-elena", name: "Elena", age: 24 },
       { id: "card-roberto", name: "Roberto", age: 29 },
       { id: "card-carmen", name: "Carmen", age: 33 }
@@ -70,6 +70,7 @@ function initGame() {
   currentProblem = problems[randomIndex];
   
   document.getElementById('problem-text').textContent = currentProblem.text;
+  document.getElementById('instruction-text').innerHTML = `Arrastra las cards desde el pool de datos hacia las zonas de orden en la parte superior. Debes ordenarlas de <strong>menor a mayor edad</strong> según las pistas proporcionadas.`;
   document.getElementById('result').textContent = '';
   
   const cardsContainer = document.getElementById('cards-container');
@@ -204,24 +205,48 @@ window.onclick = function(event) {
   }
 }
 
-function showLevelModal() {
-  document.getElementById('level-modal').style.display = 'block';
-}
+let keyboardInput = '';
 
 function closeLevelModal() {
   document.getElementById('level-modal').style.display = 'none';
 }
 
 function pressNumber(number) {
-  console.log(number);
+  keyboardInput += number.toString();
+  updateKeyboardDisplay();
 }
 
 function pressDelete() {
-  console.log('X');
+  keyboardInput = keyboardInput.slice(0, -1);
+  updateKeyboardDisplay();
 }
 
 function pressConfirm() {
-  console.log('✓');
+  if (keyboardInput === '') {
+    alert('Por favor, ingresa un número primero.');
+    return;
+  }
+  
+  alert(`Número ingresado: ${keyboardInput}`);
+  keyboardInput = '';
+  updateKeyboardDisplay();
+}
+
+function updateKeyboardDisplay() {
+  const input = document.getElementById('keyboard-input');
+  if (input) {
+    input.value = keyboardInput || '';
+    if (keyboardInput === '') {
+      input.placeholder = '0';
+    }
+  }
+}
+
+// Limpiar el teclado cuando se abre el modal
+function showLevelModal() {
+  keyboardInput = '';
+  updateKeyboardDisplay();
+  document.getElementById('level-modal').style.display = 'block';
 }
 
 window.addEventListener('DOMContentLoaded', initGame);

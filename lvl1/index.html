@@ -12,16 +12,30 @@
 <body>
   <div class="grid-background"></div>
   <div class="scanlines"></div>
-  <button class="level-button" onclick="showLevelModal()">
-    <span class="button-text">[LEVEL] PASAR DE NIVEL</span>
-  </button>
+
   <div class="game-container">
 
     <h2 class="cyber-title">[SYSTEM] ORDENAR CARDS POR EDAD</h2>
     
-    <div class="problems-container">
-      <div class="neon-text" id="problem-text">Cargando problema...</div>
-    </div>
+    <section class="instructions panel-glow">
+      <div class="panel-header">
+        <span class="status-indicator"></span>
+        <h2 class="panel-title">INSTRUCCIONES DEL SISTEMA</h2>
+      </div>
+      <div class="panel-content">
+        <p class="instruction-text" id="instruction-text">Cargando instrucciones...</p>
+      </div>
+    </section>
+
+    <section class="problems-container panel-glow">
+      <div class="panel-header">
+        <span class="status-indicator"></span>
+        <h2 class="panel-title">PROBLEMA DEL SISTEMA</h2>
+      </div>
+      <div class="panel-content">
+        <p class="neon-text instruction-text" id="problem-text">Cargando problema...</p>
+      </div>
+    </section>
 
     <h3 class="cyber-subtitle">[DRAG & DROP] Arrastra las Cards en el orden correcto (de menor a mayor edad):</h3>
     <div class="order-container" id="order-container">
@@ -41,6 +55,10 @@
         <span class="button-glow"></span>
     </div>
     <p id="result" class="result-text"></p>
+    
+    <button class="level-button" onclick="showLevelModal()">
+      <span class="button-text">🔒 [LEVEL] PASAR DE NIVEL</span>
+    </button>
   </div>
 
   <div id="modal" class="modal">
@@ -63,24 +81,32 @@
   </div>
 
   <div id="level-modal" class="modal">
-    <div class="level-modal-content">
-      <span class="close" onclick="closeLevelModal()">&times;</span>
+    <div class="level-modal-content cyber-modal">
       <div class="level-modal-background">
         <img src="images/fondo-code.png" alt="Fondo" class="level-background-img">
-        <div class="level-modal-content-inner">
-          <img src="images/codigo.png" alt="Código" class="level-code-img">
-          <button class="invisible-btn number-btn" style="left: 240px; top: 220px;" onclick="pressNumber(1)"></button>
-          <button class="invisible-btn number-btn" style="left: 340px; top: 220px;" onclick="pressNumber(2)"></button>
-          <button class="invisible-btn number-btn" style="left: 440px; top: 220px;" onclick="pressNumber(3)"></button>
-          <button class="invisible-btn number-btn" style="left: 240px; top: 320px;" onclick="pressNumber(4)"></button>
-          <button class="invisible-btn number-btn" style="left: 340px; top: 320px;" onclick="pressNumber(5)"></button>
-          <button class="invisible-btn number-btn" style="left: 440px; top: 320px;" onclick="pressNumber(6)"></button>
-          <button class="invisible-btn number-btn" style="left: 240px; top: 420px;" onclick="pressNumber(7)"></button>
-          <button class="invisible-btn number-btn" style="left: 340px; top: 420px;" onclick="pressNumber(8)"></button>
-          <button class="invisible-btn number-btn" style="left: 440px; top: 420px;" onclick="pressNumber(9)"></button>
-          <button class="invisible-btn number-btn" style="left: 340px; top: 520px;" onclick="pressNumber(0)"></button>
-          <button class="invisible-btn delete-btn" style="left: 240px; top: 520px;" onclick="pressDelete()"></button>
-          <button class="invisible-btn confirm-btn" style="left: 440px; top: 520px;" onclick="pressConfirm()"></button>
+      </div>
+      <div class="modal-header">
+        <span class="close" onclick="closeLevelModal()">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="keyboard-container">
+          <div class="keyboard-display">
+            <input type="text" id="keyboard-input" readonly placeholder="0">
+          </div>
+          <div class="keyboard-grid">
+            <button class="keyboard-btn num-btn" onclick="pressNumber(1)">1</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(2)">2</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(3)">3</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(4)">4</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(5)">5</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(6)">6</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(7)">7</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(8)">8</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(9)">9</button>
+            <button class="keyboard-btn delete-btn" onclick="pressDelete()">X</button>
+            <button class="keyboard-btn num-btn" onclick="pressNumber(0)">0</button>
+            <button class="keyboard-btn confirm-btn" onclick="pressConfirm()">✔</button>
+          </div>
         </div>
       </div>
     </div>
