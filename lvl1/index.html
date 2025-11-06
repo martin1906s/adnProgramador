@@ -1257,9 +1257,14 @@ function pressConfirm() {
     return;
   }
   
-  alert(`Número ingresado: ${keyboardInput}`);
-  keyboardInput = '';
-  updateKeyboardDisplay();
+  if (keyboardInput === '0816') {
+    // Código correcto, redirigir al nivel 2
+    window.location.href = '../lvl2/index.html';
+  } else {
+    alert(`Código incorrecto: ${keyboardInput}. Intenta nuevamente.`);
+    keyboardInput = '';
+    updateKeyboardDisplay();
+  }
 }
 
 function updateKeyboardDisplay() {
