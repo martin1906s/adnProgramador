@@ -1,7 +1,187 @@
 // Las personas y características están disponibles globalmente desde person.js
 
-// Sistema de instrucciones con operadores lógicos
+// Sistema de instrucciones con operadores lógicos y rondas
 let instruccionActual = null;
+const NUM_RONDAS = 4;
+let rondaActual = 0;
+let instruccionesRondas = [];
+// Estado por ronda: Set de ids en la zona de clasificación
+let estadoRondas = Array.from({ length: NUM_RONDAS }, () => new Set());
+
+function actualizarRoundIndicator() {
+  const ind = document.getElementById('roundIndicator');
+  if (ind) ind.textContent = `Ronda ${rondaActual + 1} / ${NUM_RONDAS}`;
+  const btnGen = document.getElementById('btnGenerate');
+  if (btnGen) {
+    // Mostrar solo en la 4ta ronda
+    btnGen.style.display = (rondaActual === NUM_RONDAS - 1) ? 'inline-flex' : 'none';
+  }
+}
+
+function capturarEstadoActual() {
+  const dropZone = document.querySelector('#dragArea .drop-zone');
+  const contenedor = dropZone ? dropZone : document.getElementById('dragArea');
+  const personasEnContenedor = contenedor.querySelectorAll('.person');
+  const set = new Set();
+  personasEnContenedor.forEach(p => set.add(p.id));
+  estadoRondas[rondaActual] = set;
+}
+
+function aplicarEstadoRonda(indice) {
+  const personContainer = document.querySelector('.person-container');
+  const dropZone = document.querySelector('#dragArea .drop-zone');
+  const destino = dropZone ? dropZone : document.getElementById('dragArea');
+  const placeholder = document.querySelector('#dragArea .drop-placeholder');
+
+  // Mover todas al pool primero
+  document.querySelectorAll('.person').forEach(p => personContainer.appendChild(p));
+
+  const set = estadoRondas[indice] || new Set();
+  set.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) destino.appendChild(el);
+  });
+
+  // Placeholder segun estado
+  if (placeholder) {
+    placeholder.style.display = set.size > 0 ? 'none' : 'block';
+  }
+
+  // Progreso acorde al estado aplicado
+  const totalCorrectas = Array.from(document.querySelectorAll('.person')).filter(p => validarCondiciones(p)).length;
+  actualizarProgreso(set.size, totalCorrectas);
+  actualizarContadorDatos();
+}
+
+function irA(incremento) {
+  // Guardar estado actual
+  capturarEstadoActual();
+
+  // Cambiar índice de ronda (acotado 0..NUM_RONDAS-1)
+  const nueva = rondaActual + incremento;
+  if (nueva < 0 || nueva >= NUM_RONDAS) return;
+  rondaActual = nueva;
+
+  // Cambiar instrucción a la de la ronda
+  instruccionActual = instruccionesRondas[rondaActual];
+  mostrarInstruccion();
+  aplicarEstadoRonda(rondaActual);
+  actualizarRoundIndicator();
+}
+
+function configurarNavegacionRondas() {
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+  const btnGen = document.getElementById('btnGenerate');
+  if (btnPrev) btnPrev.onclick = () => irA(-1);
+  if (btnNext) btnNext.onclick = () => irA(1);
+  if (btnGen) {
+    btnGen.onclick = () => {
+      // Asegurar guardar el estado actual antes de generar
+      capturarEstadoActual();
+      // Construir contenido del modal
+      construirContenidoModal();
+      const modal = document.getElementById('codeModal');
+      if (!modal) return;
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+    };
+  }
+  // Cerrar modal al hacer click en el overlay
+  const modal = document.getElementById('codeModal');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+    });
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('show')) {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+  actualizarRoundIndicator();
+}
+
+function construirContenidoModal() {
+  const modal = document.getElementById('codeModal');
+  if (!modal) return;
+  const content = modal.querySelector('.modal-content');
+  if (!content) return;
+
+  // Contenedor de secciones
+  const wrapper = document.createElement('div');
+  wrapper.className = 'modal-sections';
+
+  for (let i = 0; i < NUM_RONDAS; i++) {
+    const section = document.createElement('section');
+    section.className = 'modal-section';
+
+    const header = document.createElement('div');
+    header.className = 'modal-section-header';
+    const title = document.createElement('h4');
+    title.className = 'modal-section-title';
+    const instruccionTexto = instruccionesRondas[i]?.texto || '—';
+    title.textContent = `Ronda ${i + 1}: ${instruccionTexto}`;
+
+    const thumbs = document.createElement('div');
+    thumbs.className = 'thumbs';
+
+    const ids = Array.from(estadoRondas[i] || []);
+    // Contador en header (escritorio)
+    const countHeader = document.createElement('span');
+    countHeader.className = 'count-badge count-header';
+    countHeader.textContent = String(ids.length);
+    header.appendChild(title);
+    header.appendChild(countHeader);
+
+    if (ids.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-round';
+      empty.textContent = 'Sin elementos arrastrados';
+      thumbs.appendChild(empty);
+    } else {
+      ids.forEach(pid => {
+        const el = document.getElementById(pid);
+        if (!el) return;
+        const img = el.querySelector('img');
+        const src = img ? img.src : '';
+        const alt = img ? img.alt : pid;
+        const fig = document.createElement('figure');
+        fig.className = 'thumb';
+        const thumbImg = document.createElement('img');
+        thumbImg.src = src;
+        thumbImg.alt = alt;
+        thumbImg.loading = 'lazy';
+        thumbImg.decoding = 'async';
+        fig.appendChild(thumbImg);
+        thumbs.appendChild(fig);
+      });
+    }
+
+    // Contador al lado derecho de las imágenes (móvil)
+    const countAside = document.createElement('span');
+    countAside.className = 'count-badge count-aside';
+    countAside.textContent = String(ids.length);
+
+    const body = document.createElement('div');
+    body.className = 'section-body';
+    body.appendChild(thumbs);
+    body.appendChild(countAside);
+
+    section.appendChild(header);
+    section.appendChild(body);
+    wrapper.appendChild(section);
+  }
+
+  // Limpiar y montar
+  content.innerHTML = '';
+  content.appendChild(wrapper);
+}
 
 // Mapa de características de cada persona (escalable)
 // Se construye dinámicamente analizando las propiedades de cada persona
@@ -91,6 +271,8 @@ function inicializarMapaCaracteristicas() {
       edad = 'adulto'; sexo = 'mujer'; pelo = 'largo';
     } else if (persona.img === '13.png') {
       edad = 'adulto'; sexo = 'mujer'; pelo = 'corto';
+    } else if (persona.img === '14.png') {
+      edad = 'niño'; sexo = 'mujer'; pelo = 'largo';
     } else {
       // Para nuevas personas, usar valores por defecto o inferir de otras propiedades
       // Por ahora, usar el índice como fallback (no ideal pero funcional)
@@ -374,8 +556,28 @@ function inicializar() {
   // Inicializar el mapa de características primero
   inicializarMapaCaracteristicas();
   
-  // Generar instrucción aleatoria y coherente basada en los datos reales
-  instruccionActual = generarInstruccionAleatoria();
+  // Generar 4 instrucciones únicas para rondas
+  const textosUsados = new Set();
+  instruccionesRondas = [];
+  for (let i = 0; i < NUM_RONDAS; i++) {
+    let inst = null;
+    let intentos = 0;
+    do {
+      inst = generarInstruccionAleatoria();
+      intentos++;
+      if (!inst) break;
+    } while (textosUsados.has(inst.texto) && intentos < 30);
+    if (!inst) continue;
+    textosUsados.add(inst.texto);
+    instruccionesRondas.push(inst);
+  }
+  // Si por alguna razón no se llenan las 4, repetir últimas válidas
+  while (instruccionesRondas.length < NUM_RONDAS && instruccionesRondas.length > 0) {
+    instruccionesRondas.push(instruccionesRondas[instruccionesRondas.length - 1]);
+  }
+  
+  rondaActual = 0;
+  instruccionActual = instruccionesRondas[rondaActual];
   
   if (!instruccionActual) {
     console.error('No se pudo generar una instrucción válida');
@@ -391,8 +593,14 @@ function inicializar() {
   // Configurar drag and drop
   configurarDragAndDrop();
   
+  // Configurar navegación por rondas
+  configurarNavegacionRondas();
+  
   // Actualizar contador de datos
   actualizarContadorDatos();
+  
+  // Aplicar estado de la ronda inicial (vacío)
+  aplicarEstadoRonda(rondaActual);
 }
 
 // Mostrar instrucción actual
@@ -402,16 +610,8 @@ function mostrarInstruccion() {
     instructionText.innerHTML = `<strong>Instrucción:</strong> ${instruccionActual.texto}`;
   }
   
-  // Reiniciar progreso
+  // Actualizar contador
   setTimeout(() => {
-    const todasLasPersonas = document.querySelectorAll('.person');
-    let personasCorrectas = 0;
-    todasLasPersonas.forEach(persona => {
-      if (validarCondiciones(persona)) {
-        personasCorrectas++;
-      }
-    });
-    actualizarProgreso(0, personasCorrectas);
     actualizarContadorDatos();
   }, 100);
 }
@@ -467,8 +667,8 @@ function generarPersonajes() {
     
     personDiv.appendChild(img);
     
-    // Tooltip con información
-    personDiv.title = `Gorra: ${persona.gorra ? 'Sí' : 'No'} | Lentes: ${persona.lentes ? 'Sí' : 'No'} | Edad: ${edad} | Sexo: ${sexo} | Ropa: ${persona.ropa} | Pelo: ${pelo}`;
+    // Tooltip deshabilitado por requerimiento (no mostrar ayuda)
+    // personDiv.title = '';
     
     personContainer.appendChild(personDiv);
   });
@@ -572,13 +772,7 @@ function configurarDragAndDrop() {
     // Usar el elemento guardado en la variable global
     if (!elementoArrastrado) return;
     
-    if (validarCondiciones(elementoArrastrado)) {
-      dragArea.classList.add("accept");
-      dragArea.classList.remove("reject");
-    } else {
-      dragArea.classList.add("reject");
-      dragArea.classList.remove("accept");
-    }
+    // Sin feedback visual de acierto/error
   });
   
   dragArea.addEventListener("dragenter", (e) => {
@@ -587,10 +781,7 @@ function configurarDragAndDrop() {
   });
   
   dragArea.addEventListener("dragleave", (e) => {
-    // Solo remover clases si realmente salimos del área
-    if (!dragArea.contains(e.relatedTarget)) {
-      dragArea.classList.remove("accept", "reject");
-    }
+    // Sin indicadores visuales
   });
   
   dragArea.addEventListener("drop", (e) => {
@@ -606,52 +797,66 @@ function configurarDragAndDrop() {
     }
     
     if (!droppedPerson) {
-      dragArea.classList.remove("accept", "reject");
       return;
     }
     
-    // Validar condiciones
-    if (validarCondiciones(droppedPerson)) {
-      // Verificar si ya está en el contenedor
-      if (droppedPerson.parentElement !== dragArea) {
-        // Obtener el drop-zone dentro del dragArea
-        const dropZone = dragArea.querySelector('.drop-zone');
-        
-        // Remover de donde estaba
-        droppedPerson.remove();
-        
-        // Agregar al área de destino (dentro del drop-zone)
-        if (dropZone) {
-          dropZone.appendChild(droppedPerson);
-        } else {
-          dragArea.appendChild(droppedPerson);
-        }
-        
-        droppedPerson.style.opacity = "1";
-        
-        // Ocultar placeholder si existe
-        const placeholder = dragArea.querySelector('.drop-placeholder');
-        if (placeholder) {
-          placeholder.style.display = 'none';
-        }
-        
-        // Mostrar mensaje de éxito
-        mostrarMensaje("✓ Correcto! Entidad clasificada correctamente.", "success");
-        
-        // Verificar si se completó el ejercicio
-        verificarCompletado();
-        
-        // Actualizar contadores después de un pequeño delay para asegurar que el DOM se actualizó
-        setTimeout(() => {
-          actualizarContadorDatos();
-        }, 100);
+    // Aceptar y mantener SIEMPRE en el contenedor, sin importar si cumple
+    if (droppedPerson.parentElement !== dragArea && droppedPerson.parentElement !== dragArea.querySelector('.drop-zone')) {
+      const dropZone = dragArea.querySelector('.drop-zone');
+      
+      // Remover de donde estaba
+      droppedPerson.remove();
+      
+      // Agregar al área de destino (dentro del drop-zone si existe)
+      if (dropZone) {
+        dropZone.appendChild(droppedPerson);
+      } else {
+        dragArea.appendChild(droppedPerson);
       }
-    } else {
-      mostrarMensaje("✗ Error: Esta entidad no cumple con las características requeridas.", "error");
+      
+      droppedPerson.style.opacity = "1";
+      
+      // Ocultar placeholder si existe
+      const placeholder = dragArea.querySelector('.drop-placeholder');
+      if (placeholder) {
+        placeholder.style.display = 'none';
+      }
+      
+      // Actualizar contadores
+      setTimeout(() => {
+        actualizarContadorDatos();
+      }, 100);
     }
     
-    dragArea.classList.remove("accept", "reject");
     elementoArrastrado = null;
+  });
+
+  // Click en elemento dentro del contenedor: devolver al pool de datos
+  dragArea.addEventListener('click', (e) => {
+    const person = e.target.closest('.person');
+    if (!person) return;
+    const personContainer = document.querySelector('.person-container');
+    if (!personContainer) return;
+    
+    // Si ya está en el pool, no hacer nada
+    if (person.parentElement === personContainer) return;
+    
+    // Mover al pool
+    person.remove();
+    personContainer.appendChild(person);
+    
+    // Si no quedan elementos, mostrar placeholder
+    const placeholder = dragArea.querySelector('.drop-placeholder');
+    const dropZone = dragArea.querySelector('.drop-zone');
+    const countInZone = (dropZone ? dropZone : dragArea).querySelectorAll('.person').length;
+    if (placeholder) {
+      placeholder.style.display = countInZone > 0 ? 'none' : 'block';
+    }
+    
+    // Actualizar contador
+    setTimeout(() => {
+      actualizarContadorDatos();
+    }, 50);
   });
   
   // Prevenir el comportamiento por defecto en todo el documento
@@ -669,22 +874,7 @@ function configurarDragAndDrop() {
 }
 
 // Mostrar mensaje temporal
-function mostrarMensaje(texto, tipo) {
-  // Eliminar mensaje anterior si existe
-  const mensajeAnterior = document.querySelector('.mensaje-temp');
-  if (mensajeAnterior) {
-    mensajeAnterior.remove();
-  }
-  
-  const mensaje = document.createElement('div');
-  mensaje.className = `mensaje-temp ${tipo}`;
-  mensaje.textContent = texto;
-  document.body.appendChild(mensaje);
-  
-  setTimeout(() => {
-    mensaje.remove();
-  }, 2000);
-}
+// Mensajes deshabilitados por requerimiento
 
 // Verificar si se completó el ejercicio
 function verificarCompletado() {

@@ -141,6 +141,16 @@
           </div>
           <div class="panel-content">
             <p class="instruction-text">Cargando instrucciones...</p>
+            <div class="round-nav" role="toolbar" aria-label="Navegación de rondas">
+              <button id="btnPrev" class="nav-btn" type="button" aria-label="Anterior" title="Anterior">&#x2039;</button>
+              <span id="roundIndicator" class="round-indicator" aria-live="polite">Ronda 1 / 4</span>
+              <button id="btnNext" class="nav-btn" type="button" aria-label="Siguiente" title="Siguiente">&#x203A;</button>
+            </div>
+            <div class="generate-wrapper">
+              <button id="btnGenerate" class="generate-btn" type="button" aria-label="Generar código" title="Generar código" style="display:none;">
+                Generar código
+              </button>
+            </div>
           </div>
         </section>
 
@@ -209,39 +219,20 @@
           </section>
         </div>
 
-        <section class="progress panel-glow" aria-labelledby="progress-title">
-          <div class="progress-header">
-            <span class="status-indicator" aria-hidden="true"></span>
-            <h2 class="panel-title" id="progress-title">
-              PROGRESO DEL SISTEMA
-            </h2>
-          </div>
-          <div class="progress-content">
-            <div class="progress-bar-container">
-              <div
-                class="progress-bar"
-                id="progressBar"
-                role="progressbar"
-                aria-valuenow="0"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                aria-label="Progreso de clasificación"
-              >
-                <div class="progress-fill"></div>
-              </div>
-            </div>
-            <p class="progress-text" id="progressText" aria-live="polite">
-              <span class="code-value">0</span> /
-              <span class="code-value">0</span> entidades clasificadas
-              correctamente
-            </p>
-          </div>
-        </section>
+        <!-- Barra de progreso eliminada por requerimiento -->
       </main>
     </div>
 
     <!-- Scripts con defer para mejor rendimiento y SEO -->
     <script src="./scripts/person.js" defer></script>
     <script src="./scripts/script.js" defer></script>
+
+    <!-- Modal para código generado -->
+    <div id="codeModal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="codeModalTitle">
+        <h3 id="codeModalTitle" class="visually-hidden">Código generado</h3>
+        <!-- Contenido en blanco según requerimiento -->
+      </div>
+    </div>
   </body>
 </html>

@@ -137,6 +137,16 @@ const persona13 = {
   pelo: (caracteristicas.pelo.corto = true),
 };
 
+const persona14 = {
+  img: "14.png",
+  gorra: true,
+  lentes: true,
+  edad: (caracteristicas.edad.niño = true),
+  sexo: (caracteristicas.sexo.mujer = true),
+  ropa: (caracteristicas.ropa.color = "Blanco"),
+  pelo: (caracteristicas.pelo.largo = true),
+};
+
 const personas = [
   persona1,
   persona2,
@@ -151,4 +161,5 @@ const personas = [
   persona11,
   persona12,
   persona13,
+  persona14,
 ];
