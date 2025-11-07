@@ -62,17 +62,12 @@
     />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="./assets/favicon.png" />
-    <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
 
     <!-- Preconnect para Rendimiento -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
     <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-
-    <!-- Estilos -->
-    <link rel="stylesheet" href="./styles/style.css" />
 
     <!-- Fuentes -->
     <link
@@ -1470,6 +1465,45 @@
       .level-button.show {
         display: block;
       }
+
+      .code-modal-wrapper {
+        padding: 30px 24px 36px;
+        display: grid;
+        gap: 18px;
+        text-align: center;
+      }
+
+      .code-modal-title {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(1.1rem, 2vw, 1.4rem);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--neon-cyan);
+      }
+
+      .code-modal-text {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .code-display {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(2.4rem, 6vw, 3rem);
+        font-weight: 900;
+        color: var(--neon-green);
+        letter-spacing: 14px;
+        text-shadow: var(--glow-green);
+        margin: 0;
+      }
+
+      .code-modal-wrapper.error .code-modal-title {
+        color: var(--neon-pink);
+      }
+
+      .code-modal-wrapper.error .code-modal-text {
+        color: var(--neon-pink);
+      }
     </style>
   </head>
   <body>
@@ -1621,10 +1655,6 @@
       </main>
     </div>
 
-    <!-- Scripts con defer para mejor rendimiento y SEO -->
-    <script src="./scripts/person.js" defer></script>
-    <script src="./scripts/script.js" defer></script>
-
     <!-- Modal para código generado -->
     <div id="codeModal" class="modal-overlay" aria-hidden="true">
       <div
@@ -1647,7 +1677,7 @@
     <div id="level-modal" class="modal-overlay" style="display: none;">
       <div class="level-modal-content">
         <div class="level-modal-background">
-          <img src="./images/fondo-code.png" alt="Fondo" class="level-background-img" onerror="this.style.display='none'">
+          <img src="../lvl1/images/fondo-code.png" alt="Fondo" class="level-background-img" onerror="this.style.display='none'">
         </div>
         <div class="modal-header">
           <span class="close" onclick="closeLevelModal()">&times;</span>
@@ -1882,7 +1912,7 @@
         const personasEnContenedor = contenedor.querySelectorAll(".person");
         const set = new Set();
         personasEnContenedor.forEach((p) => set.add(p.id));
-        estadoRondas[rondaActual] = set;
+        estadoRondas[rondaActual] = new Set(set);
       }
 
       function aplicarEstadoRonda(indice) {
@@ -1919,6 +1949,103 @@
         actualizarContadorDatos();
       }
 
+      function obtenerIdsCorrectosParaInstruccion(instruccion) {
+        const previo = instruccionActual;
+        instruccionActual = instruccion;
+        const ids = new Set();
+        document.querySelectorAll(".person").forEach((persona) => {
+          if (validarCondiciones(persona)) {
+            ids.add(persona.id);
+          }
+        });
+        instruccionActual = previo;
+        return ids;
+      }
+
+      function compararSets(a, b) {
+        if (a.size !== b.size) return false;
+        for (const valor of a) {
+          if (!b.has(valor)) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function generarDigitoCodigo(idsCorrectos, indiceRonda) {
+        const cantidad = idsCorrectos.size;
+        return cantidad.toString();
+      }
+
+      function obtenerResumenRondas() {
+        const resumen = instruccionesRondas.map((instruccion, indice) => {
+          const seleccionUsuario = new Set(estadoRondas[indice] || []);
+          const idsCorrectos = obtenerIdsCorrectosParaInstruccion(instruccion);
+          const esCorrecto =
+            idsCorrectos.size > 0 &&
+            compararSets(seleccionUsuario, idsCorrectos);
+          return {
+            indice,
+            seleccionUsuario,
+            idsCorrectos,
+            esCorrecto,
+          };
+        });
+
+        const todasCorrectas =
+          resumen.length === NUM_RONDAS &&
+          resumen.every((ronda) => ronda.esCorrecto);
+
+        return { resumen, todasCorrectas };
+      }
+
+      function obtenerCodigoEsperado() {
+        if (!Array.isArray(instruccionesRondas) || instruccionesRondas.length === 0) {
+          return "";
+        }
+
+        const digitos = instruccionesRondas.map((instruccion, indice) => {
+          const idsCorrectos = obtenerIdsCorrectosParaInstruccion(instruccion);
+          return generarDigitoCodigo(idsCorrectos, indice);
+        });
+
+        return digitos.join("");
+      }
+
+      function obtenerCodigoUsuario() {
+        return Array.from({ length: NUM_RONDAS }, (_, indice) => {
+          const set = estadoRondas[indice];
+          return set instanceof Set ? set.size : 0;
+        })
+          .map((valor) => valor.toString())
+          .join("");
+      }
+
+      function registrarDiagnostico(origen, codigoIngresado) {
+        const { resumen, todasCorrectas } = obtenerResumenRondas();
+        const codigoEsperado = obtenerCodigoEsperado();
+        const codigoUsuario = obtenerCodigoUsuario();
+        const rondasCorrectas = resumen.filter((ronda) => ronda.esCorrecto).length;
+
+        console.group(`[DEBUG] ${origen}`);
+        console.log("Código esperado:", codigoEsperado);
+        console.log("Código generado por usuario:", codigoUsuario);
+        console.log("Código ingresado en teclado:", codigoIngresado ?? "(sin ingreso)" );
+        console.log(`Rondas correctas: ${rondasCorrectas} / ${NUM_RONDAS}`);
+        resumen.forEach((datos, indice) => {
+          const instruccionTexto = instruccionesRondas[indice]?.texto || "—";
+          console.group(`Ronda ${indice + 1}`);
+          console.log("Instrucción:", instruccionTexto);
+          console.log("Selección usuario:", Array.from(datos.seleccionUsuario));
+          console.log("IDs correctos:", Array.from(datos.idsCorrectos));
+          console.log("Es correcta:", datos.esCorrecto);
+          console.groupEnd();
+        });
+        console.groupEnd();
+
+        return { resumen, todasCorrectas, codigoEsperado, codigoUsuario };
+      }
+
       function irA(incremento) {
         // Guardar estado actual
         capturarEstadoActual();
@@ -1947,10 +2074,6 @@
             capturarEstadoActual();
             // Construir contenido del modal
             construirContenidoModal();
-            const modal = document.getElementById("codeModal");
-            if (!modal) return;
-            modal.classList.add("show");
-            modal.setAttribute("aria-hidden", "false");
           };
         }
         // Cerrar modal al hacer click en el overlay
@@ -1973,80 +2096,54 @@
         actualizarRoundIndicator();
       }
 
-      function construirContenidoModal() {
+      function abrirModalCodigo({ titulo, mensaje, codigo = "", tipo = "info" }) {
         const modal = document.getElementById("codeModal");
         if (!modal) return;
         const content = modal.querySelector(".modal-content");
         if (!content) return;
 
-        // Contenedor de secciones
         const wrapper = document.createElement("div");
-        wrapper.className = "modal-sections";
-
-        for (let i = 0; i < NUM_RONDAS; i++) {
-          const section = document.createElement("section");
-          section.className = "modal-section";
-
-          const header = document.createElement("div");
-          header.className = "modal-section-header";
-          const title = document.createElement("h4");
-          title.className = "modal-section-title";
-          const instruccionTexto = instruccionesRondas[i]?.texto || "—";
-          title.textContent = `Ronda ${i + 1}: ${instruccionTexto}`;
-
-          const thumbs = document.createElement("div");
-          thumbs.className = "thumbs";
-
-          const ids = Array.from(estadoRondas[i] || []);
-          // Contador en header (escritorio)
-          const countHeader = document.createElement("span");
-          countHeader.className = "count-badge count-header";
-          countHeader.textContent = String(ids.length);
-          header.appendChild(title);
-          header.appendChild(countHeader);
-
-          if (ids.length === 0) {
-            const empty = document.createElement("p");
-            empty.className = "empty-round";
-            empty.textContent = "Sin elementos arrastrados";
-            thumbs.appendChild(empty);
-          } else {
-            ids.forEach((pid) => {
-              const el = document.getElementById(pid);
-              if (!el) return;
-              const img = el.querySelector("img");
-              const src = img ? img.src : "";
-              const alt = img ? img.alt : pid;
-              const fig = document.createElement("figure");
-              fig.className = "thumb";
-              const thumbImg = document.createElement("img");
-              thumbImg.src = src;
-              thumbImg.alt = alt;
-              thumbImg.loading = "lazy";
-              thumbImg.decoding = "async";
-              fig.appendChild(thumbImg);
-              thumbs.appendChild(fig);
-            });
-          }
-
-          // Contador al lado derecho de las imágenes (móvil)
-          const countAside = document.createElement("span");
-          countAside.className = "count-badge count-aside";
-          countAside.textContent = String(ids.length);
-
-          const body = document.createElement("div");
-          body.className = "section-body";
-          body.appendChild(thumbs);
-          body.appendChild(countAside);
-
-          section.appendChild(header);
-          section.appendChild(body);
-          wrapper.appendChild(section);
+        wrapper.className = "code-modal-wrapper";
+        if (tipo === "error") {
+          wrapper.classList.add("error");
         }
 
-        // Limpiar y montar
+        const titleEl = document.createElement("h4");
+        titleEl.className = "code-modal-title";
+        titleEl.textContent = titulo;
+        wrapper.appendChild(titleEl);
+
+        const messageEl = document.createElement("p");
+        messageEl.className = "code-modal-text";
+        messageEl.textContent = mensaje;
+        wrapper.appendChild(messageEl);
+
+        if (codigo) {
+          const codeDisplay = document.createElement("p");
+          codeDisplay.className = "code-display";
+          codeDisplay.textContent = codigo;
+          wrapper.appendChild(codeDisplay);
+        }
+
         content.innerHTML = "";
         content.appendChild(wrapper);
+
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+      }
+
+      function construirContenidoModal() {
+        const { codigoUsuario } = registrarDiagnostico(
+          "Generar código",
+          null
+        );
+        const codigo = codigoUsuario;
+        abrirModalCodigo({
+          titulo: "Código generado",
+          mensaje: "Ingresa este código en el panel de nivel para continuar.",
+          codigo,
+          tipo: "info",
+        });
       }
 
       // Mapa de características de cada persona (escalable)
@@ -2485,6 +2582,8 @@
         // Inicializar el mapa de características primero
         inicializarMapaCaracteristicas();
 
+        estadoRondas = Array.from({ length: NUM_RONDAS }, () => new Set());
+
         // Generar 4 instrucciones únicas para rondas
         const textosUsados = new Set();
         instruccionesRondas = [];
@@ -2769,6 +2868,7 @@
               placeholder.style.display = "none";
             }
 
+            capturarEstadoActual();
             // Actualizar contadores
             setTimeout(() => {
               actualizarContadorDatos();
@@ -2806,6 +2906,7 @@
           setTimeout(() => {
             actualizarContadorDatos();
           }, 50);
+          capturarEstadoActual();
         });
 
         // Prevenir el comportamiento por defecto en todo el documento
@@ -2925,6 +3026,7 @@
 
           // Actualizar contadores
           actualizarContadorDatos();
+          capturarEstadoActual();
         }
       }
 
@@ -2960,6 +3062,10 @@
       }
 
       function pressNumber(number) {
+        const maxLength = 8;
+        if (keyboardInput.length >= maxLength) {
+          return;
+        }
         keyboardInput += number.toString();
         updateKeyboardDisplay();
       }
@@ -2970,19 +3076,31 @@
       }
 
       function pressConfirm() {
+        capturarEstadoActual();
         if (keyboardInput === '') {
           alert('Por favor, ingresa un número primero.');
           return;
         }
-        
-        if (keyboardInput === '0816') {
-          // Código correcto, redirigir al nivel 3
+
+        const { todasCorrectas, codigoEsperado } = registrarDiagnostico(
+          'Confirmar código',
+          keyboardInput
+        );
+
+        if (todasCorrectas && keyboardInput === codigoEsperado) {
+          closeLevelModal();
           window.location.href = '../lvl3/index.html';
-        } else {
-          alert(`Código incorrecto: ${keyboardInput}. Intenta nuevamente.`);
-          keyboardInput = '';
-          updateKeyboardDisplay();
+          return;
         }
+
+        closeLevelModal();
+        abrirModalCodigo({
+          titulo: 'Código incorrecto',
+          mensaje: 'Código incorrecto. Revisa tus respuestas e inténtalo de nuevo.',
+          tipo: 'error',
+        });
+        keyboardInput = '';
+        updateKeyboardDisplay();
       }
 
       function updateKeyboardDisplay() {
