@@ -53,6 +53,18 @@
   }
 }
 
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-8px);
+  }
+  40%, 80% {
+    transform: translateX(8px);
+  }
+}
+
 body {
   font-family: 'Rajdhani', 'Orbitron', monospace;
   background: #0a0a0f;
@@ -746,6 +758,9 @@ body {
   max-width: 280px;
   margin: 0 auto;
   padding: 15px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .keyboard-display {
@@ -772,10 +787,41 @@ body {
     inset 0 0 20px rgba(0, 255, 255, 0.1);
   outline: none;
   letter-spacing: 6px;
+  transition: border 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
 }
 
 #keyboard-input::placeholder {
   color: rgba(0, 255, 255, 0.3);
+}
+
+.keyboard-container.error {
+  border: 2px solid rgba(255, 0, 64, 0.9);
+  box-shadow: 0 0 25px rgba(255, 0, 64, 0.6);
+}
+
+#keyboard-input.error {
+  border-color: rgba(255, 0, 64, 0.9);
+  color: #ff0040;
+  box-shadow: 
+    0 0 25px rgba(255, 0, 64, 0.6),
+    inset 0 0 15px rgba(255, 0, 64, 0.3);
+}
+
+.keyboard-container.success {
+  border: 2px solid rgba(0, 255, 136, 0.9);
+  box-shadow: 0 0 25px rgba(0, 255, 136, 0.6);
+}
+
+#keyboard-input.success {
+  border-color: rgba(0, 255, 136, 0.9);
+  color: #00ff88;
+  box-shadow: 
+    0 0 25px rgba(0, 255, 136, 0.6),
+    inset 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.level-modal-content.shake {
+  animation: shake 0.45s ease;
 }
 
 .keyboard-grid {
@@ -783,6 +829,29 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   width: 100%;
+}
+
+.keyboard-feedback {
+  margin-top: 15px;
+  font-family: 'Orbitron', monospace;
+  font-size: 14px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  min-height: 18px;
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.keyboard-feedback.error {
+  color: #ff0040;
+  text-shadow: 0 0 12px rgba(255, 0, 64, 0.6);
+}
+
+.keyboard-feedback.success {
+  color: #00ff88;
+  text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
 }
 
 .keyboard-btn {
@@ -1008,6 +1077,7 @@ body {
           <div class="keyboard-display">
             <input type="text" id="keyboard-input" readonly placeholder="0">
           </div>
+          <p class="keyboard-feedback" id="keyboard-feedback"></p>
           <div class="keyboard-grid">
             <button class="keyboard-btn num-btn" onclick="pressNumber(1)">1</button>
             <button class="keyboard-btn num-btn" onclick="pressNumber(2)">2</button>
@@ -1237,31 +1307,119 @@ window.onclick = function(event) {
 
 let keyboardInput = '';
 
+function clearKeyboardState() {
+  const keyboardContainer = document.querySelector('.keyboard-container');
+  const input = document.getElementById('keyboard-input');
+  const feedback = document.getElementById('keyboard-feedback');
+  if (keyboardContainer) {
+    keyboardContainer.classList.remove('error', 'success');
+  }
+  if (input) {
+    input.classList.remove('error', 'success');
+  }
+  if (feedback) {
+    feedback.textContent = '';
+    feedback.classList.remove('error', 'success');
+  }
+}
+
+function triggerKeyboardError(message) {
+  const keyboardContainer = document.querySelector('.keyboard-container');
+  const levelModalContent = document.querySelector('.level-modal-content');
+  const input = document.getElementById('keyboard-input');
+  const feedback = document.getElementById('keyboard-feedback');
+
+  if (keyboardContainer) {
+    keyboardContainer.classList.remove('error');
+    void keyboardContainer.offsetWidth;
+    keyboardContainer.classList.add('error');
+    setTimeout(() => keyboardContainer.classList.remove('error'), 600);
+  }
+
+  if (input) {
+    input.classList.remove('error');
+    void input.offsetWidth;
+    input.classList.add('error');
+    setTimeout(() => input.classList.remove('error'), 600);
+  }
+
+  if (feedback) {
+    feedback.classList.remove('success');
+    feedback.classList.add('error');
+    feedback.textContent = message || 'CÓDIGO INCORRECTO';
+  }
+
+  if (levelModalContent) {
+    levelModalContent.classList.remove('shake');
+    void levelModalContent.offsetWidth;
+    levelModalContent.classList.add('shake');
+    setTimeout(() => levelModalContent.classList.remove('shake'), 600);
+  }
+}
+
+function triggerKeyboardSuccess(message) {
+  const keyboardContainer = document.querySelector('.keyboard-container');
+  const levelModalContent = document.querySelector('.level-modal-content');
+  const input = document.getElementById('keyboard-input');
+  const feedback = document.getElementById('keyboard-feedback');
+
+  if (keyboardContainer) {
+    keyboardContainer.classList.remove('success');
+    void keyboardContainer.offsetWidth;
+    keyboardContainer.classList.add('success');
+  }
+
+  if (input) {
+    input.classList.remove('success');
+    void input.offsetWidth;
+    input.classList.add('success');
+  }
+
+  if (feedback) {
+    feedback.classList.remove('error');
+    feedback.classList.add('success');
+    feedback.textContent = message || 'ACCESO PERMITIDO';
+  }
+
+  if (levelModalContent) {
+    levelModalContent.classList.remove('shake');
+  }
+}
+
 function closeLevelModal() {
   document.getElementById('level-modal').style.display = 'none';
 }
 
 function pressNumber(number) {
+  clearKeyboardState();
+  if (keyboardInput.length >= 4) {
+    keyboardInput = keyboardInput.slice(0, 4);
+    updateKeyboardDisplay();
+    return;
+  }
   keyboardInput += number.toString();
   updateKeyboardDisplay();
 }
 
 function pressDelete() {
+  clearKeyboardState();
   keyboardInput = keyboardInput.slice(0, -1);
   updateKeyboardDisplay();
 }
 
 function pressConfirm() {
   if (keyboardInput === '') {
-    alert('Por favor, ingresa un número primero.');
+    triggerKeyboardError('INGRESA UN CÓDIGO');
     return;
   }
   
   if (keyboardInput === '0816') {
-    // Código correcto, redirigir al nivel 2
-    window.location.href = '../lvl2/index.html';
+    triggerKeyboardSuccess('ACCESO PERMITIDO');
+    setTimeout(() => {
+      window.location.href = '../lvl2/index.html';
+    }, 1200);
   } else {
-    alert(`Código incorrecto: ${keyboardInput}. Intenta nuevamente.`);
+    triggerKeyboardError('CÓDIGO INCORRECTO');
     keyboardInput = '';
     updateKeyboardDisplay();
   }
@@ -1270,7 +1428,8 @@ function pressConfirm() {
 function updateKeyboardDisplay() {
   const input = document.getElementById('keyboard-input');
   if (input) {
-    input.value = keyboardInput || '';
+    const displayValue = keyboardInput.slice(0, 4);
+    input.value = displayValue;
     if (keyboardInput === '') {
       input.placeholder = '0';
     }
@@ -1281,6 +1440,7 @@ function updateKeyboardDisplay() {
 function showLevelModal() {
   keyboardInput = '';
   updateKeyboardDisplay();
+  clearKeyboardState();
   document.getElementById('level-modal').style.display = 'block';
 }
 
