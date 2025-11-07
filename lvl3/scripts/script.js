@@ -6,31 +6,146 @@ const POINT_SIZE = 12; // Tamaño de los puntos
 // Colores disponibles para los puntos
 const POINT_COLORS = [
     { id: 1, color: '#ff0080', name: 'Rosa' },      // neon-pink
-    { id: 2, color: '#00ffff', name: 'Cyan' },      // neon-cyan
+    { id: 2, color: '#ffff00', name: 'Amarillo' },      // neon-yellow
     { id: 3, color: '#00ff88', name: 'Verde' },     // neon-green
     { id: 4, color: '#ff00ff', name: 'Magenta' },   // neon-magenta
     { id: 5, color: '#a855f7', name: 'Púrpura' },   // neon-purple
-    { id: 6, color: '#0080ff', name: 'Azul' },      // neon-blue
-    { id: 7, color: '#ff8000', name: 'Naranja' },   // naranja
-    { id: 8, color: '#ffff00', name: 'Amarillo' },  // amarillo
-    { id: 9, color: '#ff4080', name: 'Rosa claro' }, // rosa claro
-    { id: 10, color: '#80ff00', name: 'Lima' }      // lima
+    { id: 6, color: '#0080ff', name: 'Azul' }       // neon-blue
 ];
 
-// Coordenadas para formar un gato (x, y, colorId)
-// Las coordenadas van de 0 a 9, pero se mapean a las etiquetas visuales (1-10)
-const CAT_COORDINATES = [
-    { x: 2, y: 8, colorId: 1 },  // Oreja izquierda
-    { x: 4, y: 8, colorId: 2 },  // Oreja derecha
-    { x: 1, y: 7, colorId: 3 },  // Ojo izquierdo
-    { x: 5, y: 7, colorId: 4 },  // Ojo derecho
-    { x: 3, y: 6, colorId: 5 },  // Nariz
-    { x: 2, y: 5, colorId: 6 },  // Mejilla izquierda
-    { x: 4, y: 5, colorId: 7 },  // Mejilla derecha
-    { x: 3, y: 4, colorId: 8 },  // Boca
-    { x: 2, y: 3, colorId: 9 },  // Cuerpo izquierdo
-    { x: 4, y: 3, colorId: 10 }  // Cuerpo derecho
+const COLOR_MAP = new Map(POINT_COLORS.map((entry) => [entry.id, entry]));
+
+const POINT_DEFINITIONS = [
+    {
+        colorId: 1,
+        digit: '7',
+        absolute: { x: 5, y: 6 },
+        customHint: 'Punto Rosa base: coordenada fija (x:5, y:6).'
+    },
+    {
+        colorId: 6,
+        digit: '3',
+        relativeTo: 1,
+        dx: 2,
+        dy: 2
+    },
+    {
+        colorId: 3,
+        digit: '9',
+        relativeTo: 6,
+        dx: -3,
+        dy: 1
+    },
+    {
+        colorId: 2,
+        digit: '4',
+        relativeTo: 3,
+        dx: 2,
+        dy: -4
+    },
+    {
+        colorId: 5,
+        digit: '6',
+        relativeTo: 2,
+        dx: -3,
+        dy: 2
+    },
+    {
+        colorId: 4,
+        digit: '8',
+        relativeTo: 5,
+        dx: 5,
+        dy: -3
+    }
 ];
+
+function describeOffset(dx, dy) {
+    const parts = [];
+
+    if (dx > 0) {
+        parts.push(`avanza ${dx} unidad${dx === 1 ? '' : 'es'} a la derecha`);
+    } else if (dx < 0) {
+        const step = Math.abs(dx);
+        parts.push(`retrocede ${step} unidad${step === 1 ? '' : 'es'} a la izquierda`);
+    }
+
+    if (dy > 0) {
+        parts.push(`sube ${dy} unidad${dy === 1 ? '' : 'es'}`);
+    } else if (dy < 0) {
+        const step = Math.abs(dy);
+        parts.push(`baja ${step} unidad${step === 1 ? '' : 'es'}`);
+    }
+
+    if (parts.length === 0) {
+        return 'mantente en la misma posición.';
+    }
+
+    if (parts.length === 1) {
+        return `${parts[0]}.`;
+    }
+
+    return `${parts.slice(0, -1).join(' ')} y ${parts[parts.length - 1]}.`;
+}
+
+function shuffleArray(items) {
+    const array = [...items];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+const computedPoints = new Map();
+
+const PUZZLE_POINTS = POINT_DEFINITIONS.map((definition) => {
+    let x;
+    let y;
+    let hint;
+
+    if (definition.absolute) {
+        x = definition.absolute.x;
+        y = definition.absolute.y;
+        hint = definition.customHint || `Punto ${COLOR_MAP.get(definition.colorId)?.name || ''}: coordenada fija (x:${x}, y:${y}).`;
+    } else {
+        const referencePoint = computedPoints.get(definition.relativeTo);
+        if (!referencePoint) {
+            throw new Error(`No se encontró el punto de referencia para el colorId ${definition.colorId}`);
+        }
+        x = referencePoint.x + definition.dx;
+        y = referencePoint.y + definition.dy;
+        const fromColor = COLOR_MAP.get(definition.relativeTo)?.name || 'referencia';
+        const offsetDescription = describeOffset(definition.dx, definition.dy);
+        hint = `Desde el punto ${fromColor} ${offsetDescription}`;
+    }
+
+    const point = {
+        colorId: definition.colorId,
+        x,
+        y,
+        digit: definition.digit,
+        hint,
+        reference: definition.relativeTo ?? null,
+        dx: definition.dx ?? 0,
+        dy: definition.dy ?? 0
+    };
+
+    computedPoints.set(definition.colorId, point);
+    return point;
+});
+
+const ACTIVE_COLOR_IDS = Array.from(new Set(PUZZLE_POINTS.map((point) => point.colorId)));
+
+const CODE_LENGTH = PUZZLE_POINTS.length;
+const EXPECTED_CODE = PUZZLE_POINTS.map((point) => point.digit).join('');
+const CODE_PLACEHOLDER = '•';
+const MAX_INPUT_LENGTH = Math.max(8, CODE_LENGTH);
+
+PUZZLE_POINTS.forEach((point) => {
+    if (point.x < 0 || point.x > GRID_SIZE || point.y < 0 || point.y > GRID_SIZE) {
+        console.warn('[Nivel 3] Punto fuera de rango detectado:', point);
+    }
+});
 
 // Estado del juego
 let placedPoints = {}; // { 'x-y': { colorId: 1, element: pointElement, corner: 'top-right' } }
@@ -38,6 +153,7 @@ let draggedPoint = null;
 let draggedColorId = null;
 let dragGhost = null; // Elemento fantasma que sigue al cursor
 let dragOffset = { x: 0, y: 0 }; // Offset del cursor respecto al punto
+let connectionLayer = null;
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
@@ -46,37 +162,16 @@ document.addEventListener('DOMContentLoaded', () => {
     displayCoordinates();
     updateCounts();
     
-    // Agregar evento al botón de validar
-    const validateBtn = document.getElementById('validate-btn');
-    if (validateBtn) {
-        validateBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            console.log('Botón VALIDAR presionado');
-            validateCoordinates();
-        });
-    } else {
-        console.error('No se encontró el botón de validar');
-    }
+    setupLevelAccess();
     
-    // También hacer las funciones globales por si acaso
-    window.validateCoordinates = validateCoordinates;
-    window.openModal = openModal;
-    
-    // Configurar modales para cerrar al hacer clic fuera
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('show');
-                modal.style.display = 'none';
-            }
-        });
-    });
+    console.log('[Nivel 3] Código esperado:', EXPECTED_CODE);
 });
 
 // Crear la cuadrícula cartesiana
 function createGrid() {
     const gridContainer = document.getElementById('grid-container');
     gridContainer.innerHTML = '';
+    connectionLayer = null;
     
     // Crear contenedor de la cuadrícula con ejes
     // El grid tiene 11 líneas (0 a 10) en cada dirección
@@ -324,7 +419,9 @@ function loadPoints() {
     const container = document.getElementById('points-container');
     container.innerHTML = '';
     
-    POINT_COLORS.forEach((pointColor) => {
+    const colorsToDisplay = shuffleArray(ACTIVE_COLOR_IDS.map((id) => COLOR_MAP.get(id)).filter(Boolean));
+
+    colorsToDisplay.forEach((pointColor) => {
         const pointWrapper = document.createElement('div');
         pointWrapper.className = 'point-item';
         pointWrapper.draggable = true;
@@ -362,10 +459,14 @@ function loadPoints() {
 function displayCoordinates() {
     const coordsList = document.getElementById('coordinates-list');
     coordsList.innerHTML = '';
-    
-    CAT_COORDINATES.forEach((coord) => {
-        const pointColor = POINT_COLORS.find(c => c.id === coord.colorId);
+
+    const shuffledPoints = shuffleArray(PUZZLE_POINTS);
+
+    shuffledPoints.forEach((coord) => {
+        const pointColor = COLOR_MAP.get(coord.colorId);
         if (!pointColor) return;
+
+        const isSolved = isCoordinatePlaced(coord.x, coord.y, coord.colorId);
         
         const coordItem = document.createElement('div');
         coordItem.className = 'coord-item';
@@ -377,7 +478,6 @@ function displayCoordinates() {
             text-align: center;
         `;
         
-        // Punto de color (igual que en puntos disponibles)
         const colorPoint = document.createElement('div');
         colorPoint.className = 'color-point';
         colorPoint.style.cssText = `
@@ -387,13 +487,14 @@ function displayCoordinates() {
             border-radius: 50%;
             border: 2px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 0 10px ${pointColor.color}, 0 0 20px ${pointColor.color};
-            opacity: ${isCoordinatePlaced(coord.x, coord.y, coord.colorId) ? '0.5' : '1'};
+            opacity: ${isSolved ? '0.5' : '1'};
             transition: opacity 0.3s ease;
         `;
-        
-        // Coordenadas debajo del punto
+ 
         const coordText = document.createElement('div');
-        coordText.textContent = `(x:${coord.x}, y:${coord.y})`;
+        coordText.textContent = coord.reference === null
+            ? `(x:${coord.x}, y:${coord.y})`
+            : coord.hint;
         coordText.style.cssText = `
             color: var(--neon-purple);
             font-weight: 600;
@@ -401,41 +502,25 @@ function displayCoordinates() {
             letter-spacing: 0.5px;
         `;
         
-        // Estado (opcional, pequeño)
-        const status = document.createElement('div');
-        status.className = 'coord-status';
-        status.textContent = isCoordinatePlaced(coord.x, coord.y, coord.colorId) ? '✓' : '';
-        status.style.cssText = `
-            color: var(--neon-green);
-            font-weight: 700;
-            font-size: 1rem;
-            min-height: 16px;
-        `;
-        
         coordItem.appendChild(colorPoint);
         coordItem.appendChild(coordText);
-        coordItem.appendChild(status);
         coordsList.appendChild(coordItem);
     });
 }
 
 // Verificar si una coordenada está colocada correctamente
 function isCoordinatePlaced(x, y, colorId) {
-    // Las coordenadas en CAT_COORDINATES van de 1 a 10 (x: 1-5, y: 3-8)
+    // Las coordenadas objetivo se almacenan en PUZZLE_POINTS con valores 0-9
     // Cuando el usuario coloca un punto, se guarda con objX y objY que van de 0 a 10
-    // Si CAT_COORDINATES tiene x=2, y=8, entonces el punto debe estar en la línea x=2, y=8
-    // La key se forma como: `${objX}-${objY}`
-    // Entonces: key = `${x}-${y}` directamente
+    // La clave se forma como `${x}-${y}` directamente
     const key = `${x}-${y}`;
     const placed = placedPoints[key];
     
     if (!placed) {
-        console.log(`Punto no encontrado en key: ${key}`);
         return false;
     }
     
     if (placed.colorId !== colorId) {
-        console.log(`Color incorrecto en key ${key}. Esperado: ${colorId}, Encontrado: ${placed.colorId}`);
         return false;
     }
     
@@ -446,18 +531,214 @@ function isCoordinatePlaced(x, y, colorId) {
 // Actualizar contadores
 function updateCounts() {
     const placedCount = Object.keys(placedPoints).length;
-    const correctCount = CAT_COORDINATES.filter(coord => 
+    const correctCount = PUZZLE_POINTS.filter(coord => 
         isCoordinatePlaced(coord.x, coord.y, coord.colorId)
     ).length;
+    const totalTargets = PUZZLE_POINTS.length;
+    const allCorrect = correctCount === totalTargets;
     
     const coordsCount = document.getElementById('coords-count');
     if (coordsCount) {
-        coordsCount.textContent = `${correctCount}/10`;
+        coordsCount.textContent = `${correctCount}/${totalTargets}`;
     }
     
     const imagesCount = document.getElementById('images-count');
     if (imagesCount) {
-        imagesCount.textContent = `${POINT_COLORS.length - placedCount}`;
+        const remaining = Math.max(ACTIVE_COLOR_IDS.length - placedCount, 0);
+        imagesCount.textContent = `${remaining}`;
+    }
+
+    updateCodeDisplay();
+    updateConnectionLines(allCorrect);
+}
+
+function updateCodeDisplay() {
+    const codeSlots = document.getElementById('code-slots');
+    if (!codeSlots) return;
+
+    const digits = PUZZLE_POINTS.map((point) =>
+        isCoordinatePlaced(point.x, point.y, point.colorId) ? point.digit : CODE_PLACEHOLDER
+    );
+
+    codeSlots.dataset.code = digits.join('');
+    codeSlots.textContent = digits.join(' ');
+}
+
+function ensureConnectionLayer() {
+    const gridWrapper = document.querySelector('.grid-wrapper');
+    if (!gridWrapper) {
+        connectionLayer = null;
+        return null;
+    }
+
+    if (connectionLayer && connectionLayer.isConnected) {
+        return connectionLayer;
+    }
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('connection-layer');
+    svg.setAttribute('width', (GRID_SIZE + 1) * CELL_SIZE);
+    svg.setAttribute('height', (GRID_SIZE + 1) * CELL_SIZE);
+    svg.style.position = 'absolute';
+    svg.style.left = '0';
+    svg.style.top = '0';
+    svg.style.pointerEvents = 'none';
+    svg.style.zIndex = '3';
+
+    gridWrapper.appendChild(svg);
+    connectionLayer = svg;
+    return connectionLayer;
+}
+
+function updateConnectionLines(allCorrect) {
+    const layer = ensureConnectionLayer();
+    if (!layer) return;
+
+    layer.innerHTML = '';
+    if (!allCorrect) {
+        return;
+    }
+
+    const points = [];
+
+    for (const coord of PUZZLE_POINTS) {
+        const key = `${coord.x}-${coord.y}`;
+        const placed = placedPoints[key];
+        if (!placed) {
+            return;
+        }
+
+        const xPx = coord.x * CELL_SIZE;
+        const yPx = (GRID_SIZE - coord.y) * CELL_SIZE;
+        points.push(`${xPx},${yPx}`);
+    }
+
+    if (points.length !== PUZZLE_POINTS.length) {
+        return;
+    }
+
+    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    polyline.setAttribute('points', points.join(' '));
+    polyline.setAttribute('fill', 'none');
+    polyline.setAttribute('stroke', '#00ff88');
+    polyline.setAttribute('stroke-width', '3');
+    polyline.setAttribute('stroke-linecap', 'round');
+    polyline.setAttribute('stroke-linejoin', 'round');
+    polyline.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 136, 0.6))';
+
+    layer.appendChild(polyline);
+}
+
+function setupLevelAccess() {
+    levelModalElement = document.getElementById('level-modal');
+    keyboardInputField = document.getElementById('keyboard-input');
+    const openBtn = document.getElementById('next-level-btn');
+    const closeBtn = document.getElementById('level-modal-close');
+
+    if (openBtn) {
+        openBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openLevelModal();
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            closeLevelModal();
+        });
+    }
+
+    if (levelModalElement) {
+        levelModalElement.addEventListener('click', (e) => {
+            if (e.target === levelModalElement) {
+                closeLevelModal();
+            }
+        });
+    }
+
+    document.querySelectorAll('.keyboard-btn').forEach((btn) => {
+        const number = btn.dataset.number;
+        const action = btn.dataset.action;
+
+        if (number !== undefined) {
+            btn.addEventListener('click', () => pressNumber(number));
+        } else if (action === 'delete') {
+            btn.addEventListener('click', () => pressDelete());
+        } else if (action === 'confirm') {
+            btn.addEventListener('click', () => pressConfirm());
+        }
+    });
+
+    updateKeyboardDisplay();
+}
+
+let keyboardInput = '';
+let levelModalElement = null;
+let keyboardInputField = null;
+
+function openLevelModal() {
+    if (!levelModalElement) return;
+    keyboardInput = '';
+    updateKeyboardDisplay();
+    levelModalElement.classList.add('show');
+    levelModalElement.setAttribute('aria-hidden', 'false');
+}
+
+function closeLevelModal() {
+    if (!levelModalElement) return;
+    levelModalElement.classList.remove('show');
+    levelModalElement.setAttribute('aria-hidden', 'true');
+    keyboardInput = '';
+    updateKeyboardDisplay();
+}
+
+function updateKeyboardDisplay() {
+    if (!keyboardInputField) return;
+    keyboardInputField.value = keyboardInput;
+    if (!keyboardInput) {
+        keyboardInputField.placeholder = '0';
+    }
+}
+
+function pressNumber(value) {
+    if (keyboardInput.length >= MAX_INPUT_LENGTH) return;
+    keyboardInput += value.toString();
+    updateKeyboardDisplay();
+}
+
+function pressDelete() {
+    keyboardInput = keyboardInput.slice(0, -1);
+    updateKeyboardDisplay();
+}
+
+function areAllPointsCorrect() {
+    return PUZZLE_POINTS.every((point) =>
+        isCoordinatePlaced(point.x, point.y, point.colorId)
+    );
+}
+
+function pressConfirm() {
+    if (!areAllPointsCorrect()) {
+        showMessage('Primero coloca correctamente los 6 puntos.', 'error');
+        closeLevelModal();
+        return;
+    }
+
+    if (keyboardInput.length !== CODE_LENGTH) {
+        showMessage(`Ingresa los ${CODE_LENGTH} dígitos del código.`, 'error');
+        return;
+    }
+
+    if (keyboardInput === EXPECTED_CODE) {
+        closeLevelModal();
+        showMessage('Código correcto. Avanzando al nivel 5...', 'success');
+        setTimeout(() => {
+            window.location.href = '../lvl5/index.html';
+        }, 900);
+    } else {
+        showMessage('Código incorrecto. Revisa las pistas e inténtalo de nuevo.', 'error');
+        keyboardInput = '';
+        updateKeyboardDisplay();
     }
 }
 
@@ -501,7 +782,7 @@ function handleDragStart(e) {
 
 // Crear elemento fantasma que sigue al cursor
 function createDragGhost(e) {
-    const pointColor = POINT_COLORS.find(c => c.id === draggedColorId);
+    const pointColor = COLOR_MAP.get(draggedColorId);
     if (!pointColor) return;
     
     // Obtener el elemento del punto (puede ser .color-point dentro de .point-item o .grid-placed-point directamente)
@@ -692,7 +973,7 @@ function handleGridDrop(e) {
     }
     
     // Obtener el color del punto
-    const pointColor = POINT_COLORS.find(c => c.id === draggedColorId);
+    const pointColor = COLOR_MAP.get(draggedColorId);
     if (!pointColor) return;
     
     // Crear contenedor para el punto si no existe
@@ -869,7 +1150,7 @@ function handleLineDrop(e) {
     }
     
     // Obtener el color del punto
-    const pointColor = POINT_COLORS.find(c => c.id === draggedColorId);
+    const pointColor = COLOR_MAP.get(draggedColorId);
     if (!pointColor) return;
     
     // Crear contenedor para el punto si no existe
@@ -1003,7 +1284,7 @@ function handleCellDrop(e) {
     }
     
     // Obtener el color del punto
-    const pointColor = POINT_COLORS.find(c => c.id === draggedColorId);
+    const pointColor = COLOR_MAP.get(draggedColorId);
     if (!pointColor) return;
     
     // Obtener el grid wrapper para crear el contenedor de puntos
@@ -1099,97 +1380,6 @@ function handlePlacedPointDrop(e) {
     // Redirigir al nuevo sistema que usa intersecciones directamente
     handleGridDrop(e);
 }
-
-// Abrir modal (declarar antes de validateCoordinates)
-function openModal(modalId) {
-    console.log('>>> openModal llamado con ID:', modalId);
-    const modal = document.getElementById(modalId);
-    
-    if (!modal) {
-        console.error('❌ ERROR: Modal no encontrado con ID:', modalId);
-        console.log('Buscando modales disponibles...');
-        const allModals = document.querySelectorAll('.modal-overlay');
-        console.log('Modales encontrados:', allModals.length);
-        allModals.forEach(m => console.log('  - ID:', m.id));
-        return;
-    }
-    
-    console.log('✓ Modal encontrado:', modal);
-    console.log('  - Clases actuales:', modal.className);
-    
-    // Remover cualquier otra clase que pueda interferir
-    modal.classList.remove('hide');
-    
-    // Agregar clase show
-    modal.classList.add('show');
-    console.log('  - Clase "show" agregada');
-    
-    // Asegurarnos de que el display se establezca explícitamente
-    modal.style.display = 'flex';
-    modal.style.zIndex = '3000';
-    
-    console.log('  - Display:', modal.style.display);
-    console.log('  - Clases finales:', modal.className);
-    console.log('✓ Modal debería estar visible ahora');
-}
-
-// Validar coordenadas
-function validateCoordinates() {
-    console.log('=== INICIANDO VALIDACIÓN ===');
-    console.log('placedPoints:', placedPoints);
-    
-    let allCorrect = true;
-    let correctCount = 0;
-    
-    // Verificar que todas las coordenadas estén correctas
-    for (const coord of CAT_COORDINATES) {
-        const isPlaced = isCoordinatePlaced(coord.x, coord.y, coord.colorId);
-        console.log(`Coordenada (${coord.x}, ${coord.y}) con colorId ${coord.colorId}: ${isPlaced ? '✓ CORRECTA' : '✗ INCORRECTA'}`);
-        if (isPlaced) {
-            correctCount++;
-        } else {
-            allCorrect = false;
-        }
-    }
-    
-    console.log(`Total correctas: ${correctCount}/${CAT_COORDINATES.length}`);
-    console.log(`Todas correctas: ${allCorrect}`);
-    
-    // Mostrar modal correspondiente
-    if (allCorrect) {
-        console.log('>>> Abriendo modal de ÉXITO (200 OK)');
-        openModal('success-modal');
-    } else {
-        console.log('>>> Abriendo modal de ERROR (404)');
-        openModal('error-modal');
-    }
-    
-    console.log('=== FIN VALIDACIÓN ===');
-}
-
-// Cerrar modal (función global para usar en onclick)
-function closeModal(modalId) {
-    console.log('>>> closeModal llamado con ID:', modalId);
-    const modal = document.getElementById(modalId);
-    
-    if (!modal) {
-        console.error('❌ ERROR: Modal no encontrado con ID:', modalId);
-        return;
-    }
-    
-    console.log('✓ Modal encontrado, cerrando...');
-    
-    // Remover clase show
-    modal.classList.remove('show');
-    
-    // También establecer display: none explícitamente
-    modal.style.display = 'none';
-    
-    console.log('✓ Modal cerrado');
-}
-
-// Hacer la función global
-window.closeModal = closeModal;
 
 // Mostrar mensaje temporal
 function showMessage(text, type = 'success') {

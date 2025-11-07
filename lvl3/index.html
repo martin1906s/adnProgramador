@@ -20,9 +20,20 @@
                 <h1 class="cyber-title">NIVEL <span class="code-symbol">3</span> - COORDENADAS CARTESIANAS</h1>
             </div>
             <p class="subtitle">
-                Arrastra las imágenes a las coordenadas correctas para formar un <span class="code-operator">GATO</span>
+                Arrastra las imágenes a las coordenadas correctas para formar una <span class="code-operator">FIGURA</span>
             </p>
         </header>
+
+        <section class="panel-glow code-panel">
+            <div class="panel-header">
+                <div class="status-indicator"></div>
+                <h2 class="panel-title">Código Actual</h2>
+            </div>
+            <div class="panel-content code-panel-content">
+                <p class="code-instruction">Coloca los puntos correctos para revelar los 6 dígitos.</p>
+                <div id="code-slots" class="code-slots">• • • • • •</div>
+            </div>
+        </section>
 
         <!-- Cuadrícula Cartesiana con Paneles Laterales -->
         <div class="panel-glow">
@@ -36,7 +47,7 @@
                     <div class="side-panel-header">
                         <div class="status-indicator"></div>
                         <h3 class="side-panel-title">Puntos Disponibles</h3>
-                        <span class="data-count" id="images-count">10</span>
+                        <span class="data-count" id="images-count">6</span>
                     </div>
                     <div class="side-panel-content">
                         <div class="points-container" id="points-container">
@@ -57,7 +68,7 @@
                     <div class="side-panel-header">
                         <div class="status-indicator"></div>
                         <h3 class="side-panel-title">Coordenadas Objetivo</h3>
-                        <span class="data-count" id="coords-count">10</span>
+                        <span class="data-count" id="coords-count">0/6</span>
                     </div>
                     <div class="side-panel-content">
                         <div id="coordinates-list" class="coordinates-list">
@@ -68,40 +79,37 @@
             </div>
         </div>
 
-        <!-- Botón Validar -->
-        <div class="validate-container">
-            <button id="validate-btn" class="validate-btn">VALIDAR</button>
+        <div class="next-level-container">
+            <button id="next-level-btn" class="next-level-btn">PRÓXIMO NIVEL 5</button>
         </div>
     </div>
 
-    <!-- Modal de Aprobado -->
-    <div id="success-modal" class="modal-overlay">
-        <div class="modal-content validation-modal">
-            <div class="modal-header">
-                <h2 class="modal-title success-title">200 OK</h2>
+    <div id="level-modal" class="modal-overlay" aria-hidden="true">
+        <div class="level-modal-content">
+            <div class="level-modal-header">
+                <h3 class="level-modal-title">Ingresa el código</h3>
+                <button class="level-modal-close" id="level-modal-close" type="button" aria-label="Cerrar">×</button>
             </div>
-            <div class="modal-body">
-                <div class="success-icon">✓</div>
-                <p class="modal-message">¡Felicitaciones! Has colocado todas las coordenadas correctamente.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-close-btn" onclick="closeModal('success-modal')">Cerrar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Error -->
-    <div id="error-modal" class="modal-overlay">
-        <div class="modal-content validation-modal">
-            <div class="modal-header">
-                <h2 class="modal-title error-title">ERROR 404</h2>
-            </div>
-            <div class="modal-body">
-                <div class="error-icon">✗</div>
-                <p class="modal-message">Mal las coordenadas. Por favor, revisa y corrige las posiciones.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="modal-close-btn" onclick="closeModal('error-modal')">Cerrar</button>
+            <div class="level-modal-body">
+                <div class="keyboard-container">
+                    <div class="keyboard-display">
+                        <input type="text" id="keyboard-input" readonly placeholder="0" />
+                    </div>
+                    <div class="keyboard-grid">
+                        <button class="keyboard-btn num-btn" data-number="1">1</button>
+                        <button class="keyboard-btn num-btn" data-number="2">2</button>
+                        <button class="keyboard-btn num-btn" data-number="3">3</button>
+                        <button class="keyboard-btn num-btn" data-number="4">4</button>
+                        <button class="keyboard-btn num-btn" data-number="5">5</button>
+                        <button class="keyboard-btn num-btn" data-number="6">6</button>
+                        <button class="keyboard-btn num-btn" data-number="7">7</button>
+                        <button class="keyboard-btn num-btn" data-number="8">8</button>
+                        <button class="keyboard-btn num-btn" data-number="9">9</button>
+                        <button class="keyboard-btn delete-btn" data-action="delete">✖</button>
+                        <button class="keyboard-btn num-btn" data-number="0">0</button>
+                        <button class="keyboard-btn confirm-btn" data-action="confirm">✔</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
