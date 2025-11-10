@@ -183,6 +183,8 @@ const PUZZLE_POINTS = Array.from(computedPoints.values());
 
 const ACTIVE_COLOR_IDS = Array.from(new Set(PUZZLE_POINTS.map((point) => point.colorId)));
 
+const CONNECTION_PATH = [1, 2, 3, 4, 5, 6, 1];
+
 const CODE_LENGTH = PUZZLE_POINTS.length;
 const EXPECTED_CODE = PUZZLE_POINTS.map((point) => point.digit).join('');
 const CODE_PLACEHOLDER = '•';
@@ -557,6 +559,8 @@ function updateCounts() {
     ).length;
     const totalTargets = PUZZLE_POINTS.length;
     const allCorrect = correctCount === totalTargets;
+
+    console.debug('[Nivel 3] placed:', placedCount, 'correct:', correctCount, 'allCorrect:', allCorrect);
     
     const coordsCount = document.getElementById('coords-count');
     if (coordsCount) {
@@ -570,7 +574,7 @@ function updateCounts() {
     }
 
     updateCodeDisplay();
-    updateConnectionLines(allCorrect);
+    updateConnectionLines();
 }
 
 function updateCodeDisplay() {
@@ -604,67 +608,62 @@ function ensureConnectionLayer() {
     svg.style.left = '0';
     svg.style.top = '0';
     svg.style.pointerEvents = 'none';
-    svg.style.zIndex = '3';
+    svg.style.zIndex = '4';
 
     gridWrapper.appendChild(svg);
     connectionLayer = svg;
     return connectionLayer;
 }
 
-function updateConnectionLines(allCorrect) {
+function updateConnectionLines() {
     const layer = ensureConnectionLayer();
     if (!layer) return;
 
     const gridWrapper = document.querySelector('.grid-wrapper');
 
     layer.innerHTML = '';
-    if (!allCorrect) {
-        if (gridWrapper) {
-            gridWrapper.classList.remove('solved');
-        }
-        return;
-    }
 
     const orderedPoints = CONNECTION_PATH.map((colorId) =>
         PUZZLE_POINTS.find((point) => point.colorId === colorId)
     );
 
     if (orderedPoints.some((point) => !point)) {
+        if (gridWrapper) gridWrapper.classList.remove('solved');
+        console.debug('[Nivel 3] líneas no dibujadas: puntos faltantes en ruta');
         return;
     }
 
-    const points = [];
+    let drawnSegments = 0;
 
-    for (const coord of orderedPoints) {
-        const key = `${coord.x}-${coord.y}`;
-        const placed = placedPoints[key];
-        if (!placed) {
-            return;
+    for (let i = 0; i < orderedPoints.length - 1; i++) {
+        const start = orderedPoints[i];
+        const end = orderedPoints[i + 1];
+
+        if (!isCoordinatePlaced(start.x, start.y, start.colorId) ||
+            !isCoordinatePlaced(end.x, end.y, end.colorId)) {
+            continue;
         }
 
-        const xPx = coord.x * CELL_SIZE;
-        const yPx = (GRID_SIZE - coord.y) * CELL_SIZE;
-        points.push(`${xPx},${yPx}`);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', coordToPixelX(start.x));
+        line.setAttribute('y1', coordToPixelY(start.y));
+        line.setAttribute('x2', coordToPixelX(end.x));
+        line.setAttribute('y2', coordToPixelY(end.y));
+        line.setAttribute('stroke', '#00ff80');
+        line.setAttribute('stroke-width', '3.5');
+        line.setAttribute('stroke-linecap', 'round');
+        line.style.filter = 'drop-shadow(0 0 14px rgba(0, 255, 128, 0.75))';
+
+        layer.appendChild(line);
+        drawnSegments++;
     }
-
-    if (points.length !== orderedPoints.length) {
-        return;
-    }
-
-    const polyline = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-    polyline.setAttribute('points', points.join(' '));
-    polyline.setAttribute('fill', 'none');
-    polyline.setAttribute('stroke', '#00ff88');
-    polyline.setAttribute('stroke-width', '3');
-    polyline.setAttribute('stroke-linecap', 'round');
-    polyline.setAttribute('stroke-linejoin', 'round');
-    polyline.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 136, 0.6))';
-    polyline.classList.add('solved-line');
-
-    layer.appendChild(polyline);
 
     if (gridWrapper) {
-        gridWrapper.classList.add('solved');
+        if (drawnSegments > 0) {
+            gridWrapper.classList.add('solved');
+        } else {
+            gridWrapper.classList.remove('solved');
+        }
     }
 }
 
