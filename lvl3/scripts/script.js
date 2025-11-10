@@ -1426,23 +1426,29 @@ function handlePoolDrop(e) {
     const oldY = parseInt(movingPoint.dataset.cellY, 10);
     const oldKey = `${oldX}-${oldY}`;
 
-    movingPoint.dataset.isMoving = 'false';
-    movingPoint.style.opacity = '1';
-    movingPoint.removeAttribute('data-cellx');
-    movingPoint.removeAttribute('data-celly');
+    // Si ya existe el punto en el pool, solo eliminamos el del grid
+    const existingWrapper = poolContainer.querySelector(`.point-item[data-color-id="${draggedColorId}"]`);
+    if (existingWrapper) {
+        movingPoint.dataset.isMoving = 'false';
+        movingPoint.remove();
+        if (placedPoints[oldKey]) {
+            delete placedPoints[oldKey];
+        }
+        updateCounts();
+        displayCoordinates();
+        return;
+    }
 
-    movingPoint.classList.remove('grid-placed-point');
-    movingPoint.classList.add('point-item');
-    movingPoint.style.position = '';
-    movingPoint.style.left = '';
-    movingPoint.style.top = '';
-    movingPoint.style.transform = '';
-    movingPoint.style.pointerEvents = '';
+    const colorInfo = COLOR_MAP.get(draggedColorId);
 
-    movingPoint.innerHTML = '';
+    // Crear un nuevo wrapper como en loadPoints
+    const pointWrapper = document.createElement('div');
+    pointWrapper.className = 'point-item';
+    pointWrapper.draggable = true;
+    pointWrapper.dataset.colorId = draggedColorId;
+
     const colorPoint = document.createElement('div');
     colorPoint.className = 'color-point';
-    const colorInfo = COLOR_MAP.get(draggedColorId);
     const baseSize = POINT_SIZE * 2;
     colorPoint.style.cssText = `
         width: ${baseSize}px;
@@ -1455,25 +1461,22 @@ function handlePoolDrop(e) {
         transition: transform 0.2s ease;
     `;
 
-    movingPoint.appendChild(colorPoint);
+    pointWrapper.appendChild(colorPoint);
 
-    movingPoint.removeEventListener('mouseenter', movingPoint._hoverEnter);
-    movingPoint.removeEventListener('mouseleave', movingPoint._hoverLeave);
-    movingPoint._hoverEnter = null;
-    movingPoint._hoverLeave = null;
-
-    movingPoint.classList.add('point-item');
-    movingPoint.draggable = true;
-    movingPoint.addEventListener('dragstart', handleDragStart);
-    movingPoint.addEventListener('dragend', handleDragEnd);
-    movingPoint.addEventListener('mouseenter', () => {
+    pointWrapper.addEventListener('dragstart', handleDragStart);
+    pointWrapper.addEventListener('dragend', handleDragEnd);
+    pointWrapper.addEventListener('mouseenter', () => {
         colorPoint.style.transform = 'scale(1.2)';
     });
-    movingPoint.addEventListener('mouseleave', () => {
+    pointWrapper.addEventListener('mouseleave', () => {
         colorPoint.style.transform = 'scale(1)';
     });
 
-    poolContainer.appendChild(movingPoint);
+    poolContainer.appendChild(pointWrapper);
+
+    // Remover el punto antiguo del grid
+    movingPoint.dataset.isMoving = 'false';
+    movingPoint.remove();
 
     if (placedPoints[oldKey]) {
         delete placedPoints[oldKey];
