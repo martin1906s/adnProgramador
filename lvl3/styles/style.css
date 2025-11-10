@@ -1493,6 +1493,12 @@
     letter-spacing: 0.5px;
   }
 
+  .code-note {
+    color: var(--neon-purple);
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+
   .code-slots {
     font-family: 'Orbitron', monospace;
     font-size: clamp(2.2rem, 5vw, 3rem);
@@ -1506,6 +1512,21 @@
   .code-slots[data-code]:not([data-code*='•']) {
     color: var(--neon-purple);
     text-shadow: var(--glow-purple);
+  }
+
+  .solved-line {
+    animation: solvedPulse 1.4s ease-in-out infinite;
+  }
+
+  @keyframes solvedPulse {
+    0%, 100% {
+      stroke-width: 3px;
+      filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.8));
+    }
+    50% {
+      stroke-width: 4.5px;
+      filter: drop-shadow(0 0 14px rgba(0, 255, 255, 0.9));
+    }
   }
 
   .next-level-container {

@@ -5,10 +5,10 @@ const POINT_SIZE = 12; // Tamaño de los puntos
 
 // Colores disponibles para los puntos
 const POINT_COLORS = [
-    { id: 1, color: '#ff0080', name: 'Rosa' },      // neon-pink
+    { id: 1, color: '#ff8000', name: 'Naranja' },      // neon-orange
     { id: 2, color: '#ffff00', name: 'Amarillo' },      // neon-yellow
     { id: 3, color: '#00ff88', name: 'Verde' },     // neon-green
-    { id: 4, color: '#ff00ff', name: 'Magenta' },   // neon-magenta
+    { id: 4, color: '#ffffff', name: 'Blanco' },   // blanco
     { id: 5, color: '#a855f7', name: 'Púrpura' },   // neon-purple
     { id: 6, color: '#0080ff', name: 'Azul' }       // neon-blue
 ];
@@ -19,45 +19,48 @@ const POINT_DEFINITIONS = [
     {
         colorId: 1,
         digit: '7',
-        absolute: { x: 5, y: 6 },
-        customHint: 'Punto Rosa base: coordenada fija (x:5, y:6).'
+        absolute: { x: 5, y: 8 },
+        customHint: 'Punto Naranja base: coordenada fija (x:5, y:8).'
     },
     {
         colorId: 6,
         digit: '3',
         relativeTo: 1,
-        dx: 2,
-        dy: 2
+        dx: -2,
+        dy: 1
     },
     {
         colorId: 3,
         digit: '9',
-        relativeTo: 6,
-        dx: -3,
+        relativeTo: 1,
+        dx: 2,
         dy: 1
     },
     {
         colorId: 2,
         digit: '4',
-        relativeTo: 3,
-        dx: 2,
-        dy: -4
+        relativeTo: 6,
+        dx: -1,
+        dy: -3
     },
     {
         colorId: 5,
         digit: '6',
-        relativeTo: 2,
-        dx: -3,
-        dy: 2
+        relativeTo: 3,
+        dx: 1,
+        dy: -3
     },
     {
         colorId: 4,
         digit: '8',
-        relativeTo: 5,
-        dx: 5,
+        relativeTo: 2,
+        dx: 3,
         dy: -3
     }
 ];
+
+// Orden específico para trazar la figura del corazón (cierra en el primer punto)
+const CONNECTION_PATH = [2, 6, 1, 3, 5, 4, 2];
 
 function describeOffset(dx, dy) {
     const parts = [];
@@ -148,15 +151,17 @@ PUZZLE_POINTS.forEach((point) => {
 });
 
 // Estado del juego
-let placedPoints = {}; // { 'x-y': { colorId: 1, element: pointElement, corner: 'top-right' } }
+let placedPoints = {}; // { 'x-y': { colorId: 1, element: pointElement, container: pointContainer } }
 let draggedPoint = null;
 let draggedColorId = null;
 let dragGhost = null; // Elemento fantasma que sigue al cursor
 let dragOffset = { x: 0, y: 0 }; // Offset del cursor respecto al punto
 let connectionLayer = null;
+let poolContainer = null;
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', () => {
+    poolContainer = document.getElementById('points-container');
     createGrid();
     loadPoints();
     displayCoordinates();
@@ -173,6 +178,17 @@ function createGrid() {
     gridContainer.innerHTML = '';
     connectionLayer = null;
     
+    if (poolContainer && !poolContainer.dataset.dropEnabled) {
+        poolContainer.addEventListener('dragover', (e) => {
+            if (draggedPoint && draggedPoint.classList.contains('grid-placed-point')) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+            }
+        });
+        poolContainer.addEventListener('drop', handlePoolDrop);
+        poolContainer.dataset.dropEnabled = 'true';
+    }
+
     // Crear contenedor de la cuadrícula con ejes
     // El grid tiene 11 líneas (0 a 10) en cada dirección
     // Las celdas están entre las líneas, así que hay 10x10 celdas
@@ -416,8 +432,8 @@ function createGrid() {
 
 // Cargar puntos de colores en el contenedor
 function loadPoints() {
-    const container = document.getElementById('points-container');
-    container.innerHTML = '';
+    if (!poolContainer) return;
+    poolContainer.innerHTML = '';
     
     const colorsToDisplay = shuffleArray(ACTIVE_COLOR_IDS.map((id) => COLOR_MAP.get(id)).filter(Boolean));
 
@@ -451,7 +467,7 @@ function loadPoints() {
             point.style.transform = 'scale(1)';
         });
         
-        container.appendChild(pointWrapper);
+        poolContainer.appendChild(pointWrapper);
     });
 }
 
@@ -594,14 +610,27 @@ function updateConnectionLines(allCorrect) {
     const layer = ensureConnectionLayer();
     if (!layer) return;
 
+    const gridWrapper = document.querySelector('.grid-wrapper');
+
     layer.innerHTML = '';
     if (!allCorrect) {
+        if (gridWrapper) {
+            gridWrapper.classList.remove('solved');
+        }
+        return;
+    }
+
+    const orderedPoints = CONNECTION_PATH.map((colorId) =>
+        PUZZLE_POINTS.find((point) => point.colorId === colorId)
+    );
+
+    if (orderedPoints.some((point) => !point)) {
         return;
     }
 
     const points = [];
 
-    for (const coord of PUZZLE_POINTS) {
+    for (const coord of orderedPoints) {
         const key = `${coord.x}-${coord.y}`;
         const placed = placedPoints[key];
         if (!placed) {
@@ -613,7 +642,7 @@ function updateConnectionLines(allCorrect) {
         points.push(`${xPx},${yPx}`);
     }
 
-    if (points.length !== PUZZLE_POINTS.length) {
+    if (points.length !== orderedPoints.length) {
         return;
     }
 
@@ -625,8 +654,13 @@ function updateConnectionLines(allCorrect) {
     polyline.setAttribute('stroke-linecap', 'round');
     polyline.setAttribute('stroke-linejoin', 'round');
     polyline.style.filter = 'drop-shadow(0 0 8px rgba(0, 255, 136, 0.6))';
+    polyline.classList.add('solved-line');
 
     layer.appendChild(polyline);
+
+    if (gridWrapper) {
+        gridWrapper.classList.add('solved');
+    }
 }
 
 function setupLevelAccess() {
@@ -731,10 +765,7 @@ function pressConfirm() {
 
     if (keyboardInput === EXPECTED_CODE) {
         closeLevelModal();
-        showMessage('Código correcto. Avanzando al nivel 5...', 'success');
-        setTimeout(() => {
-            window.location.href = '../lvl5/index.html';
-        }, 900);
+        showMessage('Código correcto. Nivel 5 en construcción, ¡pronto disponible!', 'success');
     } else {
         showMessage('Código incorrecto. Revisa las pistas e inténtalo de nuevo.', 'error');
         keyboardInput = '';
@@ -754,22 +785,20 @@ function getCornerPosition(x, y) {
 
 // Manejar inicio de arrastre
 function handleDragStart(e) {
-    draggedPoint = e.target.closest('.point-item');
-    if (!draggedPoint) {
-        // Puede ser un punto ya colocado
-        draggedPoint = e.target.closest('.grid-placed-point');
-        if (draggedPoint) {
-            draggedColorId = parseInt(draggedPoint.dataset.colorId);
-            draggedPoint.dataset.isMoving = 'true';
-            draggedPoint.style.opacity = '0.5';
-        }
+    draggedPoint = e.target.closest('.point-item, .grid-placed-point');
+    if (!draggedPoint) return;
+
+    if (draggedPoint.classList.contains('grid-placed-point')) {
+        draggedColorId = parseInt(draggedPoint.dataset.colorId, 10);
+        draggedPoint.dataset.isMoving = 'true';
+        draggedPoint.style.opacity = '0.5';
     } else {
-        draggedColorId = parseInt(draggedPoint.dataset.colorId);
+        draggedColorId = parseInt(draggedPoint.dataset.colorId || draggedPoint.dataset.colorId, 10);
         draggedPoint.style.opacity = '0.5';
     }
-    
+
     if (!draggedColorId) return;
-    
+
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', draggedColorId.toString());
     
@@ -1379,6 +1408,79 @@ function handleCellDrop(e) {
 function handlePlacedPointDrop(e) {
     // Redirigir al nuevo sistema que usa intersecciones directamente
     handleGridDrop(e);
+}
+
+// Manejar soltar punto en el pool para devolverlo
+function handlePoolDrop(e) {
+    if (!draggedColorId || !poolContainer) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const movingPoint = document.querySelector('.grid-placed-point[data-is-moving="true"]');
+    if (!movingPoint) {
+        // Solo puntos ya colocados pueden regresarse
+        return;
+    }
+
+    const oldX = parseInt(movingPoint.dataset.cellX, 10);
+    const oldY = parseInt(movingPoint.dataset.cellY, 10);
+    const oldKey = `${oldX}-${oldY}`;
+
+    movingPoint.dataset.isMoving = 'false';
+    movingPoint.style.opacity = '1';
+    movingPoint.removeAttribute('data-cellx');
+    movingPoint.removeAttribute('data-celly');
+
+    movingPoint.classList.remove('grid-placed-point');
+    movingPoint.classList.add('point-item');
+    movingPoint.style.position = '';
+    movingPoint.style.left = '';
+    movingPoint.style.top = '';
+    movingPoint.style.transform = '';
+    movingPoint.style.pointerEvents = '';
+
+    movingPoint.innerHTML = '';
+    const colorPoint = document.createElement('div');
+    colorPoint.className = 'color-point';
+    const colorInfo = COLOR_MAP.get(draggedColorId);
+    const baseSize = POINT_SIZE * 2;
+    colorPoint.style.cssText = `
+        width: ${baseSize}px;
+        height: ${baseSize}px;
+        background: ${colorInfo?.color || '#ffffff'};
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 10px ${colorInfo?.color || '#ffffff'}, 0 0 20px ${colorInfo?.color || '#ffffff'};
+        cursor: grab;
+        transition: transform 0.2s ease;
+    `;
+
+    movingPoint.appendChild(colorPoint);
+
+    movingPoint.removeEventListener('mouseenter', movingPoint._hoverEnter);
+    movingPoint.removeEventListener('mouseleave', movingPoint._hoverLeave);
+    movingPoint._hoverEnter = null;
+    movingPoint._hoverLeave = null;
+
+    movingPoint.classList.add('point-item');
+    movingPoint.draggable = true;
+    movingPoint.addEventListener('dragstart', handleDragStart);
+    movingPoint.addEventListener('dragend', handleDragEnd);
+    movingPoint.addEventListener('mouseenter', () => {
+        colorPoint.style.transform = 'scale(1.2)';
+    });
+    movingPoint.addEventListener('mouseleave', () => {
+        colorPoint.style.transform = 'scale(1)';
+    });
+
+    poolContainer.appendChild(movingPoint);
+
+    if (placedPoints[oldKey]) {
+        delete placedPoints[oldKey];
+    }
+
+    updateCounts();
+    displayCoordinates();
 }
 
 // Mostrar mensaje temporal
