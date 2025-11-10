@@ -821,6 +821,7 @@
       /* Drag Container */
       .drag-container {
         min-height: 300px;
+        position: relative;
       }
 
       /* Feedback visual de acierto/error eliminado por requerimiento */
@@ -1504,6 +1505,46 @@
       .code-modal-wrapper.error .code-modal-text {
         color: var(--neon-pink);
       }
+
+      .classification-counter {
+        position: absolute;
+        bottom: clamp(16px, 3vw, 28px);
+        right: clamp(16px, 3vw, 28px);
+        width: clamp(70px, 10vw, 92px);
+        height: clamp(70px, 10vw, 92px);
+        border-radius: 50%;
+        border: 2px solid rgba(0, 255, 255, 0.6);
+        background: radial-gradient(circle at top, rgba(0, 255, 255, 0.25), rgba(0, 0, 0, 0.6));
+        box-shadow:
+          0 0 25px rgba(0, 255, 255, 0.35),
+          inset 0 0 18px rgba(0, 255, 255, 0.25);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .classification-counter::before {
+        content: "[DIGITO]";
+        font-family: "Orbitron", monospace;
+        font-size: clamp(0.45rem, 1.2vw, 0.55rem);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(0, 255, 255, 0.7);
+        text-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+      }
+
+      .classification-counter .counter-value {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(1.3rem, 3vw, 1.8rem);
+        font-weight: 800;
+        color: #00ffff;
+        text-shadow:
+          0 0 15px rgba(0, 255, 255, 0.6),
+          0 0 30px rgba(0, 255, 255, 0.35);
+      }
     </style>
   </head>
   <body>
@@ -1647,6 +1688,9 @@
                   sistema
                 </p>
               </div>
+            </div>
+            <div class="classification-counter" id="classification-counter">
+              <span class="counter-value">0</span>
             </div>
           </section>
         </div>
@@ -1947,6 +1991,7 @@
         ).filter((p) => validarCondiciones(p)).length;
         actualizarProgreso(set.size, totalCorrectas);
         actualizarContadorDatos();
+        updateClassificationCounter();
       }
 
       function obtenerIdsCorrectosParaInstruccion(instruccion) {
@@ -2996,6 +3041,7 @@
             personContainer.querySelectorAll(".person").length;
           dataCount.textContent = `${personasEnPool} entidades`;
         }
+        updateClassificationCounter();
       }
 
       // Cambiar instrucción (generar una nueva aleatoria)
@@ -3026,8 +3072,22 @@
 
           // Actualizar contadores
           actualizarContadorDatos();
+          updateClassificationCounter();
           capturarEstadoActual();
         }
+      }
+
+      function updateClassificationCounter() {
+        const counter = document.getElementById("classification-counter");
+        if (!counter) return;
+        const valueElement = counter.querySelector(".counter-value");
+        const dropZone = document.querySelector("#dragArea .drop-zone");
+        if (!valueElement || !dropZone) {
+          if (valueElement) valueElement.textContent = "0";
+          return;
+        }
+        const count = dropZone.querySelectorAll(".person").length;
+        valueElement.textContent = count;
       }
 
       // Inicializar cuando el DOM esté listo

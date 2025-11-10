@@ -53,15 +53,29 @@
   }
 }
 
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
+@keyframes gridMove {
+  0% {
+    transform: translate(0, 0);
   }
-  20%, 60% {
-    transform: translateX(-8px);
+  100% {
+    transform: translate(50px, 50px);
   }
-  40%, 80% {
-    transform: translateX(8px);
+}
+
+@keyframes scanLine {
+  0% {
+    top: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
   }
 }
 
@@ -75,34 +89,39 @@ body {
   color: #00ffff;
 }
 
-.grid-background {
+.cyber-grid {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+  background-image: linear-gradient(
+      rgba(0, 255, 255, 0.03) 1px,
+      transparent 1px
+    ),
     linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   pointer-events: none;
   z-index: 0;
+  animation: gridMove 20s linear infinite;
 }
 
-.scanlines {
+.scan-line {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 2px;
   background: linear-gradient(
-    transparent 50%,
-    rgba(0, 255, 255, 0.03) 50%
+    90deg,
+    transparent,
+    #00ffff,
+    transparent
   );
-  background-size: 100% 4px;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+  animation: scanLine 3s linear infinite;
+  z-index: 1000;
   pointer-events: none;
-  z-index: 1;
-  animation: slideScan 8s linear infinite;
 }
 
 .level-button {
@@ -514,6 +533,9 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 4vw, 40px);
 }
 
 .cyber-modal {
@@ -559,9 +581,15 @@ body {
 }
 
 .modal-body {
-  padding: 40px 30px;
+  padding: clamp(24px, 5vw, 40px) clamp(20px, 4vw, 32px);
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 24px);
+  width: 100%;
 }
 
 .modal-title {
@@ -639,20 +667,24 @@ body {
 
 .level-modal-content {
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(26, 0, 51, 0.95) 100%);
-  margin: 10% auto;
-  padding: 0;
+  margin: 0;
+  padding: clamp(18px, 4vw, 28px) clamp(16px, 4vw, 24px);
   border: 3px solid #00ffff;
   border-radius: 0;
-  width: 90%;
-  max-width: 500px;
+  width: min(480px, 90vw);
+  max-height: calc(100vh - clamp(60px, 10vh, 120px));
   text-align: center;
   position: relative;
   box-shadow: 
     0 0 50px rgba(0, 255, 255, 0.8),
     inset 0 0 50px rgba(0, 255, 255, 0.1);
   clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
-  animation: pulse 2s ease-in-out infinite;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 4vw, 26px);
 }
 
 .level-modal-background {
@@ -676,14 +708,14 @@ body {
   position: relative;
   display: inline-block;
   width: 100%;
-  max-width: 400px;
+  max-width: clamp(220px, 55vw, 360px);
+  margin: 0 auto;
 }
 
 .level-code-img {
   width: 100%;
-  max-width: 400px;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: clamp(16px, 4vw, 24px);
   filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.8));
   animation: pulse 2s ease-in-out infinite;
   position: relative;
@@ -723,7 +755,7 @@ body {
 
 .level-code-display {
   font-family: 'Orbitron', monospace;
-  font-size: 64px;
+  font-size: clamp(2.5rem, 8vw, 4.25rem);
   font-weight: 900;
   color: #a855f7;
   text-shadow: 
@@ -732,7 +764,7 @@ body {
     0 0 60px rgba(168, 85, 247, 0.2),
     0 0 80px rgba(168, 85, 247, 0.1);
   animation: codeFlicker 1.5s ease-in-out infinite;
-  letter-spacing: 12px;
+  letter-spacing: clamp(6px, 1.8vw, 14px);
   text-align: center;
   margin: 0;
 }
@@ -755,23 +787,22 @@ body {
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 280px;
+  max-width: clamp(200px, 55vw, 260px);
   margin: 0 auto;
-  padding: 15px;
-  border: 2px solid transparent;
-  border-radius: 12px;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
+  padding: clamp(10px, 2.5vw, 16px);
+  gap: clamp(10px, 2.5vw, 16px);
+  flex: 0 0 auto;
 }
 
 .keyboard-display {
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: clamp(10px, 2.5vw, 14px);
 }
 
 #keyboard-input {
   width: 100%;
-  padding: 12px;
-  font-size: 32px;
+  padding: clamp(8px, 2vw, 12px);
+  font-size: clamp(1.8rem, 5.5vw, 2.6rem);
   font-family: 'Orbitron', monospace;
   font-weight: 900;
   text-align: center;
@@ -786,81 +817,28 @@ body {
     0 0 20px rgba(0, 255, 255, 0.5),
     inset 0 0 20px rgba(0, 255, 255, 0.1);
   outline: none;
-  letter-spacing: 6px;
-  transition: border 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+  letter-spacing: clamp(3px, 0.8vw, 6px);
 }
 
 #keyboard-input::placeholder {
   color: rgba(0, 255, 255, 0.3);
 }
 
-.keyboard-container.error {
-  border: 2px solid rgba(255, 0, 64, 0.9);
-  box-shadow: 0 0 25px rgba(255, 0, 64, 0.6);
-}
-
-#keyboard-input.error {
-  border-color: rgba(255, 0, 64, 0.9);
-  color: #ff0040;
-  box-shadow: 
-    0 0 25px rgba(255, 0, 64, 0.6),
-    inset 0 0 15px rgba(255, 0, 64, 0.3);
-}
-
-.keyboard-container.success {
-  border: 2px solid rgba(0, 255, 136, 0.9);
-  box-shadow: 0 0 25px rgba(0, 255, 136, 0.6);
-}
-
-#keyboard-input.success {
-  border-color: rgba(0, 255, 136, 0.9);
-  color: #00ff88;
-  box-shadow: 
-    0 0 25px rgba(0, 255, 136, 0.6),
-    inset 0 0 15px rgba(0, 255, 136, 0.3);
-}
-
-.level-modal-content.shake {
-  animation: shake 0.45s ease;
-}
-
 .keyboard-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: clamp(6px, 2vw, 12px);
   width: 100%;
-}
-
-.keyboard-feedback {
-  margin-top: 15px;
-  font-family: 'Orbitron', monospace;
-  font-size: 14px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-align: center;
-  min-height: 18px;
-  color: #00ffff;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
-  transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.keyboard-feedback.error {
-  color: #ff0040;
-  text-shadow: 0 0 12px rgba(255, 0, 64, 0.6);
-}
-
-.keyboard-feedback.success {
-  color: #00ff88;
-  text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+  flex: 0 0 auto;
 }
 
 .keyboard-btn {
   aspect-ratio: 1;
-  font-size: 22px;
+  font-size: clamp(1.05rem, 3.8vw, 1.4rem);
   font-weight: 700;
   font-family: 'Orbitron', monospace;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 
@@ -951,51 +929,44 @@ body {
 /* Responsive para móviles */
 @media (max-width: 768px) {
   .keyboard-container {
-    max-width: 100%;
-    padding: 12px;
+    max-width: clamp(200px, 70vw, 280px);
   }
 
   #keyboard-input {
-    font-size: 28px;
-    padding: 10px;
-    letter-spacing: 4px;
-  }
-
-  .keyboard-grid {
-    gap: 8px;
-  }
-
-  .keyboard-btn {
-    font-size: 18px;
-    border-radius: 8px;
+    font-size: clamp(1.8rem, 7vw, 2.4rem);
   }
 }
-
-@media (max-width: 480px) {
+ 
+ @media (max-width: 480px) {
   .keyboard-container {
-    padding: 10px;
+    max-width: clamp(180px, 75vw, 240px);
   }
 
   #keyboard-input {
-    font-size: 24px;
-    padding: 8px;
-    letter-spacing: 2px;
+    font-size: clamp(1.6rem, 8vw, 2rem);
+    letter-spacing: clamp(2px, 1.2vw, 4px);
+  }
+ }
+
+@media (max-height: 640px) {
+  .level-modal-content {
+    max-height: calc(100vh - 32px);
+    padding: clamp(18px, 3vw, 28px) clamp(16px, 3vw, 24px);
   }
 
-  .keyboard-grid {
-    gap: 6px;
+  .code-image-wrapper {
+    max-width: clamp(200px, 50vw, 300px);
   }
 
-  .keyboard-btn {
-    font-size: 16px;
-    border-radius: 8px;
+  .keyboard-container {
+    max-width: clamp(200px, 65vw, 260px);
   }
 }
   </style>
 </head>
 <body>
-  <div class="grid-background"></div>
-  <div class="scanlines"></div>
+  <div class="cyber-grid"></div>
+  <div class="scan-line"></div>
 
   <div class="game-container">
 
@@ -1027,6 +998,9 @@ body {
       <div class="drop-zone" id="drop-zone-2" data-position="1"></div>
       <div class="drop-zone" id="drop-zone-3" data-position="2"></div>
       <div class="drop-zone" id="drop-zone-4" data-position="3"></div>
+    </div>
+    <div class="classification-counter" id="classification-counter">
+      [CONTADOR] 0 / 4
     </div>
 
     <div class="cards-container" id="cards-container">
@@ -1069,15 +1043,11 @@ body {
       <div class="level-modal-background">
         <img src="images/fondo-code.png" alt="Fondo" class="level-background-img">
       </div>
-      <div class="modal-header">
-        <span class="close" onclick="closeLevelModal()">&times;</span>
-      </div>
       <div class="modal-body">
         <div class="keyboard-container">
           <div class="keyboard-display">
             <input type="text" id="keyboard-input" readonly placeholder="0">
           </div>
-          <p class="keyboard-feedback" id="keyboard-feedback"></p>
           <div class="keyboard-grid">
             <button class="keyboard-btn num-btn" onclick="pressNumber(1)">1</button>
             <button class="keyboard-btn num-btn" onclick="pressNumber(2)">2</button>
@@ -1199,12 +1169,14 @@ function initGame() {
   cards = document.querySelectorAll('.card');
   
   setupDragAndDrop();
+  updateClassificationCounter();
 }
 
 function setupDragAndDrop() {
   cards.forEach(card => {
     card.addEventListener('dragstart', dragStart);
     card.addEventListener('dragend', dragEnd);
+    card.addEventListener('click', handleCardClick);
   });
 
   dropZones.forEach(dropZone => {
@@ -1223,6 +1195,19 @@ function dragStart(e) {
 
 function dragEnd(e) {
   e.target.style.display = 'block';
+}
+
+function handleCardClick(e) {
+  const card = e.currentTarget;
+  const parent = card.parentElement;
+  const cardsContainer = document.getElementById('cards-container');
+  if (!cardsContainer || !parent) return;
+
+  if (parent.classList.contains('drop-zone')) {
+    cardsContainer.appendChild(card);
+    card.setAttribute('draggable', 'true');
+    updateClassificationCounter();
+  }
 }
 
 function dragOver(e) {
@@ -1249,6 +1234,7 @@ function dropCard(e) {
 
   e.currentTarget.appendChild(card);
   card.setAttribute('draggable', 'false');
+  updateClassificationCounter();
 }
 
 function checkOrder() {
@@ -1286,12 +1272,31 @@ function checkOrder() {
 }
 
 function showModal() {
-  document.querySelector('.neon-code').textContent = '0816';
-  document.getElementById('modal').style.display = 'block';
+  if (!currentProblem) return;
+  const codeElement = document.querySelector('.neon-code');
+  if (codeElement) {
+    codeElement.textContent = currentProblem.code;
+  }
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.style.display = 'flex';
+  }
 }
 
 function closeModal() {
-  document.getElementById('modal').style.display = 'none';
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+function showLevelModal() {
+  keyboardInput = '';
+  updateKeyboardDisplay();
+  const levelModal = document.getElementById('level-modal');
+  if (levelModal) {
+    levelModal.style.display = 'flex';
+  }
 }
 
 window.onclick = function(event) {
@@ -1307,119 +1312,35 @@ window.onclick = function(event) {
 
 let keyboardInput = '';
 
-function clearKeyboardState() {
-  const keyboardContainer = document.querySelector('.keyboard-container');
-  const input = document.getElementById('keyboard-input');
-  const feedback = document.getElementById('keyboard-feedback');
-  if (keyboardContainer) {
-    keyboardContainer.classList.remove('error', 'success');
-  }
-  if (input) {
-    input.classList.remove('error', 'success');
-  }
-  if (feedback) {
-    feedback.textContent = '';
-    feedback.classList.remove('error', 'success');
-  }
-}
-
-function triggerKeyboardError(message) {
-  const keyboardContainer = document.querySelector('.keyboard-container');
-  const levelModalContent = document.querySelector('.level-modal-content');
-  const input = document.getElementById('keyboard-input');
-  const feedback = document.getElementById('keyboard-feedback');
-
-  if (keyboardContainer) {
-    keyboardContainer.classList.remove('error');
-    void keyboardContainer.offsetWidth;
-    keyboardContainer.classList.add('error');
-    setTimeout(() => keyboardContainer.classList.remove('error'), 600);
-  }
-
-  if (input) {
-    input.classList.remove('error');
-    void input.offsetWidth;
-    input.classList.add('error');
-    setTimeout(() => input.classList.remove('error'), 600);
-  }
-
-  if (feedback) {
-    feedback.classList.remove('success');
-    feedback.classList.add('error');
-    feedback.textContent = message || 'CÓDIGO INCORRECTO';
-  }
-
-  if (levelModalContent) {
-    levelModalContent.classList.remove('shake');
-    void levelModalContent.offsetWidth;
-    levelModalContent.classList.add('shake');
-    setTimeout(() => levelModalContent.classList.remove('shake'), 600);
-  }
-}
-
-function triggerKeyboardSuccess(message) {
-  const keyboardContainer = document.querySelector('.keyboard-container');
-  const levelModalContent = document.querySelector('.level-modal-content');
-  const input = document.getElementById('keyboard-input');
-  const feedback = document.getElementById('keyboard-feedback');
-
-  if (keyboardContainer) {
-    keyboardContainer.classList.remove('success');
-    void keyboardContainer.offsetWidth;
-    keyboardContainer.classList.add('success');
-  }
-
-  if (input) {
-    input.classList.remove('success');
-    void input.offsetWidth;
-    input.classList.add('success');
-  }
-
-  if (feedback) {
-    feedback.classList.remove('error');
-    feedback.classList.add('success');
-    feedback.textContent = message || 'ACCESO PERMITIDO';
-  }
-
-  if (levelModalContent) {
-    levelModalContent.classList.remove('shake');
-  }
-}
-
 function closeLevelModal() {
-  document.getElementById('level-modal').style.display = 'none';
+  const levelModal = document.getElementById('level-modal');
+  if (levelModal) {
+    levelModal.style.display = 'none';
+  }
 }
 
 function pressNumber(number) {
-  clearKeyboardState();
-  if (keyboardInput.length >= 4) {
-    keyboardInput = keyboardInput.slice(0, 4);
-    updateKeyboardDisplay();
-    return;
-  }
   keyboardInput += number.toString();
   updateKeyboardDisplay();
 }
 
 function pressDelete() {
-  clearKeyboardState();
   keyboardInput = keyboardInput.slice(0, -1);
   updateKeyboardDisplay();
 }
 
 function pressConfirm() {
   if (keyboardInput === '') {
-    triggerKeyboardError('INGRESA UN CÓDIGO');
+    alert('Por favor, ingresa un número primero.');
     return;
   }
   
-  if (keyboardInput === '0816') {
-    triggerKeyboardSuccess('ACCESO PERMITIDO');
-    setTimeout(() => {
-      window.location.href = '../lvl2/index.html';
-    }, 1200);
+  const expectedCode = currentProblem ? currentProblem.code : '0816';
+  if (keyboardInput === expectedCode) {
+    // Código correcto, redirigir al nivel 2
+    window.location.href = '../lvl2/index.html';
   } else {
-    triggerKeyboardError('CÓDIGO INCORRECTO');
+    alert(`Código incorrecto: ${keyboardInput}. Intenta nuevamente.`);
     keyboardInput = '';
     updateKeyboardDisplay();
   }
@@ -1428,24 +1349,26 @@ function pressConfirm() {
 function updateKeyboardDisplay() {
   const input = document.getElementById('keyboard-input');
   if (input) {
-    const displayValue = keyboardInput.slice(0, 4);
-    input.value = displayValue;
+    input.value = keyboardInput || '';
     if (keyboardInput === '') {
       input.placeholder = '0';
     }
   }
 }
 
-// Limpiar el teclado cuando se abre el modal
-function showLevelModal() {
-  keyboardInput = '';
-  updateKeyboardDisplay();
-  clearKeyboardState();
-  document.getElementById('level-modal').style.display = 'block';
+function updateClassificationCounter() {
+  const counter = document.getElementById('classification-counter');
+  if (!counter || !dropZones) return;
+  const placed = Array.from(dropZones).reduce((total, zone) => {
+    return total + (zone.querySelector('.card') ? 1 : 0);
+  }, 0);
+  const total = dropZones.length;
+  counter.textContent = `[CONTADOR] ${placed} / ${total}`;
 }
 
-window.addEventListener('DOMContentLoaded', initGame);
-
+document.addEventListener('DOMContentLoaded', () => {
+  initGame();
+});
   </script>
 </body>
 </html>
