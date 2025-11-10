@@ -24,62 +24,93 @@ function pixelToCoordY(pixel) {
 
 // Colores disponibles para los puntos
 const POINT_COLORS = [
-    { id: 1, color: '#ff8000', name: 'Naranja' },      // neon-orange
-    { id: 2, color: '#ffff00', name: 'Amarillo' },      // neon-yellow
-    { id: 3, color: '#00ff88', name: 'Verde' },     // neon-green
-    { id: 4, color: '#ffffff', name: 'Blanco' },   // blanco
-    { id: 5, color: '#a855f7', name: 'Púrpura' },   // neon-purple
-    { id: 6, color: '#0080ff', name: 'Azul' }       // neon-blue
+    { id: 1, color: '#ffff00', name: 'Amarillo' },
+    { id: 2, color: '#0080ff', name: 'Azul' },
+    { id: 3, color: '#ff8000', name: 'Naranja' },
+    { id: 4, color: '#00ff88', name: 'Verde' },
+    { id: 5, color: '#a855f7', name: 'Morado' },
+    { id: 6, color: '#ffffff', name: 'Blanco' }
 ];
 
 const COLOR_MAP = new Map(POINT_COLORS.map((entry) => [entry.id, entry]));
 
 const POINT_DEFINITIONS = [
     {
-        colorId: 1,
-        digit: '7',
-        absolute: { x: 5, y: 8 },
-        customHint: 'Punto Naranja base: coordenada fija (x:5, y:8).'
-    },
-    {
-        colorId: 6,
-        digit: '3',
-        relativeTo: 1,
-        dx: -2,
-        dy: 1
-    },
-    {
         colorId: 3,
-        digit: '9',
-        relativeTo: 1,
-        dx: 2,
-        dy: 1
+        digit: '7',
+        absolute: { x: 5, y: 9 },
+        customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+    },
+    {
+        colorId: 1,
+        digit: '3',
+        relativeTo: 3,
+        dx: -3,
+        dy: -2,
+        customHint: 'Desde el punto Naranja retrocede 3 unidades a la izquierda y baja 2 unidades.'
     },
     {
         colorId: 2,
+        digit: '9',
+        relativeTo: 3,
+        dx: -2,
+        dy: 1,
+        customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y sube 1 unidad.'
+    },
+    {
+        colorId: 4,
         digit: '4',
-        relativeTo: 6,
-        dx: -1,
-        dy: -3
+        relativeTo: 3,
+        dx: 2,
+        dy: 1,
+        customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y sube 1 unidad.'
     },
     {
         colorId: 5,
         digit: '6',
         relativeTo: 3,
-        dx: 1,
-        dy: -3
+        dx: 3,
+        dy: -2,
+        customHint: 'Desde el punto Naranja avanza 3 unidades a la derecha y baja 2 unidades.'
     },
     {
-        colorId: 4,
+        colorId: 6,
         digit: '8',
-        relativeTo: 2,
+        relativeTo: 1,
         dx: 3,
-        dy: -3
+        dy: -3,
+        customHint: 'Desde el punto Amarillo avanza 3 unidades a la derecha y baja 3 unidades.'
     }
 ];
 
 // Orden específico para trazar la figura del corazón (cierra en el primer punto)
-const CONNECTION_PATH = [2, 6, 1, 3, 5, 4, 2];
+function buildConnectionPath(points) {
+    const centroid = points.reduce(
+        (acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }),
+        { x: 0, y: 0 }
+    );
+    centroid.x /= points.length;
+    centroid.y /= points.length;
+
+    const sorted = [...points].sort((a, b) => {
+        const angleA = Math.atan2(a.y - centroid.y, a.x - centroid.x);
+        const angleB = Math.atan2(b.y - centroid.y, b.x - centroid.x);
+        return angleB - angleA; // horario
+    });
+
+    const startIndex = sorted.reduce((bestIndex, point, index) => {
+        const bestPoint = sorted[bestIndex];
+        if (point.y < bestPoint.y || (point.y === bestPoint.y && point.x < bestPoint.x)) {
+            return index;
+        }
+        return bestIndex;
+    }, 0);
+
+    const ordered = sorted.slice(startIndex).concat(sorted.slice(0, startIndex));
+    const path = ordered.map((point) => point.colorId);
+    path.push(path[0]);
+    return path;
+}
 
 function describeOffset(dx, dy) {
     const parts = [];
@@ -120,15 +151,13 @@ function shuffleArray(items) {
 
 const computedPoints = new Map();
 
-const PUZZLE_POINTS = POINT_DEFINITIONS.map((definition) => {
+POINT_DEFINITIONS.forEach((definition) => {
     let x;
     let y;
-    let hint;
 
     if (definition.absolute) {
         x = definition.absolute.x;
         y = definition.absolute.y;
-        hint = definition.customHint || `Punto ${COLOR_MAP.get(definition.colorId)?.name || ''}: coordenada fija (x:${x}, y:${y}).`;
     } else {
         const referencePoint = computedPoints.get(definition.relativeTo);
         if (!referencePoint) {
@@ -136,25 +165,21 @@ const PUZZLE_POINTS = POINT_DEFINITIONS.map((definition) => {
         }
         x = referencePoint.x + definition.dx;
         y = referencePoint.y + definition.dy;
-        const fromColor = COLOR_MAP.get(definition.relativeTo)?.name || 'referencia';
-        const offsetDescription = describeOffset(definition.dx, definition.dy);
-        hint = `Desde el punto ${fromColor} ${offsetDescription}`;
     }
 
-    const point = {
+    computedPoints.set(definition.colorId, {
         colorId: definition.colorId,
+        digit: definition.digit,
         x,
         y,
-        digit: definition.digit,
-        hint,
+        hint: definition.customHint || describeOffset(0, 0),
         reference: definition.relativeTo ?? null,
         dx: definition.dx ?? 0,
         dy: definition.dy ?? 0
-    };
-
-    computedPoints.set(definition.colorId, point);
-    return point;
+    });
 });
+
+const PUZZLE_POINTS = Array.from(computedPoints.values());
 
 const ACTIVE_COLOR_IDS = Array.from(new Set(PUZZLE_POINTS.map((point) => point.colorId)));
 
