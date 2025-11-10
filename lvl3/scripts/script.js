@@ -1,7 +1,26 @@
 // Configuración de la cuadrícula
 const GRID_SIZE = 10; // Tamaño de la cuadrícula (10x10)
 const CELL_SIZE = 50; // Tamaño de cada celda en píxeles
+const GRID_MARGIN = 1; // margen en unidades alrededor del plano
 const POINT_SIZE = 12; // Tamaño de los puntos
+
+const GRID_TOTAL_SIZE = (GRID_SIZE + GRID_MARGIN + 1) * CELL_SIZE;
+
+function coordToPixelX(x) {
+    return (x + GRID_MARGIN) * CELL_SIZE;
+}
+
+function coordToPixelY(y) {
+    return (GRID_SIZE - y + GRID_MARGIN) * CELL_SIZE;
+}
+
+function pixelToCoordX(pixel) {
+    return Math.max(0, Math.min(GRID_SIZE, Math.round(pixel / CELL_SIZE - GRID_MARGIN)));
+}
+
+function pixelToCoordY(pixel) {
+    return Math.max(0, Math.min(GRID_SIZE, Math.round(GRID_SIZE + GRID_MARGIN - pixel / CELL_SIZE)));
+}
 
 // Colores disponibles para los puntos
 const POINT_COLORS = [
@@ -177,7 +196,7 @@ function createGrid() {
     const gridContainer = document.getElementById('grid-container');
     gridContainer.innerHTML = '';
     connectionLayer = null;
-    
+
     if (poolContainer && !poolContainer.dataset.dropEnabled) {
         poolContainer.addEventListener('dragover', (e) => {
             if (draggedPoint && draggedPoint.classList.contains('grid-placed-point')) {
@@ -189,26 +208,23 @@ function createGrid() {
         poolContainer.dataset.dropEnabled = 'true';
     }
 
-    // Crear contenedor de la cuadrícula con ejes
-    // El grid tiene 11 líneas (0 a 10) en cada dirección
-    // Las celdas están entre las líneas, así que hay 10x10 celdas
     const gridWrapper = document.createElement('div');
     gridWrapper.className = 'grid-wrapper';
     gridWrapper.style.cssText = `
         position: relative;
-        width: ${(GRID_SIZE + 1) * CELL_SIZE}px;
-        height: ${(GRID_SIZE + 1) * CELL_SIZE}px;
+        width: ${GRID_TOTAL_SIZE}px;
+        height: ${GRID_TOTAL_SIZE}px;
         margin: 0 auto;
     `;
 
-    // Dibujar líneas verticales (x = 0, 1, 2, ..., 10)
+    // Dibujar líneas verticales (x = 0..GRID_SIZE)
     for (let x = 0; x <= GRID_SIZE; x++) {
         const line = document.createElement('div');
         line.className = 'grid-line-vertical';
         line.style.cssText = `
             position: absolute;
-            left: ${x * CELL_SIZE}px;
-            top: 0;
+            left: ${coordToPixelX(x)}px;
+            top: ${GRID_MARGIN * CELL_SIZE}px;
             width: 2px;
             height: ${GRID_SIZE * CELL_SIZE}px;
             background: var(--neon-cyan);
@@ -218,15 +234,14 @@ function createGrid() {
         gridWrapper.appendChild(line);
     }
 
-    // Dibujar líneas horizontales (y = 0, 1, 2, ..., 10)
-    // y=0 está abajo, y=10 está arriba
+    // Dibujar líneas horizontales (y = 0..GRID_SIZE)
     for (let y = 0; y <= GRID_SIZE; y++) {
         const line = document.createElement('div');
         line.className = 'grid-line-horizontal';
         line.style.cssText = `
             position: absolute;
-            left: 0;
-            top: ${(GRID_SIZE - y) * CELL_SIZE}px;
+            left: ${GRID_MARGIN * CELL_SIZE}px;
+            top: ${coordToPixelY(y)}px;
             width: ${GRID_SIZE * CELL_SIZE}px;
             height: 2px;
             background: var(--neon-cyan);
@@ -236,13 +251,13 @@ function createGrid() {
         gridWrapper.appendChild(line);
     }
 
-    // Eje Y (vertical) - línea x=0 (borde izquierdo)
+    // Eje Y (x=0)
     const yAxis = document.createElement('div');
     yAxis.className = 'axis-y';
     yAxis.style.cssText = `
         position: absolute;
-        left: 0;
-        top: 0;
+        left: ${coordToPixelX(0)}px;
+        top: ${GRID_MARGIN * CELL_SIZE}px;
         width: 2px;
         height: ${GRID_SIZE * CELL_SIZE}px;
         background: var(--neon-cyan);
@@ -250,13 +265,13 @@ function createGrid() {
         z-index: 2;
     `;
 
-    // Eje X (horizontal) - línea y=0 (borde inferior)
+    // Eje X (y=0)
     const xAxis = document.createElement('div');
     xAxis.className = 'axis-x';
     xAxis.style.cssText = `
         position: absolute;
-        left: 0;
-        top: ${GRID_SIZE * CELL_SIZE}px;
+        left: ${GRID_MARGIN * CELL_SIZE}px;
+        top: ${coordToPixelY(0)}px;
         width: ${GRID_SIZE * CELL_SIZE}px;
         height: 2px;
         background: var(--neon-cyan);
@@ -264,13 +279,13 @@ function createGrid() {
         z-index: 2;
     `;
 
-    // Etiqueta "Y" para el eje Y (arriba del eje, centrada horizontalmente)
+    // Etiqueta Y
     const yAxisLabel = document.createElement('div');
     yAxisLabel.textContent = 'Y';
     yAxisLabel.style.cssText = `
         position: absolute;
-        left: -${CELL_SIZE / 2 + 12}px;
-        top: -35px;
+        left: ${coordToPixelX(0) - CELL_SIZE * 0.9}px;
+        top: ${(GRID_MARGIN * CELL_SIZE) - 35}px;
         color: var(--neon-cyan);
         font-weight: 900;
         font-size: 22px;
@@ -281,114 +296,83 @@ function createGrid() {
     `;
     gridWrapper.appendChild(yAxisLabel);
 
-    // Etiquetas del eje Y (de abajo hacia arriba: 0, 1, 2, ..., 9, 10)
-    // Las etiquetas están exactamente sobre las líneas horizontales
-    // y=0 está abajo, y=10 está arriba
+    // Etiquetas de eje Y
     for (let y = 0; y <= GRID_SIZE; y++) {
         const label = document.createElement('div');
         label.className = 'axis-label-y';
-        const yValue = y; // 0, 1, 2, ..., 9, 10 (y aumenta hacia arriba)
-        label.textContent = yValue;
-        // La línea horizontal y está en: (GRID_SIZE - y) * CELL_SIZE desde arriba
-        // y=0 (abajo) -> top = GRID_SIZE * CELL_SIZE
-        // y=10 (arriba) -> top = 0
-        // Posición: centrar la etiqueta sobre la línea
-        const labelPosition = (GRID_SIZE - y) * CELL_SIZE - 10;
+        label.textContent = y;
+        const labelTop = coordToPixelY(y) - 10;
         label.style.cssText = `
             position: absolute;
-            left: -${CELL_SIZE}px;
-            top: ${labelPosition}px;
-            width: ${CELL_SIZE}px;
-            text-align: center;
+            left: ${(coordToPixelX(0) - CELL_SIZE * 0.75)}px;
+            top: ${labelTop}px;
+            width: ${CELL_SIZE * 0.7}px;
+            text-align: right;
             color: var(--neon-cyan);
             font-weight: 700;
             font-size: 14px;
         `;
-        label.dataset.yValue = yValue;
+        label.dataset.yValue = y;
         gridWrapper.appendChild(label);
     }
 
-    // Etiqueta "X" para el eje X (a la derecha del eje, centrada verticalmente con los números)
+    // Etiqueta X
     const xAxisLabel = document.createElement('div');
     xAxisLabel.textContent = 'X';
     xAxisLabel.style.cssText = `
         position: absolute;
-        left: ${GRID_SIZE * CELL_SIZE + 18}px;
-        top: ${GRID_SIZE * CELL_SIZE - 8}px;
+        left: ${coordToPixelX(GRID_SIZE) + CELL_SIZE * 0.35}px;
+        top: ${coordToPixelY(0) + CELL_SIZE * 0.2}px;
         color: var(--neon-cyan);
         font-weight: 900;
         font-size: 22px;
         text-shadow: var(--glow-cyan);
-        line-height: 30px;
         letter-spacing: 2px;
     `;
     gridWrapper.appendChild(xAxisLabel);
 
-    // Etiquetas del eje X (de izquierda a derecha: 0, 1, 2, 3, ..., 9, 10)
-    // Las etiquetas están exactamente sobre las líneas verticales
+    // Etiquetas de eje X
     for (let x = 0; x <= GRID_SIZE; x++) {
         const label = document.createElement('div');
         label.className = 'axis-label-x';
-        const xValue = x; // 0, 1, 2, 3, ..., 10
-        label.textContent = xValue;
-        // La línea vertical x está en: x * CELL_SIZE
-        // Posición: centrar la etiqueta sobre la línea
-        const labelPosition = x * CELL_SIZE - 10;
+        label.textContent = x;
         label.style.cssText = `
             position: absolute;
-            left: ${labelPosition}px;
-            top: ${GRID_SIZE * CELL_SIZE}px;
+            left: ${coordToPixelX(x) - 10}px;
+            top: ${coordToPixelY(0) + CELL_SIZE * 0.25}px;
             width: 20px;
             text-align: center;
             color: var(--neon-cyan);
             font-weight: 700;
             font-size: 14px;
-            line-height: 30px;
+            line-height: 14px;
         `;
-        label.dataset.xValue = xValue;
+        label.dataset.xValue = x;
         gridWrapper.appendChild(label);
     }
 
-    // Crear celdas de la cuadrícula
-    // Las celdas están entre las líneas, así que hay 10x10 celdas
-    // La celda (row, col) está entre:
-    // - Líneas verticales: x = col (izquierda) y x = col + 1 (derecha)
-    // - Líneas horizontales: y = GRID_SIZE - row (arriba) y y = GRID_SIZE - row - 1 (abajo)
-    // La esquina superior derecha de la celda está en la intersección (x=col+1, y=GRID_SIZE-row)
+    // Crear celdas del grid
     const gridCells = document.createElement('div');
     gridCells.className = 'grid-cells';
     gridCells.style.cssText = `
         position: absolute;
-        left: 0;
-        top: 0;
+        left: ${GRID_MARGIN * CELL_SIZE}px;
+        top: ${GRID_MARGIN * CELL_SIZE}px;
         width: ${GRID_SIZE * CELL_SIZE}px;
         height: ${GRID_SIZE * CELL_SIZE}px;
         display: grid;
         grid-template-columns: repeat(${GRID_SIZE}, ${CELL_SIZE}px);
         grid-template-rows: repeat(${GRID_SIZE}, ${CELL_SIZE}px);
     `;
-    
+
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
             const cell = document.createElement('div');
             cell.className = 'grid-cell';
-            // La celda (row, col) tiene su esquina superior derecha en:
-            // x = col + 1, y = GRID_SIZE - row
-            // Pero ahora y aumenta hacia arriba (y=0 abajo, y=10 arriba)
-            // row=0 es la fila superior, row=GRID_SIZE-1 es la fila inferior
-            // La esquina superior derecha está en y = GRID_SIZE - row
-            // Pero como y ahora aumenta hacia arriba, esto significa:
-            // - row=0 (fila superior) -> y = GRID_SIZE (10, arriba)
-            // - row=GRID_SIZE-1 (fila inferior) -> y = 1 (1, arriba de y=0)
-            // Para las coordenadas objetivo (0-9), la intersección está en y = objY + 1
-            // Entonces: GRID_SIZE - row = objY + 1 -> row = GRID_SIZE - objY - 1
-            // Por lo tanto: objY = GRID_SIZE - row - 1
-            const coordX = col + 1; // Coordenada X (1-10)
-            const coordY = GRID_SIZE - row; // Coordenada Y en el grid (10 arriba, 1 abajo)
-            // Para las coordenadas objetivo (0-9), donde objY=0 está abajo y objY=9 está arriba:
-            // objY = GRID_SIZE - row - 1 = coordY - 1
-            cell.dataset.objX = coordX - 1; // Coordenada objetivo X (0-9)
-            cell.dataset.objY = coordY - 1; // Coordenada objetivo Y (0 abajo, 9 arriba)
+            const coordX = col + 1;
+            const coordY = GRID_SIZE - row;
+            cell.dataset.objX = coordX - 1;
+            cell.dataset.objY = coordY - 1;
             cell.dataset.x = coordX;
             cell.dataset.y = coordY;
             cell.dataset.row = row;
@@ -399,23 +383,19 @@ function createGrid() {
                 cursor: pointer;
                 transition: background 0.2s ease;
             `;
-            
-            // Ya no usamos las celdas para drop, solo para visualización
-            // Los puntos se colocarán directamente en las intersecciones de las líneas
             gridCells.appendChild(cell);
         }
     }
 
-    // Crear área de drop que cubre todo el grid para colocar puntos en intersecciones
-    // Los puntos se colocarán directamente en las intersecciones de las líneas, no en celdas
+    // Área de drop que cubre todo el grid con margen
     const gridDropArea = document.createElement('div');
     gridDropArea.className = 'grid-drop-area';
     gridDropArea.style.cssText = `
         position: absolute;
         left: 0;
         top: 0;
-        width: ${(GRID_SIZE + 1) * CELL_SIZE}px;
-        height: ${(GRID_SIZE + 1) * CELL_SIZE}px;
+        width: ${GRID_TOTAL_SIZE}px;
+        height: ${GRID_TOTAL_SIZE}px;
         z-index: 4;
     `;
     gridDropArea.addEventListener('dragover', handleDragOver);
@@ -593,8 +573,8 @@ function ensureConnectionLayer() {
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.classList.add('connection-layer');
-    svg.setAttribute('width', (GRID_SIZE + 1) * CELL_SIZE);
-    svg.setAttribute('height', (GRID_SIZE + 1) * CELL_SIZE);
+    svg.setAttribute('width', GRID_TOTAL_SIZE);
+    svg.setAttribute('height', GRID_TOTAL_SIZE);
     svg.style.position = 'absolute';
     svg.style.left = '0';
     svg.style.top = '0';
@@ -937,39 +917,9 @@ function handleGridDrop(e) {
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
     
-    // Calcular la intersección más cercana
-    // Las intersecciones están directamente en las líneas del grid (0 a 10)
-    // Todas las líneas son válidas para colocar puntos, incluyendo la línea 0
-    // Cuando colocas en la línea 0, la coordenada es 0
-    // Cuando colocas en la línea 1, la coordenada es 1
-    // Cuando colocas en la línea 2, la coordenada es 2
-    
-    // Calcular qué línea vertical está más cerca del mouse
-    // mouseX / CELL_SIZE nos da la línea (0 a GRID_SIZE)
-    const lineX = Math.round(mouseX / CELL_SIZE);
-    // Las intersecciones están en las líneas 0-10 directamente
-    // Si lineX = 0, objX = 0 (línea x=0)
-    // Si lineX = 1, objX = 1
-    // Si lineX = 2, objX = 2
-    // objX va de 0 a 10 (corresponde directamente a las líneas)
-    const objX = Math.max(0, Math.min(GRID_SIZE, lineX));
-    
-    // Calcular qué línea horizontal está más cerca del mouse
-    // mouseY aumenta hacia abajo (0 arriba, GRID_SIZE*CELL_SIZE abajo)
-    // Las líneas y van de 0 (abajo) a 10 (arriba)
-    // La línea y está en top = (GRID_SIZE - y) * CELL_SIZE
-    // Si queremos encontrar la línea y más cercana a mouseY:
-    // (GRID_SIZE - y) * CELL_SIZE ≈ mouseY
-    // GRID_SIZE - y ≈ mouseY / CELL_SIZE
-    // y ≈ GRID_SIZE - mouseY / CELL_SIZE
-    // Las intersecciones están en las líneas 0-10 directamente
-    // Si lineY = 0, objY = 0 (línea y=0)
-    // Si lineY = 1, objY = 1
-    // Si lineY = 2, objY = 2
-    // objY va de 0 a 10 (corresponde directamente a las líneas, y aumenta hacia arriba)
-    const lineY = Math.round(GRID_SIZE - mouseY / CELL_SIZE);
-    const objY = Math.max(0, Math.min(GRID_SIZE, lineY));
-    
+    const objX = pixelToCoordX(mouseX);
+    const objY = pixelToCoordY(mouseY);
+
     const key = `${objX}-${objY}`;
     
     // Verificar si estamos moviendo un punto ya colocado
@@ -1028,10 +978,8 @@ function handleGridDrop(e) {
     // objY=0 está en la línea horizontal y=0 (borde inferior)
     // La intersección está directamente en la línea x = objX, y = objY
     // Posición en píxeles:
-    // - pointX = objX * CELL_SIZE
-    // - pointY = (GRID_SIZE - objY) * CELL_SIZE
-    const pointX = objX * CELL_SIZE;
-    const pointY = (GRID_SIZE - objY) * CELL_SIZE;
+    const pointX = coordToPixelX(objX);
+    const pointY = coordToPixelY(objY);
     
     // Crear o actualizar el punto
     let pointElement;
@@ -1199,16 +1147,8 @@ function handleLineDrop(e) {
         gridWrapper.appendChild(pointContainer);
     }
     
-    // Calcular posición absoluta del punto en la intersección
-    // x y y son las coordenadas objetivo (objX, objY)
-    // objX=0 está a la izquierda, objX aumenta hacia la derecha
-    // objY=0 está abajo, objY aumenta hacia arriba
-    // La intersección está en la línea x = objX + 1, y = objY + 1
-    // Posición en píxeles:
-    // - pointX = (objX + 1) * CELL_SIZE
-    // - pointY = (GRID_SIZE - (objY + 1)) * CELL_SIZE
-    const pointX = (x + 1) * CELL_SIZE;
-    const pointY = (GRID_SIZE - y - 1) * CELL_SIZE;
+    const pointX = coordToPixelX(x);
+    const pointY = coordToPixelY(y);
     
     // Crear o actualizar el punto
     let pointElement;
@@ -1342,8 +1282,8 @@ function handleCellDrop(e) {
     // - objY=0 (línea y=1) -> pointY = (GRID_SIZE - 1) * CELL_SIZE
     // - objY=9 (línea y=10) -> pointY = (GRID_SIZE - 10) * CELL_SIZE = 0
     // Fórmula: pointY = (GRID_SIZE - (objY + 1)) * CELL_SIZE
-    const pointX = (objX + 1) * CELL_SIZE;
-    const pointY = (GRID_SIZE - objY - 1) * CELL_SIZE;
+    const pointX = coordToPixelX(objX);
+    const pointY = coordToPixelY(objY);
     
     // Colocar nuevo punto en la intersección
     const pointElement = document.createElement('div');
