@@ -483,52 +483,69 @@ function displayCoordinates() {
     const coordsList = document.getElementById('coordinates-list');
     coordsList.innerHTML = '';
 
-    const shuffledPoints = shuffleArray(PUZZLE_POINTS);
+    const pointsById = new Map(PUZZLE_POINTS.map((point) => [point.colorId, point]));
+    const order = [4, 2, 3, 1, 5, 6]; // Verde, Azul, Naranja, Amarillo, Morado, Blanco
+    const rendered = new Set();
 
-    shuffledPoints.forEach((coord) => {
-        const pointColor = COLOR_MAP.get(coord.colorId);
-        if (!pointColor) return;
-
-        const isSolved = isCoordinatePlaced(coord.x, coord.y, coord.colorId);
-        
-        const coordItem = document.createElement('div');
-        coordItem.className = 'coord-item';
-        coordItem.style.cssText = `
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            text-align: center;
-        `;
-        
-        const colorPoint = document.createElement('div');
-        colorPoint.className = 'color-point';
-        colorPoint.style.cssText = `
-            width: ${POINT_SIZE * 2}px;
-            height: ${POINT_SIZE * 2}px;
-            background: ${pointColor.color};
-            border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px ${pointColor.color}, 0 0 20px ${pointColor.color};
-            opacity: ${isSolved ? '0.5' : '1'};
-            transition: opacity 0.3s ease;
-        `;
- 
-        const coordText = document.createElement('div');
-        coordText.textContent = coord.reference === null
-            ? `(x:${coord.x}, y:${coord.y})`
-            : coord.hint;
-        coordText.style.cssText = `
-            color: var(--neon-purple);
-            font-weight: 600;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-        `;
-        
-        coordItem.appendChild(colorPoint);
-        coordItem.appendChild(coordText);
-        coordsList.appendChild(coordItem);
+    order.forEach((colorId) => {
+        const coord = pointsById.get(colorId);
+        if (!coord) return;
+        const card = createSingleCard(coord);
+        if (card) {
+            coordsList.appendChild(card);
+            rendered.add(colorId);
+        }
     });
+
+    PUZZLE_POINTS.forEach((coord) => {
+        if (rendered.has(coord.colorId)) return;
+        const card = createSingleCard(coord);
+        if (card) {
+            coordsList.appendChild(card);
+            rendered.add(coord.colorId);
+        }
+    });
+}
+
+function createInstructionEntry(coord) {
+    const pointColor = COLOR_MAP.get(coord.colorId);
+    if (!pointColor) return null;
+
+    const isSolved = isCoordinatePlaced(coord.x, coord.y, coord.colorId);
+
+    const entry = document.createElement('div');
+    entry.className = 'coord-entry';
+
+    const colorPoint = document.createElement('div');
+    colorPoint.className = 'color-point';
+    colorPoint.style.background = pointColor.color;
+    colorPoint.style.boxShadow = `0 0 8px ${pointColor.color}, 0 0 16px ${pointColor.color}`;
+
+    const coordText = document.createElement('div');
+    coordText.className = 'coord-text';
+    coordText.textContent = coord.reference === null
+        ? `(x:${coord.x}, y:${coord.y})`
+        : coord.hint;
+
+    entry.appendChild(colorPoint);
+    entry.appendChild(coordText);
+
+    return { entry, isSolved };
+}
+
+function createSingleCard(coord) {
+    const result = createInstructionEntry(coord);
+    if (!result) return null;
+
+    const { entry, isSolved } = result;
+    const card = document.createElement('div');
+    card.className = 'coord-card coord-card-single';
+    if (isSolved) {
+        card.classList.add('completed');
+    }
+
+    card.appendChild(entry);
+    return card;
 }
 
 // Verificar si una coordenada está colocada correctamente

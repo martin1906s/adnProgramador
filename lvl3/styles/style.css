@@ -1089,7 +1089,7 @@
   /* Layout de 3 columnas: Coordenadas | Cuadrícula | Imágenes */
   .grid-layout-container {
     display: grid;
-    grid-template-columns: 280px 1fr 280px;
+    grid-template-columns: 190px 1fr 320px;
     gap: 20px;
     align-items: start;
     padding: 20px;
@@ -1289,23 +1289,92 @@
   /* Lista de coordenadas - estilo simple sin cards */
   .coordinates-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    grid-template-columns: 1fr;
+    gap: 14px;
     min-height: auto;
-    padding: 10px;
+    padding: 14px;
+    overflow-y: auto;
+    flex: 1;
   }
 
-  .coord-item {
+  .coord-entry {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .coord-text {
+    color: var(--neon-purple);
+    font-weight: 600;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    letter-spacing: 0.5px;
+  }
+
+  .coord-entry .color-point {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+  }
+
+  .coord-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    padding: 10px;
-    transition: transform 0.2s ease;
+    gap: 10px;
+    background: rgba(10, 25, 45, 0.88);
+    border: 2px solid rgba(0, 255, 255, 0.75);
+    border-radius: 14px;
+    padding: 14px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 255, 255, 0.25);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .coord-item:hover {
-    transform: translateY(-3px);
+  .coord-card::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.18);
+    pointer-events: none;
+  }
+
+  .coord-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 255, 255, 0.95);
+    box-shadow: 0 18px 32px rgba(0, 255, 255, 0.28), 0 0 22px rgba(0, 255, 255, 0.4);
+  }
+
+  .coord-card.completed {
+    opacity: 0.85;
+  }
+
+  .coord-card-single {
+    gap: 4px;
+  }
+
+  .coord-subcard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(0, 255, 255, 0.4);
+    background: rgba(5, 20, 38, 0.85);
+    box-shadow: inset 0 0 12px rgba(0, 255, 255, 0.1);
+  }
+
+  .coord-subcard + .coord-subcard {
+    margin-top: 12px;
+  }
+
+  .coord-subcard.completed {
+    opacity: 0.75;
   }
 
   .coord-digit {
@@ -1324,19 +1393,21 @@
 
   /* Puntos de colores en el panel lateral */
   .points-container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
   }
 
   .point-item {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 10px;
+    padding: 6px 0;
     cursor: grab;
     transition: transform 0.2s ease;
+    width: 100%;
   }
 
   .point-item:hover {
@@ -1666,8 +1737,8 @@
   /* Responsive para cuadrícula */
   @media (max-width: 1200px) {
     .grid-layout-container {
-      grid-template-columns: 240px 1fr 240px;
-      gap: 15px;
+      grid-template-columns: 170px 1fr 280px;
+      gap: 16px;
     }
 
     .side-panel {
@@ -1677,7 +1748,7 @@
 
   @media (max-width: 1024px) {
     .grid-layout-container {
-      grid-template-columns: 200px 1fr 200px;
+      grid-template-columns: 160px 1fr 240px;
       gap: 12px;
       padding: 15px;
     }
@@ -1696,11 +1767,11 @@
 
     .coordinates-list {
       grid-template-columns: 1fr;
-      gap: 8px;
+      gap: 10px;
     }
 
     .points-container {
-      grid-template-columns: repeat(2, 1fr);
+      flex-direction: column;
       gap: 10px;
     }
   }
@@ -1738,11 +1809,12 @@
     }
 
     .coordinates-list {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr;
     }
 
     .points-container {
-      grid-template-columns: repeat(4, 1fr);
+      flex-direction: column;
+      gap: 8px;
     }
   }
 
@@ -1757,12 +1829,34 @@
     }
 
     .coordinates-list {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      grid-template-columns: 1fr;
+      gap: 10px;
     }
 
-    .coord-card {
-      padding: 8px !important;
+    .coord-item.coord-card {
+      background: rgba(10, 25, 45, 0.88);
+      border: 2px solid rgba(0, 255, 255, 0.75);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45), 0 0 18px rgba(0, 255, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .coord-item.coord-card::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.18);
+      pointer-events: none;
+    }
+
+    .coord-item.coord-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 255, 255, 0.95);
+      box-shadow: 0 18px 32px rgba(0, 255, 255, 0.28), 0 0 22px rgba(0, 255, 255, 0.4);
     }
 
     .color-point-preview {
@@ -1771,7 +1865,6 @@
     }
 
     .points-container {
-      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
   }
