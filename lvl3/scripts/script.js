@@ -34,83 +34,242 @@ const POINT_COLORS = [
 
 const COLOR_MAP = new Map(POINT_COLORS.map((entry) => [entry.id, entry]));
 
-const POINT_DEFINITIONS = [
+const PUZZLE_VARIANTS = [
     {
-        colorId: 3,
-        digit: '7',
-        absolute: { x: 5, y: 9 },
-        customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+        id: 'heart',
+        name: 'Corazón',
+        pointDefinitions: [
+            {
+                colorId: 3,
+                digit: '7',
+                absolute: { x: 5, y: 9 },
+                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+            },
+            {
+                colorId: 1,
+                digit: '3',
+                relativeTo: 3,
+                dx: -3,
+                dy: -2,
+                customHint: 'Desde el punto Naranja retrocede 3 unidades a la izquierda y baja 2 unidades.'
+            },
+            {
+                colorId: 2,
+                digit: '9',
+                relativeTo: 3,
+                dx: -2,
+                dy: 1,
+                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y sube 1 unidad.'
+            },
+            {
+                colorId: 4,
+                digit: '4',
+                relativeTo: 3,
+                dx: 2,
+                dy: 1,
+                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y sube 1 unidad.'
+            },
+            {
+                colorId: 5,
+                digit: '6',
+                relativeTo: 3,
+                dx: 3,
+                dy: -2,
+                customHint: 'Desde el punto Naranja avanza 3 unidades a la derecha y baja 2 unidades.'
+            },
+            {
+                colorId: 6,
+                digit: '8',
+                relativeTo: 1,
+                dx: 3,
+                dy: -3,
+                customHint: 'Desde el punto Amarillo avanza 3 unidades a la derecha y baja 3 unidades.'
+            }
+        ],
+        connectionPath: [1, 2, 3, 4, 5, 6, 1],
+        coordinateOrder: [4, 2, 3, 1, 5, 6]
     },
     {
-        colorId: 1,
-        digit: '3',
-        relativeTo: 3,
-        dx: -3,
-        dy: -2,
-        customHint: 'Desde el punto Naranja retrocede 3 unidades a la izquierda y baja 2 unidades.'
+        id: 'house',
+        name: 'Casa',
+        pointDefinitions: [
+            {
+                colorId: 3,
+                digit: '5',
+                absolute: { x: 5, y: 9 },
+                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+            },
+            {
+                colorId: 4,
+                digit: '2',
+                relativeTo: 3,
+                dx: -2,
+                dy: -3,
+                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y baja 3 unidades.'
+            },
+            {
+                colorId: 5,
+                digit: '6',
+                relativeTo: 3,
+                dx: 2,
+                dy: -3,
+                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y baja 3 unidades.'
+            },
+            {
+                colorId: 2,
+                digit: '4',
+                relativeTo: 3,
+                dx: 2,
+                dy: -7,
+                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y baja 7 unidades.'
+            },
+            {
+                colorId: 1,
+                digit: '8',
+                relativeTo: 3,
+                dx: -2,
+                dy: -7,
+                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y baja 7 unidades.'
+            },
+            {
+                colorId: 6,
+                digit: '1',
+                relativeTo: 3,
+                dx: 0,
+                dy: -7,
+                customHint: 'Desde el punto Naranja baja 7 unidades.'
+            }
+        ],
+        connectionPath: [1, 6, 2, 5, 3, 4, 1],
+        coordinateOrder: [4, 2, 3, 1, 5, 6]
     },
     {
-        colorId: 2,
-        digit: '9',
-        relativeTo: 3,
-        dx: -2,
-        dy: 1,
-        customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y sube 1 unidad.'
-    },
-    {
-        colorId: 4,
-        digit: '4',
-        relativeTo: 3,
-        dx: 2,
-        dy: 1,
-        customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y sube 1 unidad.'
-    },
-    {
-        colorId: 5,
-        digit: '6',
-        relativeTo: 3,
-        dx: 3,
-        dy: -2,
-        customHint: 'Desde el punto Naranja avanza 3 unidades a la derecha y baja 2 unidades.'
-    },
-    {
-        colorId: 6,
-        digit: '8',
-        relativeTo: 1,
-        dx: 3,
-        dy: -3,
-        customHint: 'Desde el punto Amarillo avanza 3 unidades a la derecha y baja 3 unidades.'
+        id: 'polygon',
+        name: 'Polígono',
+        pointDefinitions: [
+            {
+                colorId: 3,
+                digit: '4',
+                absolute: { x: 5, y: 9 },
+                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+            },
+            {
+                colorId: 4,
+                digit: '8',
+                relativeTo: 3,
+                dx: 4,
+                dy: 0,
+                customHint: 'Desde el punto Naranja avanza 4 unidades a la derecha.'
+            },
+            {
+                colorId: 5,
+                digit: '2',
+                relativeTo: 4,
+                dx: -1,
+                dy: -4,
+                customHint: 'Desde el punto Verde retrocede 1 unidad a la izquierda y baja 4 unidades.'
+            },
+            {
+                colorId: 2,
+                digit: '6',
+                relativeTo: 3,
+                dx: 0,
+                dy: -6,
+                customHint: 'Desde el punto Naranja baja 6 unidades.'
+            },
+            {
+                colorId: 1,
+                digit: '1',
+                relativeTo: 3,
+                dx: -4,
+                dy: 0,
+                customHint: 'Desde el punto Naranja retrocede 4 unidades a la izquierda.'
+            },
+            {
+                colorId: 6,
+                digit: '5',
+                relativeTo: 1,
+                dx: 1,
+                dy: -4,
+                customHint: 'Desde el punto Amarillo avanza 1 unidad a la derecha y baja 4 unidades.'
+            }
+        ],
+        connectionPath: [3, 4, 5, 2, 6, 1, 3],
+        coordinateOrder: [3, 4, 5, 2, 6, 1]
     }
 ];
 
-// Orden específico para trazar la figura del corazón (cierra en el primer punto)
-function buildConnectionPath(points) {
-    const centroid = points.reduce(
-        (acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }),
-        { x: 0, y: 0 }
-    );
-    centroid.x /= points.length;
-    centroid.y /= points.length;
+const CODE_PLACEHOLDER = '•';
+const BASE_MAX_INPUT_LENGTH = 8;
 
-    const sorted = [...points].sort((a, b) => {
-        const angleA = Math.atan2(a.y - centroid.y, a.x - centroid.x);
-        const angleB = Math.atan2(b.y - centroid.y, b.x - centroid.x);
-        return angleB - angleA; // horario
+let CURRENT_PUZZLE = null;
+let PUZZLE_POINTS = [];
+let ACTIVE_COLOR_IDS = [];
+let CONNECTION_PATH = [];
+let CODE_LENGTH = 0;
+let EXPECTED_CODE = '';
+let MAX_INPUT_LENGTH = BASE_MAX_INPUT_LENGTH;
+
+function selectRandomPuzzle() {
+    const index = Math.floor(Math.random() * PUZZLE_VARIANTS.length);
+    return PUZZLE_VARIANTS[index];
+}
+
+function initializePuzzle() {
+    CURRENT_PUZZLE = selectRandomPuzzle();
+
+    const computedPoints = new Map();
+
+    CURRENT_PUZZLE.pointDefinitions.forEach((definition) => {
+        let x;
+        let y;
+
+        if (definition.absolute) {
+            x = definition.absolute.x;
+            y = definition.absolute.y;
+        } else {
+            const referencePoint = computedPoints.get(definition.relativeTo);
+            if (!referencePoint) {
+                throw new Error(`No se encontró el punto de referencia para el colorId ${definition.colorId} en el rompecabezas ${CURRENT_PUZZLE.id}`);
+            }
+            x = referencePoint.x + definition.dx;
+            y = referencePoint.y + definition.dy;
+        }
+
+        computedPoints.set(definition.colorId, {
+            colorId: definition.colorId,
+            digit: definition.digit,
+            x,
+            y,
+            hint: definition.customHint || describeOffset(definition.dx ?? 0, definition.dy ?? 0),
+            reference: definition.relativeTo ?? null,
+            dx: definition.dx ?? 0,
+            dy: definition.dy ?? 0
+        });
     });
 
-    const startIndex = sorted.reduce((bestIndex, point, index) => {
-        const bestPoint = sorted[bestIndex];
-        if (point.y < bestPoint.y || (point.y === bestPoint.y && point.x < bestPoint.x)) {
-            return index;
-        }
-        return bestIndex;
-    }, 0);
+    PUZZLE_POINTS = Array.from(computedPoints.values());
+    ACTIVE_COLOR_IDS = Array.from(new Set(PUZZLE_POINTS.map((point) => point.colorId)));
 
-    const ordered = sorted.slice(startIndex).concat(sorted.slice(0, startIndex));
-    const path = ordered.map((point) => point.colorId);
-    path.push(path[0]);
-    return path;
+    PUZZLE_POINTS.forEach((point) => {
+        if (point.x < 0 || point.x > GRID_SIZE || point.y < 0 || point.y > GRID_SIZE) {
+            console.warn('[Nivel 3] Punto fuera de rango detectado:', point, 'en el rompecabezas', CURRENT_PUZZLE.id);
+        }
+    });
+
+    const pathSource = CURRENT_PUZZLE.connectionPath && CURRENT_PUZZLE.connectionPath.length
+        ? CURRENT_PUZZLE.connectionPath
+        : buildConnectionPath(PUZZLE_POINTS);
+    CONNECTION_PATH = [...pathSource];
+
+    CODE_LENGTH = PUZZLE_POINTS.length;
+    EXPECTED_CODE = PUZZLE_POINTS.map((point) => point.digit).join('');
+    MAX_INPUT_LENGTH = Math.max(BASE_MAX_INPUT_LENGTH, CODE_LENGTH);
+
+    console.info(`[Nivel 3] Rompecabezas cargado: ${CURRENT_PUZZLE.name} (${CURRENT_PUZZLE.id}). Código esperado: ${EXPECTED_CODE}`);
 }
+
+initializePuzzle();
 
 function describeOffset(dx, dy) {
     const parts = [];
@@ -149,52 +308,34 @@ function shuffleArray(items) {
     return array;
 }
 
-const computedPoints = new Map();
+// Orden específico para trazar la figura del corazón (cierra en el primer punto)
+function buildConnectionPath(points) {
+    const centroid = points.reduce(
+        (acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }),
+        { x: 0, y: 0 }
+    );
+    centroid.x /= points.length;
+    centroid.y /= points.length;
 
-POINT_DEFINITIONS.forEach((definition) => {
-    let x;
-    let y;
-
-    if (definition.absolute) {
-        x = definition.absolute.x;
-        y = definition.absolute.y;
-    } else {
-        const referencePoint = computedPoints.get(definition.relativeTo);
-        if (!referencePoint) {
-            throw new Error(`No se encontró el punto de referencia para el colorId ${definition.colorId}`);
-        }
-        x = referencePoint.x + definition.dx;
-        y = referencePoint.y + definition.dy;
-    }
-
-    computedPoints.set(definition.colorId, {
-        colorId: definition.colorId,
-        digit: definition.digit,
-        x,
-        y,
-        hint: definition.customHint || describeOffset(0, 0),
-        reference: definition.relativeTo ?? null,
-        dx: definition.dx ?? 0,
-        dy: definition.dy ?? 0
+    const sorted = [...points].sort((a, b) => {
+        const angleA = Math.atan2(a.y - centroid.y, a.x - centroid.x);
+        const angleB = Math.atan2(b.y - centroid.y, b.x - centroid.x);
+        return angleB - angleA; // horario
     });
-});
 
-const PUZZLE_POINTS = Array.from(computedPoints.values());
+    const startIndex = sorted.reduce((bestIndex, point, index) => {
+        const bestPoint = sorted[bestIndex];
+        if (point.y < bestPoint.y || (point.y === bestPoint.y && point.x < bestPoint.x)) {
+            return index;
+        }
+        return bestIndex;
+    }, 0);
 
-const ACTIVE_COLOR_IDS = Array.from(new Set(PUZZLE_POINTS.map((point) => point.colorId)));
-
-const CONNECTION_PATH = [1, 2, 3, 4, 5, 6, 1];
-
-const CODE_LENGTH = PUZZLE_POINTS.length;
-const EXPECTED_CODE = PUZZLE_POINTS.map((point) => point.digit).join('');
-const CODE_PLACEHOLDER = '•';
-const MAX_INPUT_LENGTH = Math.max(8, CODE_LENGTH);
-
-PUZZLE_POINTS.forEach((point) => {
-    if (point.x < 0 || point.x > GRID_SIZE || point.y < 0 || point.y > GRID_SIZE) {
-        console.warn('[Nivel 3] Punto fuera de rango detectado:', point);
-    }
-});
+    const ordered = sorted.slice(startIndex).concat(sorted.slice(0, startIndex));
+    const path = ordered.map((point) => point.colorId);
+    path.push(path[0]);
+    return path;
+}
 
 // Estado del juego
 let placedPoints = {}; // { 'x-y': { colorId: 1, element: pointElement, container: pointContainer } }
@@ -215,7 +356,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     setupLevelAccess();
     
-    console.log('[Nivel 3] Código esperado:', EXPECTED_CODE);
+    if (CURRENT_PUZZLE) {
+        console.log(`[Nivel 3] Rompecabezas activo: ${CURRENT_PUZZLE.name} (${CURRENT_PUZZLE.id}). Código esperado:`, EXPECTED_CODE);
+    }
 });
 
 // Crear la cuadrícula cartesiana
@@ -391,7 +534,7 @@ function createGrid() {
         grid-template-columns: repeat(${GRID_SIZE}, ${CELL_SIZE}px);
         grid-template-rows: repeat(${GRID_SIZE}, ${CELL_SIZE}px);
     `;
-
+    
     for (let row = 0; row < GRID_SIZE; row++) {
         for (let col = 0; col < GRID_SIZE; col++) {
             const cell = document.createElement('div');
@@ -482,9 +625,12 @@ function loadPoints() {
 function displayCoordinates() {
     const coordsList = document.getElementById('coordinates-list');
     coordsList.innerHTML = '';
-
+    
     const pointsById = new Map(PUZZLE_POINTS.map((point) => [point.colorId, point]));
-    const order = [4, 2, 3, 1, 5, 6]; // Verde, Azul, Naranja, Amarillo, Morado, Blanco
+    const configuredOrder = CURRENT_PUZZLE?.coordinateOrder;
+    const order = configuredOrder && configuredOrder.length
+        ? configuredOrder
+        : PUZZLE_POINTS.map((point) => point.colorId);
     const rendered = new Set();
 
     order.forEach((colorId) => {
@@ -516,12 +662,12 @@ function createInstructionEntry(coord) {
     const entry = document.createElement('div');
     entry.className = 'coord-entry';
 
-    const colorPoint = document.createElement('div');
-    colorPoint.className = 'color-point';
+        const colorPoint = document.createElement('div');
+        colorPoint.className = 'color-point';
     colorPoint.style.background = pointColor.color;
     colorPoint.style.boxShadow = `0 0 8px ${pointColor.color}, 0 0 16px ${pointColor.color}`;
 
-    const coordText = document.createElement('div');
+        const coordText = document.createElement('div');
     coordText.className = 'coord-text';
     coordText.textContent = coord.reference === null
         ? `(x:${coord.x}, y:${coord.y})`
@@ -811,15 +957,15 @@ function handleDragStart(e) {
 
     if (draggedPoint.classList.contains('grid-placed-point')) {
         draggedColorId = parseInt(draggedPoint.dataset.colorId, 10);
-        draggedPoint.dataset.isMoving = 'true';
-        draggedPoint.style.opacity = '0.5';
+            draggedPoint.dataset.isMoving = 'true';
+            draggedPoint.style.opacity = '0.5';
     } else {
         draggedColorId = parseInt(draggedPoint.dataset.colorId || draggedPoint.dataset.colorId, 10);
         draggedPoint.style.opacity = '0.5';
     }
-
+    
     if (!draggedColorId) return;
-
+    
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', draggedColorId.toString());
     
@@ -960,7 +1106,7 @@ function handleGridDrop(e) {
     
     const objX = pixelToCoordX(mouseX);
     const objY = pixelToCoordY(mouseY);
-
+    
     const key = `${objX}-${objY}`;
     
     // Verificar si estamos moviendo un punto ya colocado
@@ -1402,7 +1548,7 @@ function handlePoolDrop(e) {
         // Solo puntos ya colocados pueden regresarse
         return;
     }
-
+    
     const oldX = parseInt(movingPoint.dataset.cellX, 10);
     const oldY = parseInt(movingPoint.dataset.cellY, 10);
     const oldKey = `${oldX}-${oldY}`;
