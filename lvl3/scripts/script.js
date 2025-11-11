@@ -337,7 +337,7 @@ function buildConnectionPath(points) {
     return path;
 }
 
-// Estado del juego
+// Estado del Estado   del juego //
 let placedPoints = {}; // { 'x-y': { colorId: 1, element: pointElement, container: pointContainer } }
 let draggedPoint = null;
 let draggedColorId = null;
@@ -446,7 +446,7 @@ function createGrid() {
         height: 2px;
         background: var(--neon-cyan);
         box-shadow: var(--glow-cyan);
-        z-index: 2;
+        z-index: 2;            
     `;
 
     // Etiqueta Y
