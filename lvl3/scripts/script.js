@@ -38,40 +38,35 @@ const PUZZLE_VARIANTS = [
     {
         id: 'heart',
         name: 'Corazón',
+        code: '739',
         pointDefinitions: [
             {
                 colorId: 3,
-                digit: '7',
                 xExpr: { type: 'absolute', value: 5 },
                 yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 1,
-                digit: '3',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -3 },
                 yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -2 }
             },
             {
                 colorId: 2,
-                digit: '9',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -2 },
                 yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: 1 }
             },
             {
                 colorId: 4,
-                digit: '4',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 2 },
                 yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             },
             {
                 colorId: 5,
-                digit: '6',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 3 },
                 yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
-                digit: '8',
                 xExpr: { type: 'offset', color: 'amarillo', axis: 'x', value: 3 },
                 yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: -3 }
             }
@@ -82,40 +77,35 @@ const PUZZLE_VARIANTS = [
     {
         id: 'house',
         name: 'Casa',
+        code: '524',
         pointDefinitions: [
             {
                 colorId: 3,
-                digit: '5',
                 xExpr: { type: 'absolute', value: 5 },
                 yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 4,
-                digit: '2',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -2 },
                 yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -3 }
             },
             {
                 colorId: 5,
-                digit: '6',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 2 },
                 yExpr: { type: 'offset', color: 'verde', axis: 'y', value: 0 }
             },
             {
                 colorId: 2,
-                digit: '4',
                 xExpr: { type: 'offset', color: 'morado', axis: 'x', value: 0 },
                 yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -7 }
             },
             {
                 colorId: 1,
-                digit: '8',
                 xExpr: { type: 'offset', color: 'verde', axis: 'x', value: 0 },
                 yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
-                digit: '1',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 0 },
                 yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             }
@@ -126,40 +116,35 @@ const PUZZLE_VARIANTS = [
     {
         id: 'polygon',
         name: 'Polígono',
+        code: '482',
         pointDefinitions: [
             {
                 colorId: 3,
-                digit: '4',
                 xExpr: { type: 'absolute', value: 5 },
                 yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 4,
-                digit: '8',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 4 },
                 yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: 0 }
             },
             {
                 colorId: 5,
-                digit: '2',
                 xExpr: { type: 'offset', color: 'verde', axis: 'x', value: -1 },
                 yExpr: { type: 'offset', color: 'verde', axis: 'y', value: -4 }
             },
             {
                 colorId: 2,
-                digit: '6',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 0 },
                 yExpr: { type: 'offset', color: 'morado', axis: 'y', value: -2 }
             },
             {
                 colorId: 1,
-                digit: '1',
                 xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -4 },
                 yExpr: { type: 'offset', color: 'verde', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
-                digit: '5',
                 xExpr: { type: 'offset', color: 'amarillo', axis: 'x', value: 1 },
                 yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: -4 }
             }
@@ -397,6 +382,24 @@ function getColorIdByName(colorName) {
     return colorMap[colorName.toLowerCase()] || null;
 }
 
+// Cargar códigos guardados desde localStorage
+function loadSavedCodes() {
+    try {
+        // Cargar códigos para todas las figuras desde localStorage
+        PUZZLE_VARIANTS.forEach(puzzle => {
+            const storageKey = `lvl3_code_${puzzle.id}`;
+            const savedCode = localStorage.getItem(storageKey);
+            
+            if (savedCode && /^[0-9]{3}$/.test(savedCode)) {
+                puzzle.code = savedCode;
+                console.log(`[Nivel 3] Código de ${puzzle.name} cargado desde localStorage:`, savedCode);
+            }
+        });
+    } catch (e) {
+        console.warn('[Nivel 3] No se pudo cargar desde localStorage:', e);
+    }
+}
+
 function selectRandomPuzzle() {
     const index = Math.floor(Math.random() * PUZZLE_VARIANTS.length);
     return PUZZLE_VARIANTS[index];
@@ -404,6 +407,9 @@ function selectRandomPuzzle() {
 
 function initializePuzzle() {
     CURRENT_PUZZLE = selectRandomPuzzle();
+    
+    // Cargar códigos guardados desde localStorage
+    loadSavedCodes();
 
     const computedPoints = new Map();
 
@@ -454,7 +460,6 @@ function initializePuzzle() {
 
         computedPoints.set(definition.colorId, {
             colorId: definition.colorId,
-            digit: definition.digit,
             x,
             y,
             hint: hint,
@@ -480,8 +485,8 @@ function initializePuzzle() {
         : buildConnectionPath(PUZZLE_POINTS);
     CONNECTION_PATH = [...pathSource];
 
-    CODE_LENGTH = PUZZLE_POINTS.length;
-    EXPECTED_CODE = PUZZLE_POINTS.map((point) => point.digit).join('');
+    CODE_LENGTH = 3; // Código de 3 dígitos
+    EXPECTED_CODE = CURRENT_PUZZLE.code || '000';
     MAX_INPUT_LENGTH = Math.max(BASE_MAX_INPUT_LENGTH, CODE_LENGTH);
 
     console.info(`[Nivel 3] Rompecabezas cargado: ${CURRENT_PUZZLE.name} (${CURRENT_PUZZLE.id}). Código esperado: ${EXPECTED_CODE}`);
@@ -573,6 +578,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCounts();
     
     setupLevelAccess();
+    
+    // Configurar el botón de códigos (ya está en el HTML del header)
+    setupCodeConfigModal();
     
     if (CURRENT_PUZZLE) {
         console.log(`[Nivel 3] Rompecabezas activo: ${CURRENT_PUZZLE.name} (${CURRENT_PUZZLE.id}). Código esperado:`, EXPECTED_CODE);
@@ -785,11 +793,21 @@ function createGrid() {
         width: ${GRID_TOTAL_SIZE}px;
         height: ${GRID_TOTAL_SIZE}px;
         z-index: 4;
+        pointer-events: none;
     `;
     gridDropArea.addEventListener('dragover', handleDragOver);
     gridDropArea.addEventListener('drop', handleGridDrop);
     gridDropArea.addEventListener('dragenter', handleDragEnter);
     gridDropArea.addEventListener('dragleave', handleDragLeave);
+    
+    // Activar pointer-events cuando hay un drag
+    document.addEventListener('dragstart', () => {
+        gridDropArea.style.pointerEvents = 'auto';
+    });
+    
+    document.addEventListener('dragend', () => {
+        gridDropArea.style.pointerEvents = 'none';
+    });
 
     gridWrapper.appendChild(yAxis);
     gridWrapper.appendChild(xAxis);
@@ -978,12 +996,21 @@ function updateCodeDisplay() {
     const codeSlots = document.getElementById('code-slots');
     if (!codeSlots) return;
 
-    const digits = PUZZLE_POINTS.map((point) =>
-        isCoordinatePlaced(point.x, point.y, point.colorId) ? point.digit : CODE_PLACEHOLDER
+    // Verificar si todos los puntos están colocados correctamente
+    const allPointsCorrect = PUZZLE_POINTS.every((point) =>
+        isCoordinatePlaced(point.x, point.y, point.colorId)
     );
 
-    codeSlots.dataset.code = digits.join('');
-    codeSlots.textContent = digits.join(' ');
+    if (allPointsCorrect) {
+        // Revelar el código de 3 dígitos cuando la figura está completa
+        const code = EXPECTED_CODE;
+        codeSlots.dataset.code = code;
+        codeSlots.textContent = code.split('').join(' ');
+    } else {
+        // Mostrar placeholders mientras no esté completa
+        codeSlots.dataset.code = '';
+        codeSlots.textContent = `${CODE_PLACEHOLDER} ${CODE_PLACEHOLDER} ${CODE_PLACEHOLDER}`;
+    }
 }
 
 function ensureConnectionLayer() {
@@ -1107,6 +1134,172 @@ function setupLevelAccess() {
     });
 
     updateKeyboardDisplay();
+}
+
+function setupCodeConfigModal() {
+    const configBtn = document.getElementById('config-code-btn');
+    const configModal = document.getElementById('config-code-modal');
+    const configModalClose = document.getElementById('config-code-modal-close');
+    const saveCodesBtn = document.getElementById('save-codes-btn');
+    const cancelCodesBtn = document.getElementById('cancel-codes-btn');
+    
+    if (!configBtn) {
+        console.warn('[Nivel 3] Botón de configuración de códigos no encontrado');
+        return;
+    }
+    
+    console.log('[Nivel 3] Configurando botón de códigos');
+    
+    // Remover listeners anteriores si existen
+    const newConfigBtn = configBtn.cloneNode(true);
+    configBtn.parentNode.replaceChild(newConfigBtn, configBtn);
+    
+    newConfigBtn.addEventListener('click', (e) => {
+        // Solo abrir si no hay un drag en curso
+        if (!draggedPoint && !draggedColorId) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[Nivel 3] Abriendo modal de configuración de códigos');
+            openConfigCodeModal();
+        }
+    });
+    
+    // También permitir activar con doble clic para evitar conflictos
+    newConfigBtn.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('[Nivel 3] Abriendo modal de configuración de códigos (doble clic)');
+        openConfigCodeModal();
+    });
+    
+    if (configModalClose) {
+        configModalClose.addEventListener('click', () => {
+            closeConfigCodeModal();
+        });
+    }
+    
+    if (cancelCodesBtn) {
+        cancelCodesBtn.addEventListener('click', () => {
+            closeConfigCodeModal();
+        });
+    }
+    
+    if (saveCodesBtn) {
+        saveCodesBtn.addEventListener('click', () => {
+            saveCodes();
+        });
+    }
+    
+    if (configModal) {
+        configModal.addEventListener('click', (e) => {
+            if (e.target === configModal) {
+                closeConfigCodeModal();
+            }
+        });
+    }
+}
+
+function openConfigCodeModal() {
+    const configModal = document.getElementById('config-code-modal');
+    if (!configModal) {
+        console.error('[Nivel 3] Modal de configuración de códigos no encontrado');
+        return;
+    }
+    
+    // Verificar que hay un puzzle actual
+    if (!CURRENT_PUZZLE) {
+        showMessage('No hay figura activa', 'error');
+        return;
+    }
+    
+    // Mostrar el nombre de la figura actual
+    const figureNameElement = document.getElementById('current-figure-name');
+    if (figureNameElement) {
+        figureNameElement.textContent = `Figura actual: ${CURRENT_PUZZLE.name}`;
+    }
+    
+    // Cargar el código de la figura actual
+    const codeInput = document.getElementById('code-input');
+    
+    if (codeInput) {
+        // Cargar el código guardado desde localStorage o usar el código actual
+        const puzzleId = CURRENT_PUZZLE.id;
+        const storageKey = `lvl3_code_${puzzleId}`;
+        const savedCode = localStorage.getItem(storageKey);
+        
+        if (savedCode && /^[0-9]{3}$/.test(savedCode)) {
+            codeInput.value = savedCode;
+        } else {
+            codeInput.value = CURRENT_PUZZLE.code || '000';
+        }
+        
+        // Agregar validación en tiempo real para solo números (solo una vez)
+        if (!codeInput.dataset.listenerAdded) {
+            codeInput.addEventListener('input', function(e) {
+                // Solo permitir números
+                this.value = this.value.replace(/[^0-9]/g, '');
+                // Limitar a 3 dígitos
+                if (this.value.length > 3) {
+                    this.value = this.value.slice(0, 3);
+                }
+            });
+            codeInput.dataset.listenerAdded = 'true';
+        }
+    }
+    
+    configModal.classList.add('show');
+    configModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeConfigCodeModal() {
+    const configModal = document.getElementById('config-code-modal');
+    if (!configModal) return;
+    
+    configModal.classList.remove('show');
+    configModal.setAttribute('aria-hidden', 'true');
+}
+
+function saveCodes() {
+    if (!CURRENT_PUZZLE) {
+        showMessage('No hay figura activa', 'error');
+        return;
+    }
+    
+    const codeInput = document.getElementById('code-input');
+    if (!codeInput) {
+        showMessage('Error: Campo de código no encontrado', 'error');
+        return;
+    }
+    
+    const code = codeInput.value.trim();
+    const codePattern = /^[0-9]{3}$/;
+    
+    // Validar que sea un código de 3 dígitos numéricos
+    if (!code || !codePattern.test(code)) {
+        showMessage(`El código de ${CURRENT_PUZZLE.name} debe tener exactamente 3 dígitos numéricos`, 'error');
+        codeInput.focus();
+        return;
+    }
+    
+    // Actualizar el código en PUZZLE_VARIANTS
+    CURRENT_PUZZLE.code = code;
+    
+    // Guardar en localStorage para persistencia
+    try {
+        const puzzleId = CURRENT_PUZZLE.id;
+        const storageKey = `lvl3_code_${puzzleId}`;
+        localStorage.setItem(storageKey, code);
+        console.log(`[Nivel 3] Código de ${CURRENT_PUZZLE.name} guardado en localStorage:`, code);
+    } catch (e) {
+        console.warn('[Nivel 3] No se pudo guardar en localStorage:', e);
+    }
+    
+    // Actualizar el código esperado
+    EXPECTED_CODE = code;
+    updateCodeDisplay();
+    
+    showMessage(`Código de ${CURRENT_PUZZLE.name} guardado correctamente`, 'success');
+    closeConfigCodeModal();
 }
 
 let keyboardInput = '';

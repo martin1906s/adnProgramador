@@ -1178,6 +1178,51 @@
     overflow: visible;
     width: 100%;
     margin: 0 auto;
+    position: relative;
+  }
+
+  /* Botón invisible para configurar códigos en el header */
+  .logo-terminal {
+    position: relative;
+  }
+
+  .config-code-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0;
+    padding: 0;
+    margin: 0;
+    pointer-events: auto;
+  }
+
+  .config-code-btn:hover {
+    opacity: 0;
+  }
+
+  /* Asegurar que el botón no interfiera con el drag and drop */
+  .grid-drop-area {
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .grid-drop-area.dragging {
+    pointer-events: auto;
+  }
+
+  .grid-points-container {
+    z-index: 5;
+  }
+
+  /* Asegurar que el header tenga posición relativa para el botón */
+  .header {
+    position: relative;
   }
 
   .grid-wrapper {
@@ -1867,5 +1912,80 @@
     .points-container {
       gap: 8px;
     }
+  }
+
+  /* Estilos para el modal de configuración de códigos */
+  .config-code-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 10px;
+  }
+
+  .config-code-instruction {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .current-figure-name {
+    color: var(--neon-cyan);
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: var(--glow-cyan);
+    letter-spacing: 1px;
+  }
+
+  .code-config-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: var(--border-thin);
+    border-radius: 8px;
+  }
+
+  .code-config-item input {
+    width: 100%;
+    max-width: 200px;
+    padding: 14px 20px;
+    background: rgba(0, 0, 0, 0.6);
+    border: var(--border-medium);
+    border-radius: 6px;
+    color: var(--neon-cyan);
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    font-size: 1.4rem;
+    letter-spacing: 5px;
+    text-align: center;
+    text-shadow: var(--glow-cyan);
+    transition: all 0.3s ease;
+  }
+
+  .code-config-item input:focus {
+    outline: none;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  }
+
+  .code-config-item input::placeholder {
+    color: rgba(0, 255, 255, 0.3);
+  }
+
+  .config-code-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .config-code-actions .keyboard-btn {
+    min-width: 120px;
+    padding: 12px 20px;
   }
   
