@@ -1496,6 +1496,26 @@
         letter-spacing: 14px;
         text-shadow: var(--glow-green);
         margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 14px;
+        letter-spacing: 0;
+      }
+
+      .code-display:not(.has-spans) {
+        letter-spacing: 14px;
+        display: block;
+        text-align: center;
+      }
+
+      .code-display span {
+        display: inline-block;
+        font-family: "Orbitron", monospace;
+        font-size: clamp(2.4rem, 6vw, 3rem);
+        font-weight: 900;
+        color: var(--neon-green);
+        text-shadow: var(--glow-green);
       }
 
       .code-modal-wrapper.error .code-modal-title {
@@ -1504,6 +1524,136 @@
 
       .code-modal-wrapper.error .code-modal-text {
         color: var(--neon-pink);
+      }
+
+      .code-display .digit-incorrect {
+        color: #ff8800;
+        text-shadow: 
+          0 0 10px #ff8800,
+          0 0 20px #ff8800,
+          0 0 30px rgba(255, 136, 0, 0.5);
+        animation: pulse-orange 1.5s ease-in-out infinite;
+      }
+
+      @keyframes pulse-orange {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      .code-hints {
+        margin-top: 24px;
+      }
+
+      .hints-button {
+        width: 100%;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, rgba(255, 136, 0, 0.15) 0%, rgba(255, 136, 0, 0.25) 100%);
+        border: 2px solid rgba(255, 136, 0, 0.5);
+        border-radius: 8px;
+        color: #ff8800;
+        font-family: "Orbitron", monospace;
+        font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        transition: all 0.3s ease;
+        text-shadow: 0 0 10px rgba(255, 136, 0, 0.5);
+        box-shadow: 0 0 15px rgba(255, 136, 0, 0.2);
+      }
+
+      .hints-button:hover {
+        background: linear-gradient(135deg, rgba(255, 136, 0, 0.25) 0%, rgba(255, 136, 0, 0.35) 100%);
+        border-color: rgba(255, 136, 0, 0.8);
+        box-shadow: 0 0 25px rgba(255, 136, 0, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .hints-button:active {
+        transform: translateY(0);
+      }
+
+      .hints-button-icon {
+        font-size: 1.2em;
+        transition: transform 0.3s ease;
+      }
+
+      .hints-button.expanded .hints-button-icon {
+        transform: rotate(180deg);
+      }
+
+      .hints-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.4s ease, margin 0.4s ease;
+        background: rgba(255, 136, 0, 0.08);
+        border: 1px solid rgba(255, 136, 0, 0.2);
+        border-radius: 8px;
+        margin-top: 12px;
+        padding: 0 16px;
+      }
+
+      .hints-content.expanded {
+        max-height: 500px;
+        padding: 16px;
+        margin-top: 12px;
+      }
+
+      .code-hints-title {
+        font-family: "Orbitron", monospace;
+        font-size: clamp(0.85rem, 1.3vw, 1rem);
+        color: #ff8800;
+        font-weight: 700;
+        margin-bottom: 12px;
+        text-shadow: 0 0 10px rgba(255, 136, 0, 0.5);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .code-hints-title::before {
+        content: "💡";
+        font-size: 1.2em;
+      }
+
+      .code-hints-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .code-hints-list li {
+        font-size: clamp(0.85rem, 1.3vw, 1rem);
+        color: var(--text-secondary);
+        padding: 10px 0;
+        padding-left: 28px;
+        position: relative;
+        line-height: 1.6;
+        transition: color 0.3s ease;
+      }
+
+      .code-hints-list li:hover {
+        color: #ffaa44;
+      }
+
+      .code-hints-list li::before {
+        content: "▶";
+        position: absolute;
+        left: 0;
+        color: #ff8800;
+        font-weight: bold;
+        font-size: 0.8em;
+        transition: transform 0.3s ease;
+      }
+
+      .code-hints-list li:hover::before {
+        transform: translateX(4px);
       }
 
       .classification-counter {
@@ -1753,151 +1903,225 @@
     <script>
       const caracteristicas = {
         gorra: Boolean,
+        gorro: Boolean,
+        sombrero: Boolean,
         lentes: Boolean,
+        gafas: Boolean,
+        barba: Boolean,
         edad: { niño: Boolean, adulto: Boolean },
         sexo: { hombre: Boolean, mujer: Boolean },
         ropa: { color: String },
         pelo: { largo: Boolean, corto: Boolean },
       };
 
+      // 1. Niño blanco, pelo café claro churón, NO lentes, camiseta roja, pequeño, pelo corto
       const persona1 = {
-        img: "4.png",
-        gorra: (caracteristicas.gorra = true),
-        lentes: (caracteristicas.lentes = true),
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.hombre = true),
-        ropa: (caracteristicas.ropa.color = "Negro"),
-        pelo: (caracteristicas.pelo.corto = true),
-      };
-
-      const persona2 = {
-        img: "5.png",
-        gorra: (caracteristicas.gorra = true),
-        lentes: (caracteristicas.lentes = true),
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.mujer = true),
-        ropa: (caracteristicas.ropa.color = "Azul"),
-        pelo: (caracteristicas.pelo.largo = true),
-      };
-
-      const persona3 = {
-        img: "6.png",
-        gorra: (caracteristicas.gorra = false),
-        lentes: (caracteristicas.lentes = true),
-        edad: (caracteristicas.edad.niño = true),
-        sexo: (caracteristicas.sexo.hombre = true),
-        ropa: (caracteristicas.ropa.color = "Azul"),
-        pelo: (caracteristicas.pelo.corto = true),
-      };
-
-      const persona4 = {
-        img: "7.png",
-        gorra: (caracteristicas.gorra = false),
-        lentes: (caracteristicas.lentes = true),
-        edad: (caracteristicas.edad.niño = true),
-        sexo: (caracteristicas.sexo.mujer = true),
-        ropa: (caracteristicas.ropa.color = "Blanco"),
-        pelo: (caracteristicas.pelo.largo = true),
-      };
-
-      const persona5 = {
         img: "1.png",
-        gorra: (caracteristicas.gorra = false),
-        lentes: (caracteristicas.lentes = false),
-        edad: (caracteristicas.edad.niño = true),
-        sexo: (caracteristicas.sexo.hombre = true),
-        ropa: (caracteristicas.ropa.color = "Rojo"),
-        pelo: (caracteristicas.pelo.corto = true),
+        gorra: false,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: false,
+        barba: false,
+        edad: "niño",
+        sexo: "hombre",
+        ropa: "Rojo",
+        pelo: "corto",
       };
 
-      const persona6 = {
-        img: "3.png",
-        gorra: (caracteristicas.gorra = false),
-        lentes: (caracteristicas.lentes = false),
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.hombre = true),
-        ropa: (caracteristicas.ropa.color = "Amarillo"),
-        pelo: (caracteristicas.pelo.largo = true),
-      };
-
-      const persona7 = {
+      // 2. Señora ~25, vestimenta roja, gorro rojo, pelo largo, cabello rubio
+      const persona2 = {
         img: "2.png",
-        gorra: (caracteristicas.gorra = true),
-        lentes: (caracteristicas.lentes = false),
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.mujer = true),
-        ropa: (caracteristicas.ropa.color = "Rojo"),
-        pelo: (caracteristicas.pelo.largo = true),
+        gorra: false,
+        gorro: true,
+        sombrero: false,
+        lentes: false,
+        gafas: false,
+        barba: false,
+        edad: "adulto",
+        sexo: "mujer",
+        ropa: "Rojo",
+        pelo: "largo",
       };
 
+      // 3. Señor mayor ~30, barba, vestimenta amarilla, pelo largo, café claro
+      const persona3 = {
+        img: "3.png",
+        gorra: false,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: false,
+        barba: true,
+        edad: "adulto",
+        sexo: "hombre",
+        ropa: "Amarillo",
+        pelo: "largo",
+      };
+
+      // 4. Joven ~22, vestimenta negra, gafas, gorra, collares, pelo corto, sin barba
+      const persona4 = {
+        img: "4.png",
+        gorra: true,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: true,
+        barba: false,
+        edad: "adulto",
+        sexo: "hombre",
+        ropa: "Negro",
+        pelo: "corto",
+      };
+
+      // 5. Chica ~28, pelo largo, sombrero, gafas, vestimenta azul
+      const persona5 = {
+        img: "5.png",
+        gorra: false,
+        gorro: false,
+        sombrero: true,
+        lentes: false,
+        gafas: true,
+        barba: false,
+        edad: "adulto",
+        sexo: "mujer",
+        ropa: "Azul",
+        pelo: "largo",
+      };
+
+      // 6. Niño ~9, lentes, pelo corto, camisa gris de dinosaurios, sin barba
+      const persona6 = {
+        img: "6.png",
+        gorra: false,
+        gorro: false,
+        sombrero: false,
+        lentes: true,
+        gafas: false,
+        barba: false,
+        edad: "niño",
+        sexo: "hombre",
+        ropa: "Gris",
+        pelo: "corto",
+      };
+
+      // 7. Niña ~12, pelo largo rubio, lentes, camiseta blanca
+      const persona7 = {
+        img: "7.png",
+        gorra: false,
+        gorro: false,
+        sombrero: false,
+        lentes: true,
+        gafas: false,
+        barba: false,
+        edad: "niño",
+        sexo: "mujer",
+        ropa: "Blanco",
+        pelo: "largo",
+      };
+
+      // 8. Niño ~13, pelo corto rubio, gafas, saco verde y buzo celeste, gorra blanca
       const persona8 = {
         img: "8.png",
-        gorra: (caracteristicas.gorra = true),
-        lentes: (caracteristicas.lentes = true),
-        edad: (caracteristicas.edad.niño = true),
-        sexo: (caracteristicas.sexo.hombre = true),
-        ropa: (caracteristicas.ropa.color = "Verde"),
-        pelo: (caracteristicas.pelo.corto = true),
+        gorra: true,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: true,
+        barba: false,
+        edad: "niño",
+        sexo: "hombre",
+        ropa: "Verde",
+        pelo: "corto",
       };
 
+      // 9. Niña ~5, gorra, vestimenta rosa, pelo largo
       const persona9 = {
         img: "9.png",
-        gorra: (caracteristicas.gorra = true),
-        lentes: (caracteristicas.lentes = false),
-        edad: (caracteristicas.edad.niño = true),
-        sexo: (caracteristicas.sexo.mujer = true),
-        ropa: (caracteristicas.ropa.color = "Rosa"),
-        pelo: (caracteristicas.pelo.largo = true),
+        gorra: true,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: false,
+        barba: false,
+        edad: "niño",
+        sexo: "mujer",
+        ropa: "Rosa",
+        pelo: "largo",
       };
 
+      // 10. Señor ~30, pelo largo café, barba, gafas de sol
       const persona10 = {
         img: "10.png",
-        gorra: (caracteristicas.gorra = false),
-        lentes: (caracteristicas.lentes = true),
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.hombre = true),
-        ropa: (caracteristicas.ropa.color = "Blanco"),
-        pelo: (caracteristicas.pelo.largo = true),
+        gorra: false,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: true,
+        barba: true,
+        edad: "adulto",
+        sexo: "hombre",
+        ropa: "Blanco",
+        pelo: "largo",
       };
 
+      // 11. Señor ~40, grande, pelo largo, barba, pelo café, gorra, vestimenta negra
       const persona11 = {
         img: "11.png",
-        gorra: (caracteristicas.gorra = true),
-        lentes: (caracteristicas.lentes = false),
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.hombre = true),
-        ropa: (caracteristicas.ropa.color = "Negro"),
-        pelo: (caracteristicas.pelo.largo = true),
+        gorra: true,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: false,
+        barba: true,
+        edad: "adulto",
+        sexo: "hombre",
+        ropa: "Negro",
+        pelo: "largo",
       };
 
+      // 12. Chica ~21, pelo largo, café, camiseta amarilla
       const persona12 = {
         img: "12.png",
-        gorra: (caracteristicas.gorra = false),
-        lentes: (caracteristicas.lentes = false),
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.mujer = true),
-        ropa: (caracteristicas.ropa.color = "Amarillo"),
-        pelo: (caracteristicas.pelo.largo = true),
+        gorra: false,
+        gorro: false,
+        sombrero: false,
+        lentes: false,
+        gafas: false,
+        barba: false,
+        edad: "adulto",
+        sexo: "mujer",
+        ropa: "Amarillo",
+        pelo: "largo",
       };
 
+      // 13. Chica ~22, pelo corto, vestimenta negra
       const persona13 = {
         img: "13.png",
         gorra: false,
+        gorro: false,
+        sombrero: false,
         lentes: false,
-        edad: (caracteristicas.edad.adulto = true),
-        sexo: (caracteristicas.sexo.mujer = true),
-        ropa: (caracteristicas.ropa.color = "Negro"),
-        pelo: (caracteristicas.pelo.corto = true),
+        gafas: false,
+        barba: false,
+        edad: "adulto",
+        sexo: "mujer",
+        ropa: "Negro",
+        pelo: "corto",
       };
 
+      // 14. Niña ~5, sombrero, gafas, vestimenta blanca
       const persona14 = {
         img: "14.png",
-        gorra: true,
-        lentes: true,
-        edad: (caracteristicas.edad.niño = true),
-        sexo: (caracteristicas.sexo.mujer = true),
-        ropa: (caracteristicas.ropa.color = "Blanco"),
-        pelo: (caracteristicas.pelo.largo = true),
+        gorra: false,
+        gorro: false,
+        sombrero: true,
+        lentes: false,
+        gafas: true,
+        barba: false,
+        edad: "niño",
+        sexo: "mujer",
+        ropa: "Blanco",
+        pelo: "largo",
       };
 
       const personas = [
@@ -2141,7 +2365,7 @@
         actualizarRoundIndicator();
       }
 
-      function abrirModalCodigo({ titulo, mensaje, codigo = "", tipo = "info" }) {
+      function abrirModalCodigo({ titulo, mensaje, codigo = "", codigoEsperado = "", digitosIncorrectos = [], rondasConError = [], tipo = "info" }) {
         const modal = document.getElementById("codeModal");
         if (!modal) return;
         const content = modal.querySelector(".modal-content");
@@ -2166,8 +2390,76 @@
         if (codigo) {
           const codeDisplay = document.createElement("p");
           codeDisplay.className = "code-display";
-          codeDisplay.textContent = codigo;
+          
+          // Si hay dígitos incorrectos, mostrar cada dígito con su color
+          if (digitosIncorrectos.length > 0 && tipo === "error") {
+            codeDisplay.classList.add("has-spans");
+            codeDisplay.innerHTML = "";
+            for (let i = 0; i < codigo.length; i++) {
+              const span = document.createElement("span");
+              span.textContent = codigo[i];
+              if (digitosIncorrectos.includes(i)) {
+                span.className = "digit-incorrect";
+              }
+              codeDisplay.appendChild(span);
+            }
+          } else {
+            codeDisplay.textContent = codigo;
+          }
+          
           wrapper.appendChild(codeDisplay);
+        }
+
+        // Agregar pistas sobre qué rondas revisar con botón expandible
+        if (rondasConError.length > 0 && tipo === "error") {
+          const hintsEl = document.createElement("div");
+          hintsEl.className = "code-hints";
+          
+          // Crear botón para mostrar/ocultar pistas
+          const hintsButton = document.createElement("button");
+          hintsButton.className = "hints-button";
+          hintsButton.type = "button";
+          hintsButton.setAttribute("aria-expanded", "false");
+          
+          const buttonText = document.createElement("span");
+          buttonText.textContent = "💡 Ver pistas para mejorar tu código";
+          hintsButton.appendChild(buttonText);
+          
+          const buttonIcon = document.createElement("span");
+          buttonIcon.className = "hints-button-icon";
+          buttonIcon.textContent = "▼";
+          hintsButton.appendChild(buttonIcon);
+          
+          // Crear contenido expandible
+          const hintsContent = document.createElement("div");
+          hintsContent.className = "hints-content";
+          
+          const hintsTitle = document.createElement("p");
+          hintsTitle.className = "code-hints-title";
+          hintsTitle.textContent = "Pistas:";
+          hintsContent.appendChild(hintsTitle);
+          
+          const hintsList = document.createElement("ul");
+          hintsList.className = "code-hints-list";
+          
+          rondasConError.forEach((ronda) => {
+            const hintItem = document.createElement("li");
+            hintItem.textContent = `Revisa bien la ronda ${ronda}`;
+            hintsList.appendChild(hintItem);
+          });
+          
+          hintsContent.appendChild(hintsList);
+          
+          // Agregar funcionalidad de toggle
+          hintsButton.addEventListener("click", () => {
+            const isExpanded = hintsButton.classList.toggle("expanded");
+            hintsContent.classList.toggle("expanded");
+            hintsButton.setAttribute("aria-expanded", isExpanded);
+          });
+          
+          hintsEl.appendChild(hintsButton);
+          hintsEl.appendChild(hintsContent);
+          wrapper.appendChild(hintsEl);
         }
 
         content.innerHTML = "";
@@ -2178,154 +2470,65 @@
       }
 
       function construirContenidoModal() {
-        const { codigoUsuario } = registrarDiagnostico(
+        const { codigoUsuario, codigoEsperado, resumen } = registrarDiagnostico(
           "Generar código",
           null
         );
         const codigo = codigoUsuario;
-        abrirModalCodigo({
-          titulo: "Código generado",
-          mensaje: "Ingresa este código en el panel de nivel para continuar.",
-          codigo,
-          tipo: "info",
-        });
-      }
-
-      // Mapa de características de cada persona (escalable)
-      // Se construye dinámicamente analizando las propiedades de cada persona
-      const mapaCaracteristicas = new Map();
-
-      // Función helper para determinar características de una persona de forma escalable
-      function determinarCaracteristicasPersona(persona) {
-        // Crear un identificador único basado en propiedades combinadas
-        const id = `${persona.img}-${persona.gorra}-${persona.lentes}-${persona.ropa}`;
-
-        // Si ya tenemos las características, retornarlas
-        if (mapaCaracteristicas.has(id)) {
-          return mapaCaracteristicas.get(id);
-        }
-
-        // Determinar características basándose en las propiedades del objeto caracteristicas
-        // Esto es escalable porque funciona para cualquier persona
-        let edad = "niño"; // Por defecto
-        let sexo = "hombre"; // Por defecto
-        let pelo = "corto"; // Por defecto
-
-        // Determinar edad: comparar si persona.edad fue asignado desde adulto o niño
-        // Como ambos son true, usamos la lógica: si persona.edad es true Y
-        // caracteristicas.edad.adulto fue modificado antes que niño, es adulto
-        // Pero esto no es confiable. Mejor: usar un enfoque diferente
-
-        // Enfoque escalable: crear un mapa inicial basado en el orden de definición
-        // o usar las propiedades únicas de cada persona para mapearlas
-
-        // Solución temporal pero escalable: usar la imagen como identificador único
-        // y construir el mapa la primera vez que se analizan todas las personas
-        const caracteristicas = {
-          edad: edad,
-          sexo: sexo,
-          pelo: pelo,
-        };
-
-        mapaCaracteristicas.set(id, caracteristicas);
-        return caracteristicas;
-      }
-
-      // Inicializar mapa de características basándose en las personas existentes
-      function inicializarMapaCaracteristicas() {
-        // Construir el mapa analizando el código fuente de person.js sería ideal,
-        // pero como no podemos, usamos un enfoque basado en propiedades únicas
-        // que funciona para las personas actuales y es extensible
-
-        personas.forEach((persona, index) => {
-          const id = `${persona.img}-${persona.gorra}-${persona.lentes}-${persona.ropa}`;
-
-          // Determinar características basándose en el código fuente de person.js
-          // Analizamos el código: persona1 y persona2 tienen edad.adulto, persona3 y persona4 tienen edad.niño
-          // persona1 y persona3 tienen sexo.hombre, persona2 y persona4 tienen sexo.mujer
-          // persona2 y persona4 tienen pelo.largo, persona1 y persona3 tienen pelo.corto
-
-          // Pero esto requiere hardcodear. Mejor: usar un objeto de mapeo basado en propiedades únicas
-          let edad, sexo, pelo;
-
-          // Mapeo basado en propiedades únicas combinadas (escalable)
-          // Usamos la combinación de propiedades que identifican únicamente a cada persona
-          if (persona.img === "4.png") {
-            edad = "adulto";
-            sexo = "hombre";
-            pelo = "corto";
-          } else if (persona.img === "5.png") {
-            edad = "adulto";
-            sexo = "mujer";
-            pelo = "largo";
-          } else if (persona.img === "6.png") {
-            edad = "niño";
-            sexo = "hombre";
-            pelo = "corto";
-          } else if (persona.img === "7.png") {
-            edad = "niño";
-            sexo = "mujer";
-            pelo = "largo";
-          } else if (persona.img === "1.png") {
-            // persona5: niño, hombre, pelo corto
-            edad = "niño";
-            sexo = "hombre";
-            pelo = "corto";
-          } else if (persona.img === "3.png") {
-            // persona6: adulto, hombre, pelo largo
-            edad = "adulto";
-            sexo = "hombre";
-            pelo = "largo";
-          } else if (persona.img === "2.png") {
-            // persona7: adulto, mujer, pelo largo
-            edad = "adulto";
-            sexo = "mujer";
-            pelo = "largo";
-          } else if (persona.img === "8.png") {
-            edad = "niño";
-            sexo = "hombre";
-            pelo = "corto";
-          } else if (persona.img === "9.png") {
-            edad = "niño";
-            sexo = "mujer";
-            pelo = "largo";
-          } else if (persona.img === "10.png") {
-            edad = "adulto";
-            sexo = "hombre";
-            pelo = "largo";
-          } else if (persona.img === "11.png") {
-            edad = "adulto";
-            sexo = "hombre";
-            pelo = "largo";
-          } else if (persona.img === "12.png") {
-            edad = "adulto";
-            sexo = "mujer";
-            pelo = "largo";
-          } else if (persona.img === "13.png") {
-            edad = "adulto";
-            sexo = "mujer";
-            pelo = "corto";
-          } else if (persona.img === "14.png") {
-            edad = "niño";
-            sexo = "mujer";
-            pelo = "largo";
-          } else {
-            // Para nuevas personas, usar valores por defecto o inferir de otras propiedades
-            // Por ahora, usar el índice como fallback (no ideal pero funcional)
-            edad = index < 2 ? "adulto" : "niño";
-            sexo = index % 2 === 0 ? "hombre" : "mujer";
-            pelo = index % 2 === 1 ? "largo" : "corto";
+        
+        // Comparar códigos para encontrar dígitos incorrectos
+        const digitosIncorrectos = [];
+        const rondasConError = [];
+        
+        if (codigo !== codigoEsperado) {
+          // Encontrar qué dígitos están mal
+          for (let i = 0; i < Math.max(codigo.length, codigoEsperado.length); i++) {
+            if (codigo[i] !== codigoEsperado[i]) {
+              digitosIncorrectos.push(i);
+              // La ronda es i + 1 (porque las rondas empiezan en 1)
+              rondasConError.push(i + 1);
+            }
           }
-
-          mapaCaracteristicas.set(id, { edad, sexo, pelo });
-        });
+          
+          // También agregar rondas que no tienen el número correcto de personas
+          resumen.forEach((ronda, indice) => {
+            if (!ronda.esCorrecto && !rondasConError.includes(indice + 1)) {
+              rondasConError.push(indice + 1);
+            }
+          });
+          
+          // Ordenar las rondas con error
+          rondasConError.sort((a, b) => a - b);
+          
+          abrirModalCodigo({
+            titulo: "Código generado",
+            mensaje: "Tu código no coincide con el esperado. Revisa los dígitos marcados en naranja.",
+            codigo,
+            codigoEsperado,
+            digitosIncorrectos,
+            rondasConError,
+            tipo: "error",
+          });
+        } else {
+          abrirModalCodigo({
+            titulo: "Código generado",
+            mensaje: "¡Perfecto! Tu código es correcto. Ingresa este código en el panel de nivel para continuar.",
+            codigo,
+            tipo: "info",
+          });
+        }
       }
+
 
       // Analizar personas para extraer características disponibles
       function analizarCaracteristicas() {
         const caracteristicasDisponibles = {
           gorra: new Set(),
+          gorro: new Set(),
+          sombrero: new Set(),
           lentes: new Set(),
+          gafas: new Set(),
+          barba: new Set(),
           edad: new Set(),
           sexo: new Set(),
           ropa: new Set(),
@@ -2333,30 +2536,42 @@
         };
 
         personas.forEach((persona) => {
-          // Gorra - solo agregar si es boolean válido
+          // Gorra
           if (persona.gorra === true || persona.gorra === false) {
             caracteristicasDisponibles.gorra.add(persona.gorra);
           }
-
-          // Lentes - solo agregar si es boolean válido
-          const tieneLentes = persona.lentes === true;
-          caracteristicasDisponibles.lentes.add(tieneLentes);
-
-          // Edad, Sexo, Pelo - usar el mapa de características (escalable)
-          const id = `${persona.img}-${persona.gorra}-${persona.lentes}-${persona.ropa}`;
-          const caract = mapaCaracteristicas.get(id);
-          if (caract) {
-            caracteristicasDisponibles.edad.add(caract.edad);
-            caracteristicasDisponibles.sexo.add(caract.sexo);
-            caracteristicasDisponibles.pelo.add(caract.pelo);
+          // Gorro
+          if (persona.gorro === true || persona.gorro === false) {
+            caracteristicasDisponibles.gorro.add(persona.gorro);
           }
-
-          // Ropa - solo agregar si existe y no es undefined
-          if (
-            persona.ropa &&
-            persona.ropa !== undefined &&
-            persona.ropa !== null
-          ) {
+          // Sombrero
+          if (persona.sombrero === true || persona.sombrero === false) {
+            caracteristicasDisponibles.sombrero.add(persona.sombrero);
+          }
+          // Lentes
+          if (persona.lentes === true || persona.lentes === false) {
+            caracteristicasDisponibles.lentes.add(persona.lentes);
+          }
+          // Gafas
+          if (persona.gafas === true || persona.gafas === false) {
+            caracteristicasDisponibles.gafas.add(persona.gafas);
+          }
+          // Barba
+          if (persona.barba === true || persona.barba === false) {
+            caracteristicasDisponibles.barba.add(persona.barba);
+          }
+          // Edad, Sexo, Pelo - usar directamente de las personas
+          if (persona.edad) {
+            caracteristicasDisponibles.edad.add(persona.edad);
+          }
+          if (persona.sexo) {
+            caracteristicasDisponibles.sexo.add(persona.sexo);
+          }
+          if (persona.pelo) {
+            caracteristicasDisponibles.pelo.add(persona.pelo);
+          }
+          // Ropa
+          if (persona.ropa && persona.ropa !== undefined && persona.ropa !== null) {
             caracteristicasDisponibles.ropa.add(persona.ropa);
           }
         });
@@ -2373,6 +2588,20 @@
           texto: (valor) => (valor ? "tienen gorra" : "no tienen gorra"),
           textoNegado: (valor) => (valor ? "no tienen gorra" : "tienen gorra"),
         },
+        gorro: {
+          atributo: "gorro",
+          nombre: "gorro",
+          esBoolean: true,
+          texto: (valor) => (valor ? "tienen gorro" : "no tienen gorro"),
+          textoNegado: (valor) => (valor ? "no tienen gorro" : "tienen gorro"),
+        },
+        sombrero: {
+          atributo: "sombrero",
+          nombre: "sombrero",
+          esBoolean: true,
+          texto: (valor) => (valor ? "tienen sombrero" : "no tienen sombrero"),
+          textoNegado: (valor) => (valor ? "no tienen sombrero" : "tienen sombrero"),
+        },
         lentes: {
           atributo: "lentes",
           nombre: "lentes",
@@ -2380,6 +2609,22 @@
           texto: (valor) => (valor ? "tienen lentes" : "no tienen lentes"),
           textoNegado: (valor) =>
             valor ? "no tienen lentes" : "tienen lentes",
+        },
+        gafas: {
+          atributo: "gafas",
+          nombre: "gafas",
+          esBoolean: true,
+          texto: (valor) => (valor ? "tienen gafas" : "no tienen gafas"),
+          textoNegado: (valor) =>
+            valor ? "no tienen gafas" : "tienen gafas",
+        },
+        barba: {
+          atributo: "barba",
+          nombre: "barba",
+          esBoolean: true,
+          texto: (valor) => (valor ? "tienen barba" : "no tienen barba"),
+          textoNegado: (valor) =>
+            valor ? "no tienen barba" : "tienen barba",
         },
         edad: {
           atributo: "edad",
@@ -2422,17 +2667,15 @@
           const div = document.createElement("div");
           div.id = `test-${index}`;
           div.setAttribute("data-gorra", persona.gorra);
-          div.setAttribute("data-lentes", persona.lentes === true);
-          // Usar el mapa de características (escalable)
-          const id = `${persona.img}-${persona.gorra}-${persona.lentes}-${persona.ropa}`;
-          const caract = mapaCaracteristicas.get(id);
-          const edad = caract ? caract.edad : "niño";
-          const sexo = caract ? caract.sexo : "hombre";
-          const pelo = caract ? caract.pelo : "corto";
-          div.setAttribute("data-edad", edad);
-          div.setAttribute("data-sexo", sexo);
+          div.setAttribute("data-gorro", persona.gorro);
+          div.setAttribute("data-sombrero", persona.sombrero);
+          div.setAttribute("data-lentes", persona.lentes);
+          div.setAttribute("data-gafas", persona.gafas);
+          div.setAttribute("data-barba", persona.barba);
+          div.setAttribute("data-edad", persona.edad);
+          div.setAttribute("data-sexo", persona.sexo);
           div.setAttribute("data-ropa", persona.ropa);
-          div.setAttribute("data-pelo", pelo);
+          div.setAttribute("data-pelo", persona.pelo);
           return div;
         });
 
@@ -2624,9 +2867,6 @@
 
       // Función para inicializar la página
       function inicializar() {
-        // Inicializar el mapa de características primero
-        inicializarMapaCaracteristicas();
-
         estadoRondas = Array.from({ length: NUM_RONDAS }, () => new Set());
 
         // Generar 4 instrucciones únicas para rondas
@@ -2707,36 +2947,30 @@
           personDiv.id = `persona${index + 1}`;
           personDiv.draggable = true;
 
-          // Convertir la estructura original a atributos data
-          // persona.gorra es boolean
+          // Establecer todos los atributos data- usando los nuevos campos
           personDiv.setAttribute("data-gorra", persona.gorra);
-
-          // persona.lentes puede ser boolean (true/false) o undefined
-          const tieneLentes = persona.lentes === true;
-          personDiv.setAttribute("data-lentes", tieneLentes);
-
-          // Usar el mapa de características (escalable)
-          const id = `${persona.img}-${persona.gorra}-${persona.lentes}-${persona.ropa}`;
-          const caract = mapaCaracteristicas.get(id);
-
-          const edad = caract ? caract.edad : "niño";
-          const sexo = caract ? caract.sexo : "hombre";
-          const pelo = caract ? caract.pelo : "corto";
-
-          personDiv.setAttribute("data-edad", edad);
-          personDiv.setAttribute("data-sexo", sexo);
+          personDiv.setAttribute("data-gorro", persona.gorro);
+          personDiv.setAttribute("data-sombrero", persona.sombrero);
+          personDiv.setAttribute("data-lentes", persona.lentes);
+          personDiv.setAttribute("data-gafas", persona.gafas);
+          personDiv.setAttribute("data-barba", persona.barba);
+          personDiv.setAttribute("data-edad", persona.edad);
+          personDiv.setAttribute("data-sexo", persona.sexo);
           personDiv.setAttribute("data-ropa", persona.ropa);
-          personDiv.setAttribute("data-pelo", pelo);
+          personDiv.setAttribute("data-pelo", persona.pelo);
 
           // Crear imagen si está disponible
           const img = document.createElement("img");
           img.src = `./assets/${persona.img}`;
           // Alt text descriptivo para SEO y accesibilidad
-          const altText = `Persona ${edad}, ${sexo}, pelo ${pelo}, ${
-            persona.gorra ? "con gorra" : "sin gorra"
-          }, ${persona.lentes ? "con lentes" : "sin lentes"}, ropa ${
-            persona.ropa
-          }`;
+          const descripciones = [];
+          if (persona.gorra) descripciones.push("con gorra");
+          if (persona.gorro) descripciones.push("con gorro");
+          if (persona.sombrero) descripciones.push("con sombrero");
+          if (persona.lentes) descripciones.push("con lentes");
+          if (persona.gafas) descripciones.push("con gafas");
+          if (persona.barba) descripciones.push("con barba");
+          const altText = `Persona ${persona.edad}, ${persona.sexo}, pelo ${persona.pelo}, ${descripciones.join(", ") || "sin accesorios"}, ropa ${persona.ropa}`;
           img.alt = altText;
           img.loading = "lazy"; // Lazy loading para mejor rendimiento y SEO
           img.decoding = "async"; // Decodificación asíncrona para mejor rendimiento
@@ -2771,8 +3005,13 @@
           let valorComparar = condicion.valor;
           let valorObtenido = valorAtributo;
 
+          // Si el valor a comparar es boolean, convertir el atributo también
           if (valorComparar === true || valorComparar === false) {
             valorObtenido = valorAtributo === "true";
+            valorComparar = condicion.valor;
+          } else {
+            // Para valores string, comparar directamente
+            valorObtenido = valorAtributo;
             valorComparar = condicion.valor;
           }
 
