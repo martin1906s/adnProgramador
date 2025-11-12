@@ -42,48 +42,38 @@ const PUZZLE_VARIANTS = [
             {
                 colorId: 3,
                 digit: '7',
-                absolute: { x: 5, y: 9 },
-                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+                xExpr: { type: 'absolute', value: 5 },
+                yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 1,
                 digit: '3',
-                relativeTo: 3,
-                dx: -3,
-                dy: -2,
-                customHint: 'Desde el punto Naranja retrocede 3 unidades a la izquierda y baja 2 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -3 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -2 }
             },
             {
                 colorId: 2,
                 digit: '9',
-                relativeTo: 3,
-                dx: -2,
-                dy: 1,
-                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y sube 1 unidad.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -2 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: 1 }
             },
             {
                 colorId: 4,
                 digit: '4',
-                relativeTo: 3,
-                dx: 2,
-                dy: 1,
-                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y sube 1 unidad.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 2 },
+                yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             },
             {
                 colorId: 5,
                 digit: '6',
-                relativeTo: 3,
-                dx: 3,
-                dy: -2,
-                customHint: 'Desde el punto Naranja avanza 3 unidades a la derecha y baja 2 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 3 },
+                yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
                 digit: '8',
-                relativeTo: 1,
-                dx: 3,
-                dy: -3,
-                customHint: 'Desde el punto Amarillo avanza 3 unidades a la derecha y baja 3 unidades.'
+                xExpr: { type: 'offset', color: 'amarillo', axis: 'x', value: 3 },
+                yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: -3 }
             }
         ],
         connectionPath: [1, 2, 3, 4, 5, 6, 1],
@@ -96,48 +86,38 @@ const PUZZLE_VARIANTS = [
             {
                 colorId: 3,
                 digit: '5',
-                absolute: { x: 5, y: 9 },
-                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+                xExpr: { type: 'absolute', value: 5 },
+                yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 4,
                 digit: '2',
-                relativeTo: 3,
-                dx: -2,
-                dy: -3,
-                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y baja 3 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -2 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -3 }
             },
             {
                 colorId: 5,
                 digit: '6',
-                relativeTo: 3,
-                dx: 2,
-                dy: -3,
-                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y baja 3 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 2 },
+                yExpr: { type: 'offset', color: 'verde', axis: 'y', value: 0 }
             },
             {
                 colorId: 2,
                 digit: '4',
-                relativeTo: 3,
-                dx: 2,
-                dy: -7,
-                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y baja 7 unidades.'
+                xExpr: { type: 'offset', color: 'morado', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -7 }
             },
             {
                 colorId: 1,
                 digit: '8',
-                relativeTo: 3,
-                dx: -2,
-                dy: -7,
-                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y baja 7 unidades.'
+                xExpr: { type: 'offset', color: 'verde', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
                 digit: '1',
-                relativeTo: 3,
-                dx: 0,
-                dy: -7,
-                customHint: 'Desde el punto Naranja baja 7 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             }
         ],
         connectionPath: [1, 6, 2, 5, 3, 4, 1],
@@ -150,48 +130,38 @@ const PUZZLE_VARIANTS = [
             {
                 colorId: 3,
                 digit: '4',
-                absolute: { x: 5, y: 9 },
-                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+                xExpr: { type: 'absolute', value: 5 },
+                yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 4,
                 digit: '8',
-                relativeTo: 3,
-                dx: 4,
-                dy: 0,
-                customHint: 'Desde el punto Naranja avanza 4 unidades a la derecha.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 4 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: 0 }
             },
             {
                 colorId: 5,
                 digit: '2',
-                relativeTo: 4,
-                dx: -1,
-                dy: -4,
-                customHint: 'Desde el punto Verde retrocede 1 unidad a la izquierda y baja 4 unidades.'
+                xExpr: { type: 'offset', color: 'verde', axis: 'x', value: -1 },
+                yExpr: { type: 'offset', color: 'verde', axis: 'y', value: -4 }
             },
             {
                 colorId: 2,
                 digit: '6',
-                relativeTo: 3,
-                dx: 0,
-                dy: -6,
-                customHint: 'Desde el punto Naranja baja 6 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'morado', axis: 'y', value: -2 }
             },
             {
                 colorId: 1,
                 digit: '1',
-                relativeTo: 3,
-                dx: -4,
-                dy: 0,
-                customHint: 'Desde el punto Naranja retrocede 4 unidades a la izquierda.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -4 },
+                yExpr: { type: 'offset', color: 'verde', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
                 digit: '5',
-                relativeTo: 1,
-                dx: 1,
-                dy: -4,
-                customHint: 'Desde el punto Amarillo avanza 1 unidad a la derecha y baja 4 unidades.'
+                xExpr: { type: 'offset', color: 'amarillo', axis: 'x', value: 1 },
+                yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: -4 }
             }
         ],
         connectionPath: [3, 4, 5, 2, 6, 1, 3],
@@ -210,6 +180,223 @@ let CODE_LENGTH = 0;
 let EXPECTED_CODE = '';
 let MAX_INPUT_LENGTH = BASE_MAX_INPUT_LENGTH;
 
+// Sistema de evaluación de expresiones relativas
+function evaluateCoordinateExpression(expr, computedPoints, currentColorId) {
+    if (typeof expr === 'number') {
+        return expr;
+    }
+    
+    if (!expr || typeof expr !== 'object') {
+        throw new Error(`Expresión inválida: ${JSON.stringify(expr)}`);
+    }
+    
+    // Expresión absoluta
+    if (expr.type === 'absolute') {
+        return expr.value;
+    }
+    
+    // Expresión: "la mitad de X color"
+    if (expr.type === 'half') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular la mitad`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return Math.round(coord / 2);
+    }
+    
+    // Expresión: "el doble de X color"
+    if (expr.type === 'double') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular el doble`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return coord * 2;
+    }
+    
+    // Expresión: "el triple de X color"
+    if (expr.type === 'triple') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular el triple`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return coord * 3;
+    }
+    
+    // Expresión: "X más que Y color" o "X menos que Y color"
+    if (expr.type === 'offset') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular el offset`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return coord + expr.value;
+    }
+    
+    // Expresión: "el valor más grande en X hasta el momento - N"
+    if (expr.type === 'maxMinus') {
+        const axis = expr.axis || 'x';
+        const maxValue = getMaxValue(axis, computedPoints, currentColorId);
+        return maxValue - expr.value;
+    }
+    
+    // Expresión: "el valor más pequeño en X de todos los puntos"
+    if (expr.type === 'min') {
+        const axis = expr.axis || 'x';
+        return getMinValue(axis, computedPoints);
+    }
+    
+    // Expresión: "la diferencia entre X color1 y Y color2"
+    if (expr.type === 'difference') {
+        const point1 = getPointByColorName(expr.color1, computedPoints);
+        const point2 = getPointByColorName(expr.color2, computedPoints);
+        if (!point1 || !point2) {
+            throw new Error(`No se encontraron los puntos necesarios para calcular la diferencia`);
+        }
+        const coord1 = expr.axis1 === 'x' ? point1.x : point1.y;
+        const coord2 = expr.axis2 === 'x' ? point2.x : point2.y;
+        return Math.abs(coord1 - coord2);
+    }
+    
+    throw new Error(`Tipo de expresión no reconocido: ${expr.type}`);
+}
+
+function getPointByColorName(colorName, computedPoints) {
+    const colorMap = {
+        'amarillo': 1,
+        'azul': 2,
+        'naranja': 3,
+        'verde': 4,
+        'morado': 5,
+        'blanco': 6
+    };
+    
+    const colorId = colorMap[colorName.toLowerCase()];
+    if (!colorId) {
+        return null;
+    }
+    
+    return computedPoints.get(colorId);
+}
+
+function getMaxValue(axis, computedPoints, excludeColorId) {
+    let max = -Infinity;
+    computedPoints.forEach((point, colorId) => {
+        if (excludeColorId && colorId === excludeColorId) return;
+        const value = axis === 'x' ? point.x : point.y;
+        if (value > max) {
+            max = value;
+        }
+    });
+    return max === -Infinity ? 0 : max;
+}
+
+function getMinValue(axis, computedPoints) {
+    let min = Infinity;
+    computedPoints.forEach((point) => {
+        const value = axis === 'x' ? point.x : point.y;
+        if (value < min) {
+            min = value;
+        }
+    });
+    return min === Infinity ? 0 : min;
+}
+
+function generateHintFromExpression(expr, axis) {
+    if (typeof expr === 'number') {
+        return `${axis.toUpperCase()}: ${expr}`;
+    }
+    
+    if (!expr || typeof expr !== 'object') {
+        return `${axis.toUpperCase()}: ?`;
+    }
+    
+    const colorNames = {
+        1: 'Amarillo',
+        2: 'Azul',
+        3: 'Naranja',
+        4: 'Verde',
+        5: 'Morado',
+        6: 'Blanco'
+    };
+    
+    // Expresión absoluta
+    if (expr.type === 'absolute') {
+        return `${axis.toUpperCase()}: ${expr.value}`;
+    }
+    
+    // Expresión: "la mitad de X color"
+    if (expr.type === 'half') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: la mitad de ${axisRef} ${colorName}`;
+    }
+    
+    // Expresión: "el doble de X color"
+    if (expr.type === 'double') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el doble de ${axisRef} ${colorName}`;
+    }
+    
+    // Expresión: "el triple de X color"
+    if (expr.type === 'triple') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el triple de ${axisRef} ${colorName}`;
+    }
+    
+    // Expresión: "X más que Y color" o "X menos que Y color"
+    if (expr.type === 'offset') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        if (expr.value > 0) {
+            return `${axis.toUpperCase()}: ${expr.value} más que ${axisRef} ${colorName}`;
+        } else if (expr.value < 0) {
+            return `${axis.toUpperCase()}: ${Math.abs(expr.value)} menos que ${axisRef} ${colorName}`;
+        } else {
+            return `${axis.toUpperCase()}: igual que ${axisRef} ${colorName}`;
+        }
+    }
+    
+    // Expresión: "el valor más grande en X hasta el momento - N"
+    if (expr.type === 'maxMinus') {
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el valor más grande en ${axisRef} hasta el momento - ${expr.value}`;
+    }
+    
+    // Expresión: "el valor más pequeño en X de todos los puntos"
+    if (expr.type === 'min') {
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el valor más pequeño en ${axisRef} de todos los puntos`;
+    }
+    
+    // Expresión: "la diferencia entre X color1 y Y color2"
+    if (expr.type === 'difference') {
+        const colorName1 = COLOR_MAP.get(getColorIdByName(expr.color1))?.name || expr.color1;
+        const colorName2 = COLOR_MAP.get(getColorIdByName(expr.color2))?.name || expr.color2;
+        const axisRef1 = expr.axis1 === 'x' ? 'X' : 'Y';
+        const axisRef2 = expr.axis2 === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: la diferencia entre ${axisRef1} ${colorName1} y ${axisRef2} ${colorName2}`;
+    }
+    
+    return `${axis.toUpperCase()}: ?`;
+}
+
+function getColorIdByName(colorName) {
+    const colorMap = {
+        'amarillo': 1,
+        'azul': 2,
+        'naranja': 3,
+        'verde': 4,
+        'morado': 5,
+        'blanco': 6
+    };
+    return colorMap[colorName.toLowerCase()] || null;
+}
+
 function selectRandomPuzzle() {
     const index = Math.floor(Math.random() * PUZZLE_VARIANTS.length);
     return PUZZLE_VARIANTS[index];
@@ -223,10 +410,31 @@ function initializePuzzle() {
     CURRENT_PUZZLE.pointDefinitions.forEach((definition) => {
         let x;
         let y;
+        let hintX = '';
+        let hintY = '';
 
-        if (definition.absolute) {
+        // Si tiene expresiones relativas (nuevo sistema)
+        if (definition.xExpr || definition.yExpr) {
+            x = definition.xExpr 
+                ? evaluateCoordinateExpression(definition.xExpr, computedPoints, definition.colorId)
+                : (definition.absolute?.x ?? 0);
+            y = definition.yExpr 
+                ? evaluateCoordinateExpression(definition.yExpr, computedPoints, definition.colorId)
+                : (definition.absolute?.y ?? 0);
+            
+            hintX = definition.xExpr 
+                ? generateHintFromExpression(definition.xExpr, 'x')
+                : `X: ${x}`;
+            hintY = definition.yExpr 
+                ? generateHintFromExpression(definition.yExpr, 'y')
+                : `Y: ${y}`;
+        }
+        // Sistema antiguo (compatibilidad)
+        else if (definition.absolute) {
             x = definition.absolute.x;
             y = definition.absolute.y;
+            hintX = `X: ${x}`;
+            hintY = `Y: ${y}`;
         } else {
             const referencePoint = computedPoints.get(definition.relativeTo);
             if (!referencePoint) {
@@ -234,17 +442,27 @@ function initializePuzzle() {
             }
             x = referencePoint.x + definition.dx;
             y = referencePoint.y + definition.dy;
+            hintX = `X: ${x}`;
+            hintY = `Y: ${y}`;
         }
+
+        // Asegurar que las coordenadas estén en rango
+        x = Math.max(0, Math.min(GRID_SIZE, x));
+        y = Math.max(0, Math.min(GRID_SIZE, y));
+
+        const hint = definition.customHint || `${hintX}\n${hintY}`;
 
         computedPoints.set(definition.colorId, {
             colorId: definition.colorId,
             digit: definition.digit,
             x,
             y,
-            hint: definition.customHint || describeOffset(definition.dx ?? 0, definition.dy ?? 0),
+            hint: hint,
             reference: definition.relativeTo ?? null,
             dx: definition.dx ?? 0,
-            dy: definition.dy ?? 0
+            dy: definition.dy ?? 0,
+            xExpr: definition.xExpr,
+            yExpr: definition.yExpr
         });
     });
 
@@ -662,16 +880,32 @@ function createInstructionEntry(coord) {
     const entry = document.createElement('div');
     entry.className = 'coord-entry';
 
-        const colorPoint = document.createElement('div');
-        colorPoint.className = 'color-point';
+    const colorPoint = document.createElement('div');
+    colorPoint.className = 'color-point';
     colorPoint.style.background = pointColor.color;
     colorPoint.style.boxShadow = `0 0 8px ${pointColor.color}, 0 0 16px ${pointColor.color}`;
 
-        const coordText = document.createElement('div');
+    const coordText = document.createElement('div');
     coordText.className = 'coord-text';
-    coordText.textContent = coord.reference === null
-        ? `(x:${coord.x}, y:${coord.y})`
-        : coord.hint;
+    
+    // Si tiene expresiones, generar el texto desde las expresiones
+    if (coord.xExpr || coord.yExpr) {
+        const hintX = coord.xExpr 
+            ? generateHintFromExpression(coord.xExpr, 'x')
+            : `X: ${coord.x}`;
+        const hintY = coord.yExpr 
+            ? generateHintFromExpression(coord.yExpr, 'y')
+            : `Y: ${coord.y}`;
+        coordText.innerHTML = `${hintX}<br>${hintY}`;
+    } else if (coord.hint && coord.hint.includes('\n')) {
+        // Si el hint tiene saltos de línea, usar innerHTML
+        coordText.innerHTML = coord.hint.replace(/\n/g, '<br>');
+    } else {
+        // Texto simple
+        coordText.textContent = coord.reference === null
+            ? `(x:${coord.x}, y:${coord.y})`
+            : coord.hint;
+    }
 
     entry.appendChild(colorPoint);
     entry.appendChild(coordText);
@@ -786,6 +1020,18 @@ function updateConnectionLines() {
 
     layer.innerHTML = '';
 
+    // Verificar primero si TODOS los puntos están colocados correctamente
+    const allPointsCorrect = PUZZLE_POINTS.every((point) =>
+        isCoordinatePlaced(point.x, point.y, point.colorId)
+    );
+
+    // Solo dibujar líneas si TODOS los puntos están correctos
+    if (!allPointsCorrect) {
+        if (gridWrapper) gridWrapper.classList.remove('solved');
+        console.debug('[Nivel 3] Líneas no dibujadas: faltan puntos o están incorrectos');
+        return;
+    }
+
     const orderedPoints = CONNECTION_PATH.map((colorId) =>
         PUZZLE_POINTS.find((point) => point.colorId === colorId)
     );
@@ -796,16 +1042,10 @@ function updateConnectionLines() {
         return;
     }
 
-    let drawnSegments = 0;
-
+    // Dibujar todas las líneas de la figura completa
     for (let i = 0; i < orderedPoints.length - 1; i++) {
         const start = orderedPoints[i];
         const end = orderedPoints[i + 1];
-
-        if (!isCoordinatePlaced(start.x, start.y, start.colorId) ||
-            !isCoordinatePlaced(end.x, end.y, end.colorId)) {
-            continue;
-        }
 
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.setAttribute('x1', coordToPixelX(start.x));
@@ -818,15 +1058,11 @@ function updateConnectionLines() {
         line.style.filter = 'drop-shadow(0 0 14px rgba(0, 255, 128, 0.75))';
 
         layer.appendChild(line);
-        drawnSegments++;
     }
 
+    // Marcar como resuelto cuando todas las líneas están dibujadas
     if (gridWrapper) {
-        if (drawnSegments > 0) {
-            gridWrapper.classList.add('solved');
-        } else {
-            gridWrapper.classList.remove('solved');
-        }
+        gridWrapper.classList.add('solved');
     }
 }
 
