@@ -38,52 +38,37 @@ const PUZZLE_VARIANTS = [
     {
         id: 'heart',
         name: 'Corazón',
+        code: '739',
         pointDefinitions: [
             {
                 colorId: 3,
-                digit: '7',
-                absolute: { x: 5, y: 9 },
-                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+                xExpr: { type: 'absolute', value: 5 },
+                yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 1,
-                digit: '3',
-                relativeTo: 3,
-                dx: -3,
-                dy: -2,
-                customHint: 'Desde el punto Naranja retrocede 3 unidades a la izquierda y baja 2 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -3 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -2 }
             },
             {
                 colorId: 2,
-                digit: '9',
-                relativeTo: 3,
-                dx: -2,
-                dy: 1,
-                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y sube 1 unidad.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -2 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: 1 }
             },
             {
                 colorId: 4,
-                digit: '4',
-                relativeTo: 3,
-                dx: 2,
-                dy: 1,
-                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y sube 1 unidad.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 2 },
+                yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             },
             {
                 colorId: 5,
-                digit: '6',
-                relativeTo: 3,
-                dx: 3,
-                dy: -2,
-                customHint: 'Desde el punto Naranja avanza 3 unidades a la derecha y baja 2 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 3 },
+                yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
-                digit: '8',
-                relativeTo: 1,
-                dx: 3,
-                dy: -3,
-                customHint: 'Desde el punto Amarillo avanza 3 unidades a la derecha y baja 3 unidades.'
+                xExpr: { type: 'offset', color: 'amarillo', axis: 'x', value: 3 },
+                yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: -3 }
             }
         ],
         connectionPath: [1, 2, 3, 4, 5, 6, 1],
@@ -92,52 +77,37 @@ const PUZZLE_VARIANTS = [
     {
         id: 'house',
         name: 'Casa',
+        code: '524',
         pointDefinitions: [
             {
                 colorId: 3,
-                digit: '5',
-                absolute: { x: 5, y: 9 },
-                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+                xExpr: { type: 'absolute', value: 5 },
+                yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 4,
-                digit: '2',
-                relativeTo: 3,
-                dx: -2,
-                dy: -3,
-                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y baja 3 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -2 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -3 }
             },
             {
                 colorId: 5,
-                digit: '6',
-                relativeTo: 3,
-                dx: 2,
-                dy: -3,
-                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y baja 3 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 2 },
+                yExpr: { type: 'offset', color: 'verde', axis: 'y', value: 0 }
             },
             {
                 colorId: 2,
-                digit: '4',
-                relativeTo: 3,
-                dx: 2,
-                dy: -7,
-                customHint: 'Desde el punto Naranja avanza 2 unidades a la derecha y baja 7 unidades.'
+                xExpr: { type: 'offset', color: 'morado', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: -7 }
             },
             {
                 colorId: 1,
-                digit: '8',
-                relativeTo: 3,
-                dx: -2,
-                dy: -7,
-                customHint: 'Desde el punto Naranja retrocede 2 unidades a la izquierda y baja 7 unidades.'
+                xExpr: { type: 'offset', color: 'verde', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
-                digit: '1',
-                relativeTo: 3,
-                dx: 0,
-                dy: -7,
-                customHint: 'Desde el punto Naranja baja 7 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'azul', axis: 'y', value: 0 }
             }
         ],
         connectionPath: [1, 6, 2, 5, 3, 4, 1],
@@ -146,52 +116,37 @@ const PUZZLE_VARIANTS = [
     {
         id: 'polygon',
         name: 'Polígono',
+        code: '482',
         pointDefinitions: [
             {
                 colorId: 3,
-                digit: '4',
-                absolute: { x: 5, y: 9 },
-                customHint: 'Punto Naranja base: coordenada fija (x:5, y:9).'
+                xExpr: { type: 'absolute', value: 5 },
+                yExpr: { type: 'absolute', value: 9 }
             },
             {
                 colorId: 4,
-                digit: '8',
-                relativeTo: 3,
-                dx: 4,
-                dy: 0,
-                customHint: 'Desde el punto Naranja avanza 4 unidades a la derecha.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 4 },
+                yExpr: { type: 'offset', color: 'naranja', axis: 'y', value: 0 }
             },
             {
                 colorId: 5,
-                digit: '2',
-                relativeTo: 4,
-                dx: -1,
-                dy: -4,
-                customHint: 'Desde el punto Verde retrocede 1 unidad a la izquierda y baja 4 unidades.'
+                xExpr: { type: 'offset', color: 'verde', axis: 'x', value: -1 },
+                yExpr: { type: 'offset', color: 'verde', axis: 'y', value: -4 }
             },
             {
                 colorId: 2,
-                digit: '6',
-                relativeTo: 3,
-                dx: 0,
-                dy: -6,
-                customHint: 'Desde el punto Naranja baja 6 unidades.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: 0 },
+                yExpr: { type: 'offset', color: 'morado', axis: 'y', value: -2 }
             },
             {
                 colorId: 1,
-                digit: '1',
-                relativeTo: 3,
-                dx: -4,
-                dy: 0,
-                customHint: 'Desde el punto Naranja retrocede 4 unidades a la izquierda.'
+                xExpr: { type: 'offset', color: 'naranja', axis: 'x', value: -4 },
+                yExpr: { type: 'offset', color: 'verde', axis: 'y', value: 0 }
             },
             {
                 colorId: 6,
-                digit: '5',
-                relativeTo: 1,
-                dx: 1,
-                dy: -4,
-                customHint: 'Desde el punto Amarillo avanza 1 unidad a la derecha y baja 4 unidades.'
+                xExpr: { type: 'offset', color: 'amarillo', axis: 'x', value: 1 },
+                yExpr: { type: 'offset', color: 'amarillo', axis: 'y', value: -4 }
             }
         ],
         connectionPath: [3, 4, 5, 2, 6, 1, 3],
@@ -210,6 +165,241 @@ let CODE_LENGTH = 0;
 let EXPECTED_CODE = '';
 let MAX_INPUT_LENGTH = BASE_MAX_INPUT_LENGTH;
 
+// Sistema de evaluación de expresiones relativas
+function evaluateCoordinateExpression(expr, computedPoints, currentColorId) {
+    if (typeof expr === 'number') {
+        return expr;
+    }
+    
+    if (!expr || typeof expr !== 'object') {
+        throw new Error(`Expresión inválida: ${JSON.stringify(expr)}`);
+    }
+    
+    // Expresión absoluta
+    if (expr.type === 'absolute') {
+        return expr.value;
+    }
+    
+    // Expresión: "la mitad de X color"
+    if (expr.type === 'half') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular la mitad`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return Math.round(coord / 2);
+    }
+    
+    // Expresión: "el doble de X color"
+    if (expr.type === 'double') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular el doble`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return coord * 2;
+    }
+    
+    // Expresión: "el triple de X color"
+    if (expr.type === 'triple') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular el triple`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return coord * 3;
+    }
+    
+    // Expresión: "X más que Y color" o "X menos que Y color"
+    if (expr.type === 'offset') {
+        const refPoint = getPointByColorName(expr.color, computedPoints);
+        if (!refPoint) {
+            throw new Error(`No se encontró el punto de color ${expr.color} para calcular el offset`);
+        }
+        const coord = expr.axis === 'x' ? refPoint.x : refPoint.y;
+        return coord + expr.value;
+    }
+    
+    // Expresión: "el valor más grande en X hasta el momento - N"
+    if (expr.type === 'maxMinus') {
+        const axis = expr.axis || 'x';
+        const maxValue = getMaxValue(axis, computedPoints, currentColorId);
+        return maxValue - expr.value;
+    }
+    
+    // Expresión: "el valor más pequeño en X de todos los puntos"
+    if (expr.type === 'min') {
+        const axis = expr.axis || 'x';
+        return getMinValue(axis, computedPoints);
+    }
+    
+    // Expresión: "la diferencia entre X color1 y Y color2"
+    if (expr.type === 'difference') {
+        const point1 = getPointByColorName(expr.color1, computedPoints);
+        const point2 = getPointByColorName(expr.color2, computedPoints);
+        if (!point1 || !point2) {
+            throw new Error(`No se encontraron los puntos necesarios para calcular la diferencia`);
+        }
+        const coord1 = expr.axis1 === 'x' ? point1.x : point1.y;
+        const coord2 = expr.axis2 === 'x' ? point2.x : point2.y;
+        return Math.abs(coord1 - coord2);
+    }
+    
+    throw new Error(`Tipo de expresión no reconocido: ${expr.type}`);
+}
+
+function getPointByColorName(colorName, computedPoints) {
+    const colorMap = {
+        'amarillo': 1,
+        'azul': 2,
+        'naranja': 3,
+        'verde': 4,
+        'morado': 5,
+        'blanco': 6
+    };
+    
+    const colorId = colorMap[colorName.toLowerCase()];
+    if (!colorId) {
+        return null;
+    }
+    
+    return computedPoints.get(colorId);
+}
+
+function getMaxValue(axis, computedPoints, excludeColorId) {
+    let max = -Infinity;
+    computedPoints.forEach((point, colorId) => {
+        if (excludeColorId && colorId === excludeColorId) return;
+        const value = axis === 'x' ? point.x : point.y;
+        if (value > max) {
+            max = value;
+        }
+    });
+    return max === -Infinity ? 0 : max;
+}
+
+function getMinValue(axis, computedPoints) {
+    let min = Infinity;
+    computedPoints.forEach((point) => {
+        const value = axis === 'x' ? point.x : point.y;
+        if (value < min) {
+            min = value;
+        }
+    });
+    return min === Infinity ? 0 : min;
+}
+
+function generateHintFromExpression(expr, axis) {
+    if (typeof expr === 'number') {
+        return `${axis.toUpperCase()}: ${expr}`;
+    }
+    
+    if (!expr || typeof expr !== 'object') {
+        return `${axis.toUpperCase()}: ?`;
+    }
+    
+    const colorNames = {
+        1: 'Amarillo',
+        2: 'Azul',
+        3: 'Naranja',
+        4: 'Verde',
+        5: 'Morado',
+        6: 'Blanco'
+    };
+    
+    // Expresión absoluta
+    if (expr.type === 'absolute') {
+        return `${axis.toUpperCase()}: ${expr.value}`;
+    }
+    
+    // Expresión: "la mitad de X color"
+    if (expr.type === 'half') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: la mitad de ${axisRef} ${colorName}`;
+    }
+    
+    // Expresión: "el doble de X color"
+    if (expr.type === 'double') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el doble de ${axisRef} ${colorName}`;
+    }
+    
+    // Expresión: "el triple de X color"
+    if (expr.type === 'triple') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el triple de ${axisRef} ${colorName}`;
+    }
+    
+    // Expresión: "X más que Y color" o "X menos que Y color"
+    if (expr.type === 'offset') {
+        const colorName = COLOR_MAP.get(getColorIdByName(expr.color))?.name || expr.color;
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        if (expr.value > 0) {
+            return `${axis.toUpperCase()}: ${expr.value} más que ${axisRef} ${colorName}`;
+        } else if (expr.value < 0) {
+            return `${axis.toUpperCase()}: ${Math.abs(expr.value)} menos que ${axisRef} ${colorName}`;
+        } else {
+            return `${axis.toUpperCase()}: igual que ${axisRef} ${colorName}`;
+        }
+    }
+    
+    // Expresión: "el valor más grande en X hasta el momento - N"
+    if (expr.type === 'maxMinus') {
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el valor más grande en ${axisRef} hasta el momento - ${expr.value}`;
+    }
+    
+    // Expresión: "el valor más pequeño en X de todos los puntos"
+    if (expr.type === 'min') {
+        const axisRef = expr.axis === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: el valor más pequeño en ${axisRef} de todos los puntos`;
+    }
+    
+    // Expresión: "la diferencia entre X color1 y Y color2"
+    if (expr.type === 'difference') {
+        const colorName1 = COLOR_MAP.get(getColorIdByName(expr.color1))?.name || expr.color1;
+        const colorName2 = COLOR_MAP.get(getColorIdByName(expr.color2))?.name || expr.color2;
+        const axisRef1 = expr.axis1 === 'x' ? 'X' : 'Y';
+        const axisRef2 = expr.axis2 === 'x' ? 'X' : 'Y';
+        return `${axis.toUpperCase()}: la diferencia entre ${axisRef1} ${colorName1} y ${axisRef2} ${colorName2}`;
+    }
+    
+    return `${axis.toUpperCase()}: ?`;
+}
+
+function getColorIdByName(colorName) {
+    const colorMap = {
+        'amarillo': 1,
+        'azul': 2,
+        'naranja': 3,
+        'verde': 4,
+        'morado': 5,
+        'blanco': 6
+    };
+    return colorMap[colorName.toLowerCase()] || null;
+}
+
+// Cargar códigos guardados desde localStorage
+function loadSavedCodes() {
+    try {
+        // Cargar códigos para todas las figuras desde localStorage
+        PUZZLE_VARIANTS.forEach(puzzle => {
+            const storageKey = `lvl3_code_${puzzle.id}`;
+            const savedCode = localStorage.getItem(storageKey);
+            
+            if (savedCode && /^[0-9]{3}$/.test(savedCode)) {
+                puzzle.code = savedCode;
+                console.log(`[Nivel 3] Código de ${puzzle.name} cargado desde localStorage:`, savedCode);
+            }
+        });
+    } catch (e) {
+        console.warn('[Nivel 3] No se pudo cargar desde localStorage:', e);
+    }
+}
+
 function selectRandomPuzzle() {
     const index = Math.floor(Math.random() * PUZZLE_VARIANTS.length);
     return PUZZLE_VARIANTS[index];
@@ -217,16 +407,40 @@ function selectRandomPuzzle() {
 
 function initializePuzzle() {
     CURRENT_PUZZLE = selectRandomPuzzle();
+    
+    // Cargar códigos guardados desde localStorage
+    loadSavedCodes();
 
     const computedPoints = new Map();
 
     CURRENT_PUZZLE.pointDefinitions.forEach((definition) => {
         let x;
         let y;
+        let hintX = '';
+        let hintY = '';
 
-        if (definition.absolute) {
+        // Si tiene expresiones relativas (nuevo sistema)
+        if (definition.xExpr || definition.yExpr) {
+            x = definition.xExpr 
+                ? evaluateCoordinateExpression(definition.xExpr, computedPoints, definition.colorId)
+                : (definition.absolute?.x ?? 0);
+            y = definition.yExpr 
+                ? evaluateCoordinateExpression(definition.yExpr, computedPoints, definition.colorId)
+                : (definition.absolute?.y ?? 0);
+            
+            hintX = definition.xExpr 
+                ? generateHintFromExpression(definition.xExpr, 'x')
+                : `X: ${x}`;
+            hintY = definition.yExpr 
+                ? generateHintFromExpression(definition.yExpr, 'y')
+                : `Y: ${y}`;
+        }
+        // Sistema antiguo (compatibilidad)
+        else if (definition.absolute) {
             x = definition.absolute.x;
             y = definition.absolute.y;
+            hintX = `X: ${x}`;
+            hintY = `Y: ${y}`;
         } else {
             const referencePoint = computedPoints.get(definition.relativeTo);
             if (!referencePoint) {
@@ -234,17 +448,26 @@ function initializePuzzle() {
             }
             x = referencePoint.x + definition.dx;
             y = referencePoint.y + definition.dy;
+            hintX = `X: ${x}`;
+            hintY = `Y: ${y}`;
         }
+
+        // Asegurar que las coordenadas estén en rango
+        x = Math.max(0, Math.min(GRID_SIZE, x));
+        y = Math.max(0, Math.min(GRID_SIZE, y));
+
+        const hint = definition.customHint || `${hintX}\n${hintY}`;
 
         computedPoints.set(definition.colorId, {
             colorId: definition.colorId,
-            digit: definition.digit,
             x,
             y,
-            hint: definition.customHint || describeOffset(definition.dx ?? 0, definition.dy ?? 0),
+            hint: hint,
             reference: definition.relativeTo ?? null,
             dx: definition.dx ?? 0,
-            dy: definition.dy ?? 0
+            dy: definition.dy ?? 0,
+            xExpr: definition.xExpr,
+            yExpr: definition.yExpr
         });
     });
 
@@ -262,8 +485,8 @@ function initializePuzzle() {
         : buildConnectionPath(PUZZLE_POINTS);
     CONNECTION_PATH = [...pathSource];
 
-    CODE_LENGTH = PUZZLE_POINTS.length;
-    EXPECTED_CODE = PUZZLE_POINTS.map((point) => point.digit).join('');
+    CODE_LENGTH = 3; // Código de 3 dígitos
+    EXPECTED_CODE = CURRENT_PUZZLE.code || '000';
     MAX_INPUT_LENGTH = Math.max(BASE_MAX_INPUT_LENGTH, CODE_LENGTH);
 
     console.info(`[Nivel 3] Rompecabezas cargado: ${CURRENT_PUZZLE.name} (${CURRENT_PUZZLE.id}). Código esperado: ${EXPECTED_CODE}`);
@@ -355,6 +578,9 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCounts();
     
     setupLevelAccess();
+    
+    // Configurar el botón de códigos (ya está en el HTML del header)
+    setupCodeConfigModal();
     
     if (CURRENT_PUZZLE) {
         console.log(`[Nivel 3] Rompecabezas activo: ${CURRENT_PUZZLE.name} (${CURRENT_PUZZLE.id}). Código esperado:`, EXPECTED_CODE);
@@ -567,11 +793,21 @@ function createGrid() {
         width: ${GRID_TOTAL_SIZE}px;
         height: ${GRID_TOTAL_SIZE}px;
         z-index: 4;
+        pointer-events: none;
     `;
     gridDropArea.addEventListener('dragover', handleDragOver);
     gridDropArea.addEventListener('drop', handleGridDrop);
     gridDropArea.addEventListener('dragenter', handleDragEnter);
     gridDropArea.addEventListener('dragleave', handleDragLeave);
+    
+    // Activar pointer-events cuando hay un drag
+    document.addEventListener('dragstart', () => {
+        gridDropArea.style.pointerEvents = 'auto';
+    });
+    
+    document.addEventListener('dragend', () => {
+        gridDropArea.style.pointerEvents = 'none';
+    });
 
     gridWrapper.appendChild(yAxis);
     gridWrapper.appendChild(xAxis);
@@ -662,16 +898,32 @@ function createInstructionEntry(coord) {
     const entry = document.createElement('div');
     entry.className = 'coord-entry';
 
-        const colorPoint = document.createElement('div');
-        colorPoint.className = 'color-point';
+    const colorPoint = document.createElement('div');
+    colorPoint.className = 'color-point';
     colorPoint.style.background = pointColor.color;
     colorPoint.style.boxShadow = `0 0 8px ${pointColor.color}, 0 0 16px ${pointColor.color}`;
 
-        const coordText = document.createElement('div');
+    const coordText = document.createElement('div');
     coordText.className = 'coord-text';
-    coordText.textContent = coord.reference === null
-        ? `(x:${coord.x}, y:${coord.y})`
-        : coord.hint;
+    
+    // Si tiene expresiones, generar el texto desde las expresiones
+    if (coord.xExpr || coord.yExpr) {
+        const hintX = coord.xExpr 
+            ? generateHintFromExpression(coord.xExpr, 'x')
+            : `X: ${coord.x}`;
+        const hintY = coord.yExpr 
+            ? generateHintFromExpression(coord.yExpr, 'y')
+            : `Y: ${coord.y}`;
+        coordText.innerHTML = `${hintX}<br>${hintY}`;
+    } else if (coord.hint && coord.hint.includes('\n')) {
+        // Si el hint tiene saltos de línea, usar innerHTML
+        coordText.innerHTML = coord.hint.replace(/\n/g, '<br>');
+    } else {
+        // Texto simple
+        coordText.textContent = coord.reference === null
+            ? `(x:${coord.x}, y:${coord.y})`
+            : coord.hint;
+    }
 
     entry.appendChild(colorPoint);
     entry.appendChild(coordText);
@@ -744,12 +996,21 @@ function updateCodeDisplay() {
     const codeSlots = document.getElementById('code-slots');
     if (!codeSlots) return;
 
-    const digits = PUZZLE_POINTS.map((point) =>
-        isCoordinatePlaced(point.x, point.y, point.colorId) ? point.digit : CODE_PLACEHOLDER
+    // Verificar si todos los puntos están colocados correctamente
+    const allPointsCorrect = PUZZLE_POINTS.every((point) =>
+        isCoordinatePlaced(point.x, point.y, point.colorId)
     );
 
-    codeSlots.dataset.code = digits.join('');
-    codeSlots.textContent = digits.join(' ');
+    if (allPointsCorrect) {
+        // Revelar el código de 3 dígitos cuando la figura está completa
+        const code = EXPECTED_CODE;
+        codeSlots.dataset.code = code;
+        codeSlots.textContent = code.split('').join(' ');
+    } else {
+        // Mostrar placeholders mientras no esté completa
+        codeSlots.dataset.code = '';
+        codeSlots.textContent = `${CODE_PLACEHOLDER} ${CODE_PLACEHOLDER} ${CODE_PLACEHOLDER}`;
+    }
 }
 
 function ensureConnectionLayer() {
@@ -786,6 +1047,18 @@ function updateConnectionLines() {
 
     layer.innerHTML = '';
 
+    // Verificar primero si TODOS los puntos están colocados correctamente
+    const allPointsCorrect = PUZZLE_POINTS.every((point) =>
+        isCoordinatePlaced(point.x, point.y, point.colorId)
+    );
+
+    // Solo dibujar líneas si TODOS los puntos están correctos
+    if (!allPointsCorrect) {
+        if (gridWrapper) gridWrapper.classList.remove('solved');
+        console.debug('[Nivel 3] Líneas no dibujadas: faltan puntos o están incorrectos');
+        return;
+    }
+
     const orderedPoints = CONNECTION_PATH.map((colorId) =>
         PUZZLE_POINTS.find((point) => point.colorId === colorId)
     );
@@ -796,16 +1069,10 @@ function updateConnectionLines() {
         return;
     }
 
-    let drawnSegments = 0;
-
+    // Dibujar todas las líneas de la figura completa
     for (let i = 0; i < orderedPoints.length - 1; i++) {
         const start = orderedPoints[i];
         const end = orderedPoints[i + 1];
-
-        if (!isCoordinatePlaced(start.x, start.y, start.colorId) ||
-            !isCoordinatePlaced(end.x, end.y, end.colorId)) {
-            continue;
-        }
 
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.setAttribute('x1', coordToPixelX(start.x));
@@ -818,15 +1085,11 @@ function updateConnectionLines() {
         line.style.filter = 'drop-shadow(0 0 14px rgba(0, 255, 128, 0.75))';
 
         layer.appendChild(line);
-        drawnSegments++;
     }
 
+    // Marcar como resuelto cuando todas las líneas están dibujadas
     if (gridWrapper) {
-        if (drawnSegments > 0) {
-            gridWrapper.classList.add('solved');
-        } else {
-            gridWrapper.classList.remove('solved');
-        }
+        gridWrapper.classList.add('solved');
     }
 }
 
@@ -871,6 +1134,172 @@ function setupLevelAccess() {
     });
 
     updateKeyboardDisplay();
+}
+
+function setupCodeConfigModal() {
+    const configBtn = document.getElementById('config-code-btn');
+    const configModal = document.getElementById('config-code-modal');
+    const configModalClose = document.getElementById('config-code-modal-close');
+    const saveCodesBtn = document.getElementById('save-codes-btn');
+    const cancelCodesBtn = document.getElementById('cancel-codes-btn');
+    
+    if (!configBtn) {
+        console.warn('[Nivel 3] Botón de configuración de códigos no encontrado');
+        return;
+    }
+    
+    console.log('[Nivel 3] Configurando botón de códigos');
+    
+    // Remover listeners anteriores si existen
+    const newConfigBtn = configBtn.cloneNode(true);
+    configBtn.parentNode.replaceChild(newConfigBtn, configBtn);
+    
+    newConfigBtn.addEventListener('click', (e) => {
+        // Solo abrir si no hay un drag en curso
+        if (!draggedPoint && !draggedColorId) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[Nivel 3] Abriendo modal de configuración de códigos');
+            openConfigCodeModal();
+        }
+    });
+    
+    // También permitir activar con doble clic para evitar conflictos
+    newConfigBtn.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('[Nivel 3] Abriendo modal de configuración de códigos (doble clic)');
+        openConfigCodeModal();
+    });
+    
+    if (configModalClose) {
+        configModalClose.addEventListener('click', () => {
+            closeConfigCodeModal();
+        });
+    }
+    
+    if (cancelCodesBtn) {
+        cancelCodesBtn.addEventListener('click', () => {
+            closeConfigCodeModal();
+        });
+    }
+    
+    if (saveCodesBtn) {
+        saveCodesBtn.addEventListener('click', () => {
+            saveCodes();
+        });
+    }
+    
+    if (configModal) {
+        configModal.addEventListener('click', (e) => {
+            if (e.target === configModal) {
+                closeConfigCodeModal();
+            }
+        });
+    }
+}
+
+function openConfigCodeModal() {
+    const configModal = document.getElementById('config-code-modal');
+    if (!configModal) {
+        console.error('[Nivel 3] Modal de configuración de códigos no encontrado');
+        return;
+    }
+    
+    // Verificar que hay un puzzle actual
+    if (!CURRENT_PUZZLE) {
+        showMessage('No hay figura activa', 'error');
+        return;
+    }
+    
+    // Mostrar el nombre de la figura actual
+    const figureNameElement = document.getElementById('current-figure-name');
+    if (figureNameElement) {
+        figureNameElement.textContent = `Figura actual: ${CURRENT_PUZZLE.name}`;
+    }
+    
+    // Cargar el código de la figura actual
+    const codeInput = document.getElementById('code-input');
+    
+    if (codeInput) {
+        // Cargar el código guardado desde localStorage o usar el código actual
+        const puzzleId = CURRENT_PUZZLE.id;
+        const storageKey = `lvl3_code_${puzzleId}`;
+        const savedCode = localStorage.getItem(storageKey);
+        
+        if (savedCode && /^[0-9]{3}$/.test(savedCode)) {
+            codeInput.value = savedCode;
+        } else {
+            codeInput.value = CURRENT_PUZZLE.code || '000';
+        }
+        
+        // Agregar validación en tiempo real para solo números (solo una vez)
+        if (!codeInput.dataset.listenerAdded) {
+            codeInput.addEventListener('input', function(e) {
+                // Solo permitir números
+                this.value = this.value.replace(/[^0-9]/g, '');
+                // Limitar a 3 dígitos
+                if (this.value.length > 3) {
+                    this.value = this.value.slice(0, 3);
+                }
+            });
+            codeInput.dataset.listenerAdded = 'true';
+        }
+    }
+    
+    configModal.classList.add('show');
+    configModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeConfigCodeModal() {
+    const configModal = document.getElementById('config-code-modal');
+    if (!configModal) return;
+    
+    configModal.classList.remove('show');
+    configModal.setAttribute('aria-hidden', 'true');
+}
+
+function saveCodes() {
+    if (!CURRENT_PUZZLE) {
+        showMessage('No hay figura activa', 'error');
+        return;
+    }
+    
+    const codeInput = document.getElementById('code-input');
+    if (!codeInput) {
+        showMessage('Error: Campo de código no encontrado', 'error');
+        return;
+    }
+    
+    const code = codeInput.value.trim();
+    const codePattern = /^[0-9]{3}$/;
+    
+    // Validar que sea un código de 3 dígitos numéricos
+    if (!code || !codePattern.test(code)) {
+        showMessage(`El código de ${CURRENT_PUZZLE.name} debe tener exactamente 3 dígitos numéricos`, 'error');
+        codeInput.focus();
+        return;
+    }
+    
+    // Actualizar el código en PUZZLE_VARIANTS
+    CURRENT_PUZZLE.code = code;
+    
+    // Guardar en localStorage para persistencia
+    try {
+        const puzzleId = CURRENT_PUZZLE.id;
+        const storageKey = `lvl3_code_${puzzleId}`;
+        localStorage.setItem(storageKey, code);
+        console.log(`[Nivel 3] Código de ${CURRENT_PUZZLE.name} guardado en localStorage:`, code);
+    } catch (e) {
+        console.warn('[Nivel 3] No se pudo guardar en localStorage:', e);
+    }
+    
+    // Actualizar el código esperado
+    EXPECTED_CODE = code;
+    updateCodeDisplay();
+    
+    showMessage(`Código de ${CURRENT_PUZZLE.name} guardado correctamente`, 'success');
+    closeConfigCodeModal();
 }
 
 let keyboardInput = '';

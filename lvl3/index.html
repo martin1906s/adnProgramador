@@ -18,6 +18,8 @@
             <div class="logo-terminal">
                 <span class="terminal-prompt">></span>
                 <h1 class="cyber-title">NIVEL <span class="code-symbol">3</span> - COORDENADAS CARTESIANAS</h1>
+                <!-- Botón invisible para configurar códigos -->
+                <button id="config-code-btn" class="config-code-btn" title="Configurar códigos"></button>
             </div>
             <p class="subtitle">
                 Arrastra las imágenes a las coordenadas correctas para formar una <span class="code-operator">FIGURA</span>
@@ -30,9 +32,9 @@
                 <h2 class="panel-title">Código Actual</h2>
             </div>
             <div class="panel-content code-panel-content">
-                <p class="code-instruction">Coloca los puntos correctos para revelar los 6 dígitos.</p>
+                <p class="code-instruction">Coloca los puntos correctos para revelar el código.</p>
                 
-                <div id="code-slots" class="code-slots">• • • • • •</div>
+                <div id="code-slots" class="code-slots">• • •</div>
             </div>
         </section>
 
@@ -79,7 +81,7 @@
         </div>
 
         <div class="next-level-container">
-            <button id="next-level-btn" class="next-level-btn">PRÓXIMO NIVEL 4</button>
+            
         </div>
     </div>
 
@@ -107,6 +109,31 @@
                         <button class="keyboard-btn delete-btn" data-action="delete">✖</button>
                         <button class="keyboard-btn num-btn" data-number="0">0</button>
                         <button class="keyboard-btn confirm-btn" data-action="confirm">✔</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para configurar códigos -->
+    <div id="config-code-modal" class="modal-overlay" aria-hidden="true">
+        <div class="level-modal-content">
+            <div class="level-modal-header">
+                <h3 class="level-modal-title">Establecer Código</h3>
+                <button class="level-modal-close" id="config-code-modal-close" type="button" aria-label="Cerrar">×</button>
+            </div>
+            <div class="level-modal-body">
+                <div class="config-code-container">
+                    <p class="config-code-instruction">Configura el código de 3 dígitos para la figura actual:</p>
+                    <p id="current-figure-name" class="current-figure-name"></p>
+                    
+                    <div class="code-config-item">
+                        <input type="text" id="code-input" maxlength="3" inputmode="numeric" placeholder="123" />
+                    </div>
+                    
+                    <div class="config-code-actions">
+                        <button id="save-codes-btn" class="keyboard-btn confirm-btn">Guardar</button>
+                        <button id="cancel-codes-btn" class="keyboard-btn delete-btn">Cancelar</button>
                     </div>
                 </div>
             </div>
