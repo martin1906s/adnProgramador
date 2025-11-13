@@ -962,6 +962,178 @@ body {
     max-width: clamp(200px, 65vw, 260px);
   }
 }
+
+/* ============================================
+   MODAL SECRETO - CONFIGURACIÓN DE CÓDIGO
+   ============================================ */
+.secret-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(5px);
+}
+
+.secret-modal-overlay.show {
+  display: flex;
+}
+
+.secret-modal-content {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95) 0%, rgba(10, 0, 20, 0.95) 100%);
+  border: 3px solid #ff00ff;
+  border-radius: 0;
+  width: 90%;
+  max-width: 500px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 
+    0 0 50px rgba(255, 0, 255, 0.8),
+    inset 0 0 50px rgba(255, 0, 255, 0.1);
+  clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
+}
+
+.secret-modal-title {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  color: #ff00ff;
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.secret-modal-subtitle {
+  font-family: 'Rajdhani', monospace;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  color: #00ffff;
+  text-align: center;
+  margin-bottom: 25px;
+  opacity: 0.8;
+}
+
+.secret-input-group {
+  margin-bottom: 20px;
+}
+
+.secret-input-label {
+  display: block;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(0.85rem, 1.8vw, 1rem);
+  color: #00ffff;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.secret-code-input {
+  width: 100%;
+  padding: 12px;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 900;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid #ff00ff;
+  border-radius: 8px;
+  color: #ff00ff;
+  text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+  box-shadow: 
+    0 0 20px rgba(255, 0, 255, 0.5),
+    inset 0 0 20px rgba(255, 0, 255, 0.1);
+  outline: none;
+  letter-spacing: 8px;
+  transition: all 0.3s ease;
+}
+
+.secret-code-input:focus {
+  border-color: #00ffff;
+  box-shadow: 
+    0 0 30px rgba(0, 255, 255, 0.8),
+    inset 0 0 20px rgba(0, 255, 255, 0.1);
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+}
+
+.secret-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.secret-btn {
+  flex: 1;
+  padding: 12px 20px;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  font-weight: 700;
+  border: 2px solid;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.secret-btn-save {
+  background: linear-gradient(135deg, rgba(0, 255, 0, 0.2) 0%, rgba(0, 200, 0, 0.2) 100%);
+  border-color: #00ff00;
+  color: #00ff00;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.secret-btn-save:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 0, 0.4) 0%, rgba(0, 200, 0, 0.4) 100%);
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.8);
+  transform: translateY(-2px);
+}
+
+.secret-btn-cancel {
+  background: linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0%, rgba(200, 0, 0, 0.2) 100%);
+  border-color: #ff0000;
+  color: #ff0000;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+}
+
+.secret-btn-cancel:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 0, 0.4) 0%, rgba(200, 0, 0, 0.4) 100%);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+  transform: translateY(-2px);
+}
+
+.secret-btn-clear {
+  background: linear-gradient(135deg, rgba(255, 136, 0, 0.2) 0%, rgba(200, 100, 0, 0.2) 100%);
+  border-color: #ff8800;
+  color: #ff8800;
+  box-shadow: 0 0 20px rgba(255, 136, 0, 0.5);
+}
+
+.secret-btn-clear:hover {
+  background: linear-gradient(135deg, rgba(255, 136, 0, 0.4) 0%, rgba(200, 100, 0, 0.4) 100%);
+  box-shadow: 0 0 30px rgba(255, 136, 0, 0.8);
+  transform: translateY(-2px);
+}
+
+.secret-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 0, 255, 0.1);
+  border: 1px solid rgba(255, 0, 255, 0.3);
+  border-radius: 8px;
+  font-family: 'Rajdhani', monospace;
+  font-size: clamp(0.8rem, 1.5vw, 0.95rem);
+  color: #00ffff;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.secret-info strong {
+  color: #ff00ff;
+  font-weight: 700;
+}
   </style>
 </head>
 <body>
@@ -970,7 +1142,7 @@ body {
 
   <div class="game-container">
 
-    <h2 class="cyber-title">[SYSTEM] ORDENAR CARDS POR EDAD</h2>
+    <h2 class="cyber-title" id="secret-trigger" style="cursor: pointer;" title="🔐">[SYSTEM] ORDENAR CARDS POR EDAD</h2>
     
     <section class="instructions panel-glow">
       <div class="panel-header">
@@ -1275,7 +1447,19 @@ function showModal() {
   if (!currentProblem) return;
   const codeElement = document.querySelector('.neon-code');
   if (codeElement) {
-    codeElement.textContent = currentProblem.code;
+    // Obtener el código personalizado si existe, sino usar el código por defecto
+    const secretCode = getSecretCode();
+    const defaultCode = currentProblem.code;
+    const codeToShow = secretCode || defaultCode;
+    
+    // Debug temporal
+    console.log('🔍 Debug showModal:');
+    console.log('- currentProblem:', currentProblem.name);
+    console.log('- secretCode obtenido:', secretCode);
+    console.log('- defaultCode:', defaultCode);
+    console.log('- codeToShow:', codeToShow);
+    
+    codeElement.textContent = codeToShow;
   }
   const modal = document.getElementById('modal');
   if (modal) {
@@ -1299,16 +1483,6 @@ function showLevelModal() {
   }
 }
 
-window.onclick = function(event) {
-  const modal = document.getElementById('modal');
-  if (event.target == modal) {
-    closeModal();
-  }
-  const levelModal = document.getElementById('level-modal');
-  if (event.target == levelModal) {
-    closeLevelModal();
-  }
-}
 
 let keyboardInput = '';
 
@@ -1335,7 +1509,11 @@ function pressConfirm() {
     return;
   }
   
-  const expectedCode = currentProblem ? currentProblem.code : '0816';
+  // Obtener el código esperado (personalizado o por defecto)
+  const defaultCode = currentProblem ? currentProblem.code : '0816';
+  const secretCode = getSecretCode();
+  const expectedCode = secretCode || defaultCode;
+  
   if (keyboardInput === expectedCode) {
     // Código correcto, redirigir al nivel 2
     window.location.href = '../lvl2/index.html';
@@ -1343,6 +1521,157 @@ function pressConfirm() {
     alert(`Código incorrecto: ${keyboardInput}. Intenta nuevamente.`);
     keyboardInput = '';
     updateKeyboardDisplay();
+  }
+}
+
+// ============================================
+// FUNCIONES DEL PANEL SECRETO
+// ============================================
+
+function getSecretCode() {
+  if (!currentProblem) {
+    console.log('⚠️ getSecretCode: currentProblem es null');
+    return null;
+  }
+  
+  // Usar el nombre del problema como clave (método nuevo)
+  const problemKey = currentProblem.name || `problem_${problems.findIndex(p => p === currentProblem)}`;
+  let storedCode = localStorage.getItem(`secretCode_${problemKey}`);
+  
+  // Si no se encuentra, intentar con el índice (método antiguo para compatibilidad)
+  if (!storedCode) {
+    const problemIndex = problems.findIndex(p => p === currentProblem);
+    storedCode = localStorage.getItem(`secretCode_${problemIndex}`);
+    // Si se encuentra con el método antiguo, migrarlo al nuevo método
+    if (storedCode) {
+      localStorage.setItem(`secretCode_${problemKey}`, storedCode);
+      localStorage.removeItem(`secretCode_${problemIndex}`);
+      console.log('✅ Código migrado del formato antiguo al nuevo');
+    }
+  }
+  
+  // Debug temporal
+  console.log('🔍 Debug getSecretCode:');
+  console.log('- currentProblem.name:', currentProblem.name);
+  console.log('- problemKey:', problemKey);
+  console.log('- storedCode encontrado:', storedCode);
+  console.log('- localStorage keys:', Object.keys(localStorage).filter(k => k.startsWith('secretCode')));
+  
+  return storedCode || null;
+}
+
+function openSecretModal() {
+  const modal = document.getElementById('secretModal');
+  const input = document.getElementById('secretCodeInput');
+  if (modal && input) {
+    // Cargar el código guardado si existe
+    const savedCode = getSecretCode();
+    input.value = savedCode || '';
+    modal.classList.add('show');
+    // Enfocar el input después de un pequeño delay
+    setTimeout(() => input.focus(), 100);
+  }
+}
+
+function closeSecretModal() {
+  const modal = document.getElementById('secretModal');
+  if (modal) {
+    modal.classList.remove('show');
+  }
+}
+
+function saveSecretCode() {
+  if (!currentProblem) {
+    alert('No hay un problema activo.');
+    return;
+  }
+  
+  const input = document.getElementById('secretCodeInput');
+  if (!input) return;
+  
+  const code = input.value.trim();
+  // Usar el nombre del problema como clave para ser más confiable
+  const problemKey = currentProblem.name || `problem_${problems.findIndex(p => p === currentProblem)}`;
+  
+  if (code === '') {
+    // Si está vacío, eliminar el código guardado
+    localStorage.removeItem(`secretCode_${problemKey}`);
+    alert('Código personalizado eliminado. Se usará el código por defecto.');
+  } else if (code.length === 3 && /^\d{3}$/.test(code)) {
+    // Guardar el código
+    localStorage.setItem(`secretCode_${problemKey}`, code);
+    alert(`✅ Código personalizado guardado: ${code}`);
+  } else {
+    alert('❌ Por favor, ingresa un código de 3 dígitos numéricos.');
+    return;
+  }
+  
+  closeSecretModal();
+}
+
+function clearSecretCode() {
+  const input = document.getElementById('secretCodeInput');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+}
+
+// Detectar 5 clics en el título para abrir el panel secreto
+let clickCount = 0;
+let clickTimer = null;
+const SECRET_CLICKS = 5;
+const CLICK_TIMEOUT = 2000; // 2 segundos para contar los clics
+
+document.addEventListener('DOMContentLoaded', () => {
+  const secretTrigger = document.getElementById('secret-trigger');
+  if (secretTrigger) {
+    secretTrigger.addEventListener('click', () => {
+      clickCount++;
+      
+      // Reiniciar el contador si pasan más de 2 segundos
+      if (clickTimer) {
+        clearTimeout(clickTimer);
+      }
+      clickTimer = setTimeout(() => {
+        clickCount = 0;
+      }, CLICK_TIMEOUT);
+      
+      // Si se hacen 5 clics, abrir el panel secreto
+      if (clickCount >= SECRET_CLICKS) {
+        clickCount = 0;
+        if (clickTimer) {
+          clearTimeout(clickTimer);
+        }
+        openSecretModal();
+      }
+    });
+  }
+});
+
+// Cerrar con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const secretModal = document.getElementById('secretModal');
+    if (secretModal && secretModal.classList.contains('show')) {
+      closeSecretModal();
+    }
+  }
+});
+
+// Cerrar modal al hacer clic fuera
+window.onclick = function(event) {
+  const modal = document.getElementById('modal');
+  if (event.target == modal) {
+    closeModal();
+  }
+  const levelModal = document.getElementById('level-modal');
+  if (event.target == levelModal) {
+    closeLevelModal();
+  }
+  const secretModal = document.getElementById('secretModal');
+  if (event.target == secretModal) {
+    closeSecretModal();
   }
 }
 
@@ -1370,5 +1699,44 @@ document.addEventListener('DOMContentLoaded', () => {
   initGame();
 });
   </script>
+
+  <!-- Modal Secreto para Configurar Código -->
+  <div id="secretModal" class="secret-modal-overlay">
+    <div class="secret-modal-content">
+      <h2 class="secret-modal-title">🔐 Panel de Configuración Secreto</h2>
+      <p class="secret-modal-subtitle">Configura el código personalizado para este problema</p>
+      
+      <div class="secret-input-group">
+        <label class="secret-input-label" for="secretCodeInput">
+          Código Personalizado:
+        </label>
+        <input 
+          type="text" 
+          id="secretCodeInput" 
+          class="secret-code-input" 
+          placeholder="000"
+          maxlength="3"
+          pattern="[0-9]{3}"
+        />
+      </div>
+
+      <div class="secret-buttons">
+        <button class="secret-btn secret-btn-save" onclick="saveSecretCode()">
+          Guardar
+        </button>
+        <button class="secret-btn secret-btn-clear" onclick="clearSecretCode()">
+          Limpiar
+        </button>
+        <button class="secret-btn secret-btn-cancel" onclick="closeSecretModal()">
+          Cerrar
+        </button>
+      </div>
+
+      <div class="secret-info">
+        <strong>💡 Información:</strong><br>
+        El código que ingreses aquí será el que se use para validar cuando el usuario complete el problema correctamente. Si dejas el campo vacío o lo limpias, se usará el código por defecto del problema.
+      </div>
+    </div>
+  </div>
 </body>
 </html>
