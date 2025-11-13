@@ -172,31 +172,36 @@ body {
 
 .cyber-title {
   font-family: 'Orbitron', monospace;
-  font-size: 36px;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
   font-weight: 900;
   color: #00ffff;
   text-transform: uppercase;
-  letter-spacing: 4px;
-  margin-bottom: 30px;
+  letter-spacing: clamp(2px, 1vw, 4px);
+  margin-bottom: clamp(20px, 4vw, 30px);
   text-shadow: 
     0 0 10px #00ffff,
     0 0 20px #00ffff,
     0 0 30px #00ffff,
     0 0 40px #00ffff;
   animation: glow 2s ease-in-out infinite;
+  line-height: 1.2;
+  word-wrap: break-word;
 }
 
 .cyber-subtitle {
   font-family: 'Rajdhani', monospace;
-  font-size: 20px;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
   font-weight: 600;
   color: #ff00ff;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin: 30px 0;
+  letter-spacing: clamp(1px, 0.5vw, 2px);
+  margin: clamp(20px, 4vw, 30px) 0;
   text-shadow: 
     0 0 10px rgba(255, 0, 255, 0.5),
     0 0 20px rgba(255, 0, 255, 0.3);
+  line-height: 1.4;
+  word-wrap: break-word;
+  padding: 0 clamp(10px, 2vw, 20px);
 }
 
 .problems-container {
@@ -220,17 +225,19 @@ body {
   margin-bottom: 30px;
   margin-top: 40px;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: clamp(12px, 2vw, 20px);
+  padding: 0 clamp(10px, 2vw, 20px);
 }
 
 .card {
   background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%);
-  padding: 20px 30px;
+  padding: clamp(12px, 2vw, 20px) clamp(16px, 3vw, 30px);
   border-radius: 0;
   cursor: grab;
-  min-width: 140px;
+  min-width: clamp(120px, 20vw, 160px);
+  max-width: clamp(180px, 30vw, 250px);
   text-align: center;
-  font-size: 24px;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
   font-weight: 700;
   font-family: 'Orbitron', monospace;
   color: #00ffff;
@@ -241,8 +248,16 @@ body {
   position: relative;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: clamp(1px, 0.3vw, 2px);
   clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .card::before {
@@ -278,25 +293,28 @@ body {
 .order-container {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   margin-top: 30px;
-  gap: 20px;
+  gap: clamp(12px, 2vw, 20px);
   flex-wrap: wrap;
+  padding: 0 clamp(10px, 2vw, 20px);
 }
 
 .drop-zone {
-  width: 160px;
-  height: 190px;
+  width: clamp(140px, 22vw, 180px);
+  min-height: clamp(160px, 25vw, 200px);
+  height: auto;
   border: 3px dashed rgba(0, 255, 255, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
   background: rgba(0, 255, 255, 0.02);
-  min-height: 190px;
   border-radius: 0;
   position: relative;
   transition: all 0.3s ease;
   clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  padding: clamp(8px, 1.5vw, 12px);
+  box-sizing: border-box;
 }
 
 .drop-zone::before {
@@ -327,6 +345,36 @@ body {
 
 .drop-zone.drag-over::before {
   opacity: 1;
+}
+
+/* Estilos para cards dentro de drop zones */
+.drop-zone .card {
+  width: 100%;
+  max-width: 100%;
+  min-width: auto;
+  padding: clamp(10px, 2vw, 16px) clamp(12px, 2.5vw, 20px);
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  margin: 0;
+  cursor: pointer;
+  height: auto;
+  min-height: clamp(50px, 8vw, 70px);
+}
+
+.drop-zone .card:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Contador de clasificación */
+.classification-counter {
+  text-align: center;
+  margin: clamp(15px, 3vw, 25px) auto;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+  font-weight: 700;
+  color: #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  letter-spacing: clamp(2px, 0.5vw, 4px);
+  padding: clamp(8px, 2vw, 12px);
 }
 
 .cyber-button {
@@ -935,9 +983,37 @@ body {
   #keyboard-input {
     font-size: clamp(1.8rem, 7vw, 2.4rem);
   }
+
+  .card {
+    min-width: clamp(100px, 25vw, 140px);
+    max-width: clamp(140px, 35vw, 200px);
+    font-size: clamp(0.9rem, 3vw, 1.3rem);
+    padding: clamp(10px, 2.5vw, 16px) clamp(12px, 3vw, 24px);
+  }
+
+  .drop-zone {
+    width: clamp(120px, 28vw, 160px);
+    min-height: clamp(140px, 32vw, 180px);
+  }
+
+  .order-container {
+    gap: clamp(10px, 2.5vw, 16px);
+  }
+
+  .cards-container {
+    gap: clamp(10px, 2.5vw, 16px);
+  }
+
+  .cyber-title {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+  }
+
+  .cyber-subtitle {
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
+  }
 }
  
- @media (max-width: 480px) {
+@media (max-width: 480px) {
   .keyboard-container {
     max-width: clamp(180px, 75vw, 240px);
   }
@@ -946,7 +1022,66 @@ body {
     font-size: clamp(1.6rem, 8vw, 2rem);
     letter-spacing: clamp(2px, 1.2vw, 4px);
   }
- }
+
+  .card {
+    min-width: clamp(90px, 30vw, 120px);
+    max-width: clamp(120px, 40vw, 160px);
+    font-size: clamp(0.8rem, 3.5vw, 1.1rem);
+    padding: clamp(8px, 3vw, 12px) clamp(10px, 3.5vw, 20px);
+    letter-spacing: clamp(0.5px, 0.5vw, 1px);
+  }
+
+  .drop-zone {
+    width: clamp(100px, 35vw, 140px);
+    min-height: clamp(120px, 40vw, 160px);
+    padding: clamp(6px, 2vw, 10px);
+  }
+
+  .order-container {
+    gap: clamp(8px, 3vw, 12px);
+    padding: 0 clamp(8px, 3vw, 16px);
+  }
+
+  .cards-container {
+    gap: clamp(8px, 3vw, 12px);
+    padding: 0 clamp(8px, 3vw, 16px);
+  }
+
+  .cyber-title {
+    font-size: clamp(1.2rem, 7vw, 2rem);
+    letter-spacing: clamp(2px, 1vw, 4px);
+    margin-bottom: clamp(15px, 4vw, 25px);
+  }
+
+  .cyber-subtitle {
+    font-size: clamp(0.85rem, 3.5vw, 1.1rem);
+    margin: clamp(15px, 4vw, 25px) 0;
+  }
+
+  .panel-content {
+    padding: clamp(15px, 4vw, 25px);
+  }
+
+  .instruction-text {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+  }
+
+  .neon-text {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+  }
+
+  .classification-counter {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+    margin: clamp(10px, 3vw, 20px) auto;
+    padding: clamp(6px, 2vw, 10px);
+  }
+
+  .drop-zone .card {
+    font-size: clamp(0.75rem, 2.5vw, 1rem);
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 2.5vw, 16px);
+    min-height: clamp(45px, 7vw, 60px);
+  }
+}
 
 @media (max-height: 640px) {
   .level-modal-content {
@@ -1304,6 +1439,66 @@ const problems = [
     ],
     correctOrder: ["card-diego", "card-andrea", "card-fernando", "card-valeria"],
     code: "4192"
+  },
+  {
+    name: "Problema 6",
+    text: "Tomás es menor que Lucía, Lucía es menor que Javier, Javier es menor que Natalia, Natalia es la mayor",
+    people: [
+      { id: "card-tomas", name: "Tomás", age: 19 },
+      { id: "card-lucia", name: "Lucía", age: 25 },
+      { id: "card-javier", name: "Javier", age: 28 },
+      { id: "card-natalia", name: "Natalia", age: 34 }
+    ],
+    correctOrder: ["card-tomas", "card-lucia", "card-javier", "card-natalia"],
+    code: "6258"
+  },
+  {
+    name: "Problema 7",
+    text: "Ricardo es el más joven, Camila es mayor que Ricardo, Alejandra es mayor que Camila, Sebastián es el mayor",
+    people: [
+      { id: "card-ricardo", name: "Ricardo", age: 20 },
+      { id: "card-camila", name: "Camila", age: 24 },
+      { id: "card-alejandra", name: "Alejandra", age: 29 },
+      { id: "card-sebastian", name: "Sebastián", age: 35 }
+    ],
+    correctOrder: ["card-ricardo", "card-camila", "card-alejandra", "card-sebastian"],
+    code: "7295"
+  },
+  {
+    name: "Problema 8",
+    text: "Gabriel es la más joven, Gabriel es menor que Daniela, Daniela es menor que Mateo, Mateo es menor que Victoria",
+    people: [
+      { id: "card-gabriel", name: "Gabriel", age: 17 },
+      { id: "card-daniela", name: "Daniela", age: 22 },
+      { id: "card-mateo", name: "Mateo", age: 26 },
+      { id: "card-victoria", name: "Victoria", age: 30 }
+    ],
+    correctOrder: ["card-gabriel", "card-daniela", "card-mateo", "card-victoria"],
+    code: "5260"
+  },
+  {
+    name: "Problema 9",
+    text: "Martín es mayor que Paula, Paula es menor que Nicolás, Nicolás es menor que Carolina, Carolina es la mayor",
+    people: [
+      { id: "card-paula", name: "Paula", age: 18 },
+      { id: "card-martin", name: "Martín", age: 23 },
+      { id: "card-nicolas", name: "Nicolás", age: 27 },
+      { id: "card-carolina", name: "Carolina", age: 32 }
+    ],
+    correctOrder: ["card-paula", "card-martin", "card-nicolas", "card-carolina"],
+    code: "8272"
+  },
+  {
+    name: "Problema 10",
+    text: "Santiago es menor que Valentina, Valentina es menor que Ignacio, Ignacio es menor que Fernanda, Fernanda es la mayor",
+    people: [
+      { id: "card-santiago", name: "Santiago", age: 21 },
+      { id: "card-valentina", name: "Valentina", age: 26 },
+      { id: "card-ignacio", name: "Ignacio", age: 30 },
+      { id: "card-fernanda", name: "Fernanda", age: 36 }
+    ],
+    correctOrder: ["card-santiago", "card-valentina", "card-ignacio", "card-fernanda"],
+    code: "6306"
   }
 ];
 
@@ -1418,29 +1613,22 @@ function checkOrder() {
     return card ? card.id : null;
   });
   
-  let resultText = '';
-  let isCorrect = true;
-
+  // Verificar que todas las zonas tengan una card
   if (cardOrder.includes(null)) {
-    resultText = '¡Incompleto! Debes colocar todas las cards en los lugares.';
-    isCorrect = false;
-  } else {
-    cardOrder.forEach((cardId, index) => {
-      if (cardId !== currentProblem.correctOrder[index]) {
-        resultText = '¡Incorrecto! El orden no es correcto. Intenta nuevamente.';
-        isCorrect = false;
-      }
-    });
+    document.getElementById('result').textContent = '¡Incompleto! Debes colocar todas las cards en los lugares.';
+    return;
   }
-
+  
+  // Verificar que el orden sea exactamente correcto
+  const isCorrect = cardOrder.length === currentProblem.correctOrder.length &&
+    cardOrder.every((cardId, index) => cardId === currentProblem.correctOrder[index]);
+  
   if (isCorrect) {
-    resultText = '¡Correcto! El orden es el adecuado.';
+    document.getElementById('result').textContent = '¡Correcto! El orden es el adecuado.';
     showModal();
   } else {
-    resultText = resultText || '¡Incorrecto! El orden no es correcto. Intenta nuevamente.';
+    document.getElementById('result').textContent = '¡Incorrecto! El orden no es correcto. Intenta nuevamente.';
   }
-
-  document.getElementById('result').textContent = resultText;
 }
 
 function showModal() {
@@ -1451,13 +1639,6 @@ function showModal() {
     const secretCode = getSecretCode();
     const defaultCode = currentProblem.code;
     const codeToShow = secretCode || defaultCode;
-    
-    // Debug temporal
-    console.log('🔍 Debug showModal:');
-    console.log('- currentProblem:', currentProblem.name);
-    console.log('- secretCode obtenido:', secretCode);
-    console.log('- defaultCode:', defaultCode);
-    console.log('- codeToShow:', codeToShow);
     
     codeElement.textContent = codeToShow;
   }
@@ -1530,7 +1711,6 @@ function pressConfirm() {
 
 function getSecretCode() {
   if (!currentProblem) {
-    console.log('⚠️ getSecretCode: currentProblem es null');
     return null;
   }
   
@@ -1546,16 +1726,8 @@ function getSecretCode() {
     if (storedCode) {
       localStorage.setItem(`secretCode_${problemKey}`, storedCode);
       localStorage.removeItem(`secretCode_${problemIndex}`);
-      console.log('✅ Código migrado del formato antiguo al nuevo');
     }
   }
-  
-  // Debug temporal
-  console.log('🔍 Debug getSecretCode:');
-  console.log('- currentProblem.name:', currentProblem.name);
-  console.log('- problemKey:', problemKey);
-  console.log('- storedCode encontrado:', storedCode);
-  console.log('- localStorage keys:', Object.keys(localStorage).filter(k => k.startsWith('secretCode')));
   
   return storedCode || null;
 }
@@ -1597,12 +1769,12 @@ function saveSecretCode() {
     // Si está vacío, eliminar el código guardado
     localStorage.removeItem(`secretCode_${problemKey}`);
     alert('Código personalizado eliminado. Se usará el código por defecto.');
-  } else if (code.length === 3 && /^\d{3}$/.test(code)) {
-    // Guardar el código
+  } else if (code.length >= 1 && /^\d+$/.test(code)) {
+    // Guardar el código (acepta cualquier longitud de dígitos)
     localStorage.setItem(`secretCode_${problemKey}`, code);
     alert(`✅ Código personalizado guardado: ${code}`);
   } else {
-    alert('❌ Por favor, ingresa un código de 3 dígitos numéricos.');
+    alert('❌ Por favor, ingresa solo dígitos numéricos.');
     return;
   }
   
@@ -1714,9 +1886,8 @@ document.addEventListener('DOMContentLoaded', () => {
           type="text" 
           id="secretCodeInput" 
           class="secret-code-input" 
-          placeholder="000"
-          maxlength="3"
-          pattern="[0-9]{3}"
+          placeholder="0000"
+          pattern="[0-9]+"
         />
       </div>
 
